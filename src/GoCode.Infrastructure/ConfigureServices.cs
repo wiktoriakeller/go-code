@@ -27,7 +27,7 @@ namespace GoCode.Infrastructure
                 {
                     ValidIssuer = configuration["Authentication:JwtOptions:Issuer"],
                     ValidAudience = configuration["Authentication:JwtOptions:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Authentication:JwtOptions:JwtKey"]))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Authentication:JwtOptions:Key"]))
                 };
             });
 
