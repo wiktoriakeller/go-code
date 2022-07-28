@@ -1,5 +1,6 @@
 ﻿using GoCode.Application.Contracts;
 using GoCode.Infrastructure.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -16,18 +17,20 @@ namespace GoCode.Infrastructure
 
             services.AddAuthentication(options =>
             {
-                options.DefaultAuthenticateScheme = "Bearer";
-                options.DefaultScheme = "Bearer";
-                options.DefaultChallengeScheme = "Bearer";
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(cfg =>
             {
                 cfg.RequireHttpsMetadata = false;
                 cfg.SaveToken = true;
                 cfg.TokenValidationParameters = new TokenValidationParameters
                 {
+                    ValidateIssuerSigningKey = true,
                     ValidIssuer = configuration["Authentication:JwtOptions:Issuer"],
                     ValidAudience = configuration["Authentication:JwtOptions:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Authentication:JwtOptions:Key"]))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Authentication:JwtOptions:Key"])),
+                    ValidateLifetime = true
                 };
             });
 
