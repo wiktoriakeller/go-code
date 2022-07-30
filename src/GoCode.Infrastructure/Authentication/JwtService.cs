@@ -1,5 +1,4 @@
-﻿using GoCode.Application.Contracts;
-using GoCode.Domain.Entities;
+﻿using GoCode.Infrastructure.Interfaces;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -17,7 +16,7 @@ namespace GoCode.Infrastructure.Authentication
             _jwtOptions = jwtOptions.Value;
         }
 
-        public string CreateJwtToken(User user)
+        public string CreateJwtToken(ApplicationUser user)
         {
             var claims = GetTokenClaims(user);
 
@@ -36,15 +35,15 @@ namespace GoCode.Infrastructure.Authentication
             return jwtTokenHandler;
         }
 
-        private IEnumerable<Claim> GetTokenClaims(User user)
+        private IEnumerable<Claim> GetTokenClaims(ApplicationUser user)
         {
             var claims = new List<Claim>()
             {
                 new Claim(JwtRegisteredClaimNames.Iss, _jwtOptions.Issuer),
                 new Claim(JwtRegisteredClaimNames.Aud, _jwtOptions.Audience),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Name),
-                new Claim(ClaimTypes.Surname, user.Surname),
+                new Claim(ClaimTypes.Name, user.FirstName),
+                new Claim(ClaimTypes.Surname, user.LastName),
                 new Claim(ClaimTypes.Email, user.Email)
             };
 
