@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GoCode.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/identity")]
     [ApiController]
     public class IdentityController : ControllerBase
     {

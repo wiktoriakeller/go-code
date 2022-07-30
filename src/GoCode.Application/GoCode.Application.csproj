@@ -10,4 +10,8 @@
     <ProjectReference Include="..\GoCode.Domain\GoCode.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Authentication\" />
+  </ItemGroup>
+
 </Project>
