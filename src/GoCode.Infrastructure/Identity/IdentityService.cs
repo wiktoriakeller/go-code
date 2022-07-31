@@ -1,11 +1,11 @@
 ﻿using GoCode.Application.Contracts.Identity;
-using GoCode.Application.Dtos;
-using GoCode.Application.Dtos.Requests;
 using GoCode.Application.Dtos.Responses;
+using GoCode.Application.Identity.Commands;
 using GoCode.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using GoCode.Application.Dtos;
 
-namespace GoCode.Infrastructure.Authentication
+namespace GoCode.Infrastructure.Identity
 {
     public class IdentityService : IIdentityService
     {
@@ -19,17 +19,17 @@ namespace GoCode.Infrastructure.Authentication
             _jwtService = jwtService;
         }
 
-        public async Task<Response<CreateUserResponse>> CreateUserAsync(CreateUserRequest createUserRequest)
+        public async Task<Response<CreateUserResponse>> CreateUserAsync(CreateUserCommand createUserCommand)
         {
             var newUser = new ApplicationUser
             {
-                Email = createUserRequest.Email,
-                UserName = createUserRequest.Email,
-                FirstName = createUserRequest.FirstName,
-                LastName = createUserRequest.LastName
+                Email = createUserCommand.Email,
+                UserName = createUserCommand.Email,
+                FirstName = createUserCommand.FirstName,
+                LastName = createUserCommand.LastName
             };
 
-            var result = await _userManager.CreateAsync(newUser, createUserRequest.Password);
+            var result = await _userManager.CreateAsync(newUser, createUserCommand.Password);
 
             if (!result.Succeeded)
             {
@@ -45,9 +45,9 @@ namespace GoCode.Infrastructure.Authentication
             return new Response<CreateUserResponse>(true, response);
         }
 
-        public async Task<Response<AuthenticateUserResponse>> AuthenticateUserAync(AuthenticateUserRequest authenticateUserRequest)
+        public async Task<Response<AuthenticateUserResponse>> AuthenticateUserAync(AuthenticateUserCommand authenticateUserCommand)
         {
-            var user = await _userManager.FindByEmailAsync(authenticateUserRequest.Email);
+            var user = await _userManager.FindByEmailAsync(authenticateUserCommand.Email);
 
             if (user == null)
             {
@@ -55,7 +55,7 @@ namespace GoCode.Infrastructure.Authentication
                 return new Response<AuthenticateUserResponse>(false, errors);
             }
 
-            var userPasswordIsValid = await _userManager.CheckPasswordAsync(user, authenticateUserRequest.Password);
+            var userPasswordIsValid = await _userManager.CheckPasswordAsync(user, authenticateUserCommand.Password);
 
             if (!userPasswordIsValid)
             {

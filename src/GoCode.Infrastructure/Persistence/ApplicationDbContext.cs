@@ -1,4 +1,4 @@
-﻿using GoCode.Infrastructure.Authentication;
+﻿using GoCode.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

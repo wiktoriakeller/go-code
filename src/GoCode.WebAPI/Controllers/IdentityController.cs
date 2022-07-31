@@ -1,5 +1,7 @@
 ﻿using GoCode.Application.Contracts.Identity;
 using GoCode.Application.Dtos.Requests;
+using GoCode.Application.Identity.Commands;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GoCode.WebAPI.Controllers
@@ -8,17 +10,25 @@ namespace GoCode.WebAPI.Controllers
     [ApiController]
     public class IdentityController : ControllerBase
     {
-        private readonly IIdentityService _identityService;
+        private readonly IMediator _medaitor;
 
-        public IdentityController(IIdentityService identityService)
+        public IdentityController(IMediator mediator)
         {
-            _identityService = identityService;
+            _medaitor = mediator;
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] CreateUserRequest request)
         {
-            var response = await _identityService.CreateUserAsync(request);
+            var command = new CreateUserCommand
+            {
+                Email = request.Email,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                Password = request.Password
+            };
+
+            var response = await _medaitor.Send(command);
 
             if (!response.Succeeded)
             {
@@ -31,7 +41,13 @@ namespace GoCode.WebAPI.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] AuthenticateUserRequest request)
         {
-            var response = await _identityService.AuthenticateUserAync(request);
+            var command = new AuthenticateUserCommand
+            {
+                Email = request.Email,
+                Password = request.Password
+            };
+
+            var response = await _medaitor.Send(command);
 
             if (!response.Succeeded)
             {

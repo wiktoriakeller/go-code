@@ -1,4 +1,4 @@
-﻿namespace GoCode.Infrastructure.Authentication
+﻿namespace GoCode.Infrastructure.Identity
 {
     public class JwtOptions
     {

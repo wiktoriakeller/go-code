@@ -1,4 +1,4 @@
-﻿using GoCode.Infrastructure.Authentication;
+﻿using GoCode.Infrastructure.Identity;
 
 namespace GoCode.Infrastructure.Interfaces
 {

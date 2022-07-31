@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace GoCode.Infrastructure.Authentication
+namespace GoCode.Infrastructure.Identity
 {
     public class ApplicationUser : IdentityUser
     {

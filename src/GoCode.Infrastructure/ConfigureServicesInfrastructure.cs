@@ -1,5 +1,4 @@
 ﻿using GoCode.Application.Contracts.Identity;
-using GoCode.Infrastructure.Authentication;
 using GoCode.Infrastructure.Interfaces;
 using GoCode.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -9,10 +8,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using GoCode.Infrastructure.Identity;
 
 namespace GoCode.Infrastructure
 {
-    public static class ConfigureServices
+    public static class ConfigureServicesInfrastructure
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
@@ -24,7 +24,7 @@ namespace GoCode.Infrastructure
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     configuration.GetConnectionString("DefaultConnection"),
-                    b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+                    b => b.MigrationsAssembly(typeof(ConfigureServicesInfrastructure).Assembly.FullName)));
 
             //Register identity and jwt
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>

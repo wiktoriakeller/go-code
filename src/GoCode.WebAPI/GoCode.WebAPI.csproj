@@ -23,4 +23,8 @@
     <ProjectReference Include="..\GoCode.Infrastructure\GoCode.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+
 </Project>
