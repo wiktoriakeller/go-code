@@ -1,7 +1,7 @@
-﻿using GoCode.Application.Contracts.Identity;
+﻿using MediatR;
+using AutoMapper;
 using GoCode.Application.Dtos.Requests;
 using GoCode.Application.Identity.Commands;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GoCode.WebAPI.Controllers
@@ -11,23 +11,18 @@ namespace GoCode.WebAPI.Controllers
     public class IdentityController : ControllerBase
     {
         private readonly IMediator _medaitor;
+        private readonly IMapper _mapper;
 
-        public IdentityController(IMediator mediator)
+        public IdentityController(IMediator mediator, IMapper mapper)
         {
             _medaitor = mediator;
+            _mapper = mapper;
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] CreateUserRequest request)
         {
-            var command = new CreateUserCommand
-            {
-                Email = request.Email,
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                Password = request.Password
-            };
-
+            var command = _mapper.Map<CreateUserCommand>(request);
             var response = await _medaitor.Send(command);
 
             if (!response.Succeeded)
@@ -41,12 +36,7 @@ namespace GoCode.WebAPI.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] AuthenticateUserRequest request)
         {
-            var command = new AuthenticateUserCommand
-            {
-                Email = request.Email,
-                Password = request.Password
-            };
-
+            var command = _mapper.Map<AuthenticateUserCommand>(request);
             var response = await _medaitor.Send(command);
 
             if (!response.Succeeded)

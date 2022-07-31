@@ -1,4 +1,7 @@
-﻿namespace GoCode.Application.Dtos.Requests
+﻿using AutoMapper;
+using GoCode.Application.Identity.Commands;
+
+namespace GoCode.Application.Dtos.Requests
 {
     public record CreateUserRequest
     {
@@ -6,5 +9,13 @@
         public string Password { get; init; }
         public string? FirstName { get; init; }
         public string? LastName { get; init; }
+    }
+
+    public class CreateUserRequestProfile : Profile
+    {
+        public CreateUserRequestProfile()
+        {
+            CreateMap<CreateUserRequest, CreateUserCommand>();
+        }
     }
 }

@@ -8,6 +8,7 @@ namespace GoCode.Application.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddAutoMapper(typeof(ConfigureServicesExtension).Assembly);
             services.AddMediatR(typeof(ConfigureServicesExtension).Assembly);
             return services;
         }
