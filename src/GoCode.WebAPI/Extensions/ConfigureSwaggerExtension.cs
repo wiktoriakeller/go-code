@@ -11,6 +11,7 @@ namespace GoCode.WebAPI.Extensions
                 cfg.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "GoCode API",
+                    Description = "An ASP.NET Core Web API for managing courses",
                     Version = "v1"
                 });
 

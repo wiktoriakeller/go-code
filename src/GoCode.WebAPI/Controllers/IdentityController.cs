@@ -20,6 +20,8 @@ namespace GoCode.WebAPI.Controllers
         }
 
         [HttpPost("register")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Register([FromBody] CreateUserRequest request)
         {
             var command = _mapper.Map<CreateUserCommand>(request);
@@ -30,10 +32,12 @@ namespace GoCode.WebAPI.Controllers
                 return BadRequest(response);
             }
 
-            return Created($"api/identity/{response.Result.UserId}", null);
+            return Created($"api/v1/identity/{response.Result.UserId}", null);
         }
 
         [HttpPost("login")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Login([FromBody] AuthenticateUserRequest request)
         {
             var command = _mapper.Map<AuthenticateUserCommand>(request);
