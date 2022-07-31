@@ -2,13 +2,13 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace GoCode.Application
+namespace GoCode.Application.Extensions
 {
-    public static class ConfigureServicesApplication
+    public static class ConfigureServicesExtension
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddMediatR(typeof(ConfigureServicesApplication).Assembly);
+            services.AddMediatR(typeof(ConfigureServicesExtension).Assembly);
             return services;
         }
     }

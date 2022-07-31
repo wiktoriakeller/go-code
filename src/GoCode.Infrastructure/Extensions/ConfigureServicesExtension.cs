@@ -10,9 +10,9 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using GoCode.Infrastructure.Identity;
 
-namespace GoCode.Infrastructure
+namespace GoCode.Infrastructure.Extensions
 {
-    public static class ConfigureServicesInfrastructure
+    public static class ConfigureServicesExtension
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
@@ -24,7 +24,7 @@ namespace GoCode.Infrastructure
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     configuration.GetConnectionString("DefaultConnection"),
-                    b => b.MigrationsAssembly(typeof(ConfigureServicesInfrastructure).Assembly.FullName)));
+                    b => b.MigrationsAssembly(typeof(ConfigureServicesExtension).Assembly.FullName)));
 
             //Register identity and jwt
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
