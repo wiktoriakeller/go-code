@@ -50,5 +50,21 @@ namespace GoCode.WebAPI.Controllers
 
             return Ok(response);
         }
+
+        [HttpPost("refresh")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
+        {
+            var command = _mapper.Map<RefreshTokenCommand>(request);
+            var response = await _medaitor.Send(command);
+
+            if (!response.Succeeded)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
     }
 }

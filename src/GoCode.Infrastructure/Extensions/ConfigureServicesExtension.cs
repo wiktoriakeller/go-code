@@ -1,14 +1,17 @@
 ﻿using GoCode.Application.Contracts.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
+using GoCode.Infrastructure.Identity.Entities;
 using GoCode.Infrastructure.Interfaces;
 using GoCode.Infrastructure.Persistence;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.EntityFrameworkCore;
 using GoCode.Infrastructure.Identity;
+using GoCode.Infrastructure.DataAccess;
+using GoCode.Application.Contracts.DataAccess;
+using System.Text;
 
 namespace GoCode.Infrastructure.Extensions
 {
@@ -18,7 +21,8 @@ namespace GoCode.Infrastructure.Extensions
         {
             //Service registrattion
             services.AddScoped<IIdentityService, IdentityService>();
-            services.AddScoped<IJwtService, JwtService>();
+            services.AddSingleton<IJwtService, JwtService>();
+            services.AddScoped<IRepositoryAsync<RefreshToken>, BaseRepositoryAsync<RefreshToken>>();
 
             //Register db
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -27,7 +31,7 @@ namespace GoCode.Infrastructure.Extensions
                     b => b.MigrationsAssembly(typeof(ConfigureServicesExtension).Assembly.FullName)));
 
             //Register identity and jwt
-            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {
                 options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = true;
@@ -39,6 +43,15 @@ namespace GoCode.Infrastructure.Extensions
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = configuration["Authentication:JwtOptions:Issuer"],
+                ValidAudience = configuration["Authentication:JwtOptions:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Authentication:JwtOptions:Key"])),
+                ValidateLifetime = true
+            };
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -48,15 +61,10 @@ namespace GoCode.Infrastructure.Extensions
             {
                 cfg.RequireHttpsMetadata = false;
                 cfg.SaveToken = true;
-                cfg.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = configuration["Authentication:JwtOptions:Issuer"],
-                    ValidAudience = configuration["Authentication:JwtOptions:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Authentication:JwtOptions:Key"])),
-                    ValidateLifetime = true
-                };
+                cfg.TokenValidationParameters = tokenValidationParameters;
             });
+
+            services.AddSingleton(tokenValidationParameters);
 
             //Options bindings
             services.Configure<JwtOptions>(configuration.GetSection("Authentication:JwtOptions"));
