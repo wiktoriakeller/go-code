@@ -14,8 +14,11 @@ namespace GoCode.Infrastructure.DataAccess
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<T>> GetAll() =>
+        public async Task<IEnumerable<T>> GetAllAsync() =>
             await _dbContext.Set<T>().ToListAsync();
+
+        public async Task<IEnumerable<T>> GetWhereAsync(Expression<Func<T, bool>> predicate) =>
+            await _dbContext.Set<T>().Where(predicate).ToListAsync();
 
         public async Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate) =>
             await _dbContext.Set<T>().FirstOrDefaultAsync(predicate);
@@ -23,25 +26,25 @@ namespace GoCode.Infrastructure.DataAccess
         public async Task<T?> SignleOrDefaultAsync(Expression<Func<T, bool>> predicate) =>
             await _dbContext.Set<T>().SingleOrDefaultAsync(predicate);
 
-        public async Task Add(T entity)
+        public async Task AddAsync(T entity)
         {
             _dbContext.Set<T>().Add(entity);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task Update(T entity)
+        public async Task UpdateAsync(T entity)
         {
             _dbContext.Update(entity);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task BulkUpdate(IEnumerable<T> entities)
+        public async Task BulkUpdateAsync(IEnumerable<T> entities)
         {
             _dbContext.UpdateRange(entities);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task Delete(T entity)
+        public async Task DeleteAsync(T entity)
         {
             _dbContext.Remove(entity);
             await _dbContext.SaveChangesAsync();

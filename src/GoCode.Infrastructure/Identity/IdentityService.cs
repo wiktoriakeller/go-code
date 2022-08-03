@@ -79,7 +79,8 @@ namespace GoCode.Infrastructure.Identity.Entities
             }
 
             var (jwtToken, jti) = _jwtService.CreateJwtToken(user);
-            var refreshToken = await CreateRefreshToken(jti, user);
+            var storedRefresh = await _refreshTokenRepository.FirstOrDefaultAsync(t => t.UserId == user.Id);
+            var refreshToken = await CreateRefreshToken(jti, user, storedRefresh);
 
             var response = new AuthenticateUserResponse
             {
@@ -110,11 +111,18 @@ namespace GoCode.Infrastructure.Identity.Entities
                 return errorResponse;
             }
 
-            var storedRefreshToken = await _refreshTokenRepository.SignleOrDefaultAsync(x => x.Token == refreshTokenCommand.RefreshToken);
+            var storedTokens = await _refreshTokenRepository.GetWhereAsync(x => x.Token == refreshTokenCommand.RefreshToken);
 
-            if (storedRefreshToken == null ||
-                storedRefreshToken.ExpiryDate >= DateTime.UtcNow ||
-                storedRefreshToken.JwtId != jti)
+            if (storedTokens.Count() != 1)
+            {
+                errorResponse.AddErrorMessage("Identity", ErrorMessages.Identity.InvalidJwt);
+                return errorResponse;
+            }
+
+            var storedToken = storedTokens.First();
+
+            if (storedToken.ExpiryDate >= DateTime.UtcNow ||
+                storedToken.JwtId != jti)
             {
                 errorResponse.AddErrorMessage("Identity", ErrorMessages.Identity.InvalidRefreshToken);
                 return errorResponse;
@@ -122,7 +130,7 @@ namespace GoCode.Infrastructure.Identity.Entities
 
             var user = await _userManager.FindByIdAsync(userId);
             var (jwtToken, newJti) = _jwtService.CreateJwtToken(user);
-            var refreshToken = await CreateRefreshToken(newJti, user);
+            var refreshToken = await CreateRefreshToken(newJti, user, storedToken);
 
             var result = new RefreshTokenResponse
             {
@@ -133,11 +141,11 @@ namespace GoCode.Infrastructure.Identity.Entities
             return new Response<RefreshTokenResponse>(true, result);
         }
 
-        private async Task<string> CreateRefreshToken(string jti, ApplicationUser user)
+        private async Task<string> CreateRefreshToken(string jti, ApplicationUser user, RefreshToken? storedRefresh = null)
         {
-            if (user.RefreshToken != null)
+            if (storedRefresh != null)
             {
-                await _refreshTokenRepository.Delete(user.RefreshToken);
+                await _refreshTokenRepository.DeleteAsync(storedRefresh);
             }
 
             var refreshToken = new RefreshToken
@@ -150,7 +158,7 @@ namespace GoCode.Infrastructure.Identity.Entities
                 User = user
             };
 
-            await _refreshTokenRepository.Add(refreshToken);
+            await _refreshTokenRepository.AddAsync(refreshToken);
             return refreshToken.Token;
         }
 
