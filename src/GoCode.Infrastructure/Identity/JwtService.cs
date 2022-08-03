@@ -20,9 +20,9 @@ namespace GoCode.Infrastructure.Identity
             _tokenValidationParameters = tokenValidationParameters;
         }
 
-        public string CreateJwtToken(ApplicationUser user)
+        public (string jwtToken, string jti) CreateJwtToken(ApplicationUser user)
         {
-            var claims = GetTokenClaims(user);
+            var (claims, jti) = GetTokenClaims(user);
 
             var key = Encoding.UTF8.GetBytes(_jwtOptions.Key);
             var signingCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);
@@ -35,16 +35,16 @@ namespace GoCode.Infrastructure.Identity
                 expires: DateTime.UtcNow.AddMinutes(_jwtOptions.ExpirationInMinutes),
                 signingCredentials: signingCredentials);
 
-            var jwtTokenHandler = new JwtSecurityTokenHandler().WriteToken(token);
-            return jwtTokenHandler;
+            var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
+            return (jwtToken, jti);
         }
 
-        public ClaimsPrincipal? GetPrincipalFromToken(string token)
+        public ClaimsPrincipal? GetPrincipalFromJwtToken(string jwtToken)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             try
             {
-                var principal = tokenHandler.ValidateToken(token, _tokenValidationParameters, out var validatedToken);
+                var principal = tokenHandler.ValidateToken(jwtToken, _tokenValidationParameters, out var validatedToken);
 
                 if (!IsJwtWithValidSecurityAlgorithm(validatedToken))
                 {
@@ -63,20 +63,21 @@ namespace GoCode.Infrastructure.Identity
             (validatedToken is JwtSecurityToken jwtSecurityToken) &&
             jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase);
 
-        private IEnumerable<Claim> GetTokenClaims(ApplicationUser user)
+        private (IEnumerable<Claim> claims, string jti) GetTokenClaims(ApplicationUser user)
         {
+            var jti = Guid.NewGuid().ToString();
             var claims = new List<Claim>()
             {
+                new Claim(JwtRegisteredClaimNames.Jti, jti),
                 new Claim(JwtRegisteredClaimNames.Iss, _jwtOptions.Issuer),
                 new Claim(JwtRegisteredClaimNames.Aud, _jwtOptions.Audience),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.FirstName),
                 new Claim(ClaimTypes.Surname, user.LastName),
                 new Claim(ClaimTypes.Email, user.Email)
             };
 
-            return claims;
+            return (claims, jti);
         }
     }
 }

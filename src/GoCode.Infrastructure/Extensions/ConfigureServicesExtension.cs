@@ -22,7 +22,7 @@ namespace GoCode.Infrastructure.Extensions
             //Service registrattion
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddSingleton<IJwtService, JwtService>();
-            services.AddScoped<IRepositoryAsync<RefreshToken>, BaseRepositoryAsync<RefreshToken>>();
+            services.AddScoped<IRepository<RefreshToken>, BaseRepositoryAsync<RefreshToken>>();
 
             //Register db
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -49,7 +49,8 @@ namespace GoCode.Infrastructure.Extensions
                 ValidIssuer = configuration["Authentication:JwtOptions:Issuer"],
                 ValidAudience = configuration["Authentication:JwtOptions:Audience"],
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Authentication:JwtOptions:Key"])),
-                ValidateLifetime = true
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
             };
 
             services.AddAuthentication(options =>

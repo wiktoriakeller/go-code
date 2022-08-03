@@ -18,8 +18,10 @@ namespace GoCode.Infrastructure.Persistence
 
             modelBuilder.Entity<RefreshToken>(eb =>
             {
+                eb.HasKey(x => x.Token);
+
                 eb.Property(x => x.Token)
-                    .HasMaxLength(5000);
+                    .HasMaxLength(100);
             });
         }
     }

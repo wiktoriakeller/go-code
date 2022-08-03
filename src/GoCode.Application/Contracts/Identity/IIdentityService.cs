@@ -9,5 +9,6 @@ namespace GoCode.Application.Contracts.Identity
         Task<Response<CreateUserResponse>> CreateUserAsync(CreateUserCommand createUserCommand);
 
         Task<Response<AuthenticateUserResponse>> AuthenticateUserAync(AuthenticateUserCommand authenticateUserCommand);
+        Task<Response<RefreshTokenResponse>> RefreshTokenAsync(RefreshTokenCommand refreshTokenCommand);
     }
 }

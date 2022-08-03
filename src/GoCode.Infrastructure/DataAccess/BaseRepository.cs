@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GoCode.Infrastructure.DataAccess
 {
-    public class BaseRepositoryAsync<T> : IRepositoryAsync<T> where T : class
+    public class BaseRepositoryAsync<T> : IRepository<T> where T : class
     {
         protected readonly ApplicationDbContext _dbContext;
 
@@ -14,12 +14,30 @@ namespace GoCode.Infrastructure.DataAccess
             _dbContext = dbContext;
         }
 
-        public async Task<T?> GetSignleOrDefaultAsync(Expression<Func<T, bool>> predicate) =>
+        public async Task<IEnumerable<T>> GetAll() =>
+            await _dbContext.Set<T>().ToListAsync();
+
+        public async Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate) =>
+            await _dbContext.Set<T>().FirstOrDefaultAsync(predicate);
+
+        public async Task<T?> SignleOrDefaultAsync(Expression<Func<T, bool>> predicate) =>
             await _dbContext.Set<T>().SingleOrDefaultAsync(predicate);
+
+        public async Task Add(T entity)
+        {
+            _dbContext.Set<T>().Add(entity);
+            await _dbContext.SaveChangesAsync();
+        }
 
         public async Task Update(T entity)
         {
             _dbContext.Update(entity);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task BulkUpdate(IEnumerable<T> entities)
+        {
+            _dbContext.UpdateRange(entities);
             await _dbContext.SaveChangesAsync();
         }
 

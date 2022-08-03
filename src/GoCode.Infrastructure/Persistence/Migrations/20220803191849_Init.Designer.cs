@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GoCode.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220802163904_Init")]
+    [Migration("20220803191849_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -126,9 +126,9 @@ namespace GoCode.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("GoCode.Infrastructure.Identity.Entities.RefreshToken", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Token")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
@@ -136,27 +136,17 @@ namespace GoCode.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("ExpiryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsValid")
-                        .HasColumnType("bit");
-
                     b.Property<string>("JwtId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasMaxLength(5000)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Used")
-                        .HasColumnType("bit");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.HasKey("Token");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("RefreshTokens");
                 });
@@ -267,8 +257,8 @@ namespace GoCode.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("GoCode.Infrastructure.Identity.Entities.RefreshToken", b =>
                 {
                     b.HasOne("GoCode.Infrastructure.Identity.Entities.ApplicationUser", "User")
-                        .WithMany("RefreshTokens")
-                        .HasForeignKey("UserId")
+                        .WithOne("RefreshToken")
+                        .HasForeignKey("GoCode.Infrastructure.Identity.Entities.RefreshToken", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -328,7 +318,8 @@ namespace GoCode.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("GoCode.Infrastructure.Identity.Entities.ApplicationUser", b =>
                 {
-                    b.Navigation("RefreshTokens");
+                    b.Navigation("RefreshToken")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

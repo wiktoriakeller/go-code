@@ -6,6 +6,6 @@ namespace GoCode.Infrastructure.Identity.Entities
     {
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-        public ICollection<RefreshToken> RefreshTokens { get; set; }
+        public RefreshToken RefreshToken { get; set; }
     }
 }

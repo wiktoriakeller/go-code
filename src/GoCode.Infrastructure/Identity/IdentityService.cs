@@ -1,12 +1,14 @@
-﻿using GoCode.Application.Contracts.Identity;
+﻿using GoCode.Application.Contracts.DataAccess;
+using GoCode.Application.Contracts.Identity;
+using GoCode.Application.Dtos;
 using GoCode.Application.Dtos.Responses;
 using GoCode.Application.Identity.Commands;
 using GoCode.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Identity;
-using GoCode.Application.Dtos;
+using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
-using GoCode.Application.Contracts.DataAccess;
 using System.Security.Claims;
+using System.Security.Cryptography;
 
 namespace GoCode.Infrastructure.Identity.Entities
 {
@@ -14,15 +16,18 @@ namespace GoCode.Infrastructure.Identity.Entities
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IJwtService _jwtService;
-        private readonly IRepositoryAsync<RefreshToken> _refreshTokenRepository;
+        private readonly IRepository<RefreshToken> _refreshTokenRepository;
+        private readonly JwtOptions _jwtOptions;
 
         public IdentityService(UserManager<ApplicationUser> userManager,
             IJwtService jwtService,
-            IRepositoryAsync<RefreshToken> refreshTokenRepository)
+            IRepository<RefreshToken> refreshTokenRepository,
+            IOptions<JwtOptions> jwtOptions)
         {
             _userManager = userManager;
             _jwtService = jwtService;
             _refreshTokenRepository = refreshTokenRepository;
+            _jwtOptions = jwtOptions.Value;
         }
 
         public async Task<Response<CreateUserResponse>> CreateUserAsync(CreateUserCommand createUserCommand)
@@ -69,10 +74,12 @@ namespace GoCode.Infrastructure.Identity.Entities
                 return new Response<AuthenticateUserResponse>(false, errors);
             }
 
-            var token = _jwtService.CreateJwtToken(user);
+            var (jwtToken, jti) = _jwtService.CreateJwtToken(user);
+            var refreshToken = await CreateRefreshToken(jti, user);
+
             var response = new AuthenticateUserResponse
             {
-                Token = token,
+                Token = jwtToken,
                 RefreshToken = refreshToken
             };
 
@@ -81,7 +88,7 @@ namespace GoCode.Infrastructure.Identity.Entities
 
         public async Task<Response<RefreshTokenResponse>> RefreshTokenAsync(RefreshTokenCommand refreshTokenCommand)
         {
-            var validatedJwt = _jwtService.GetPrincipalFromToken(refreshTokenCommand.Token);
+            var validatedJwt = _jwtService.GetPrincipalFromJwtToken(refreshTokenCommand.Token);
 
             if (validatedJwt == null)
             {
@@ -89,8 +96,8 @@ namespace GoCode.Infrastructure.Identity.Entities
                 return new Response<RefreshTokenResponse>(false, errors);
             }
 
-            var jti = validatedJwt.Claims.SingleOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti)?.Value;
-            var userId = validatedJwt.Claims.SingleOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+            var jti = validatedJwt.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti)?.Value;
+            var userId = validatedJwt.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
             if (jti == null || userId == null)
             {
@@ -98,23 +105,61 @@ namespace GoCode.Infrastructure.Identity.Entities
                 return new Response<RefreshTokenResponse>(false, errors);
             }
 
-            var storedRefreshToken = await _refreshTokenRepository.GetSignleOrDefaultAsync(x => x.Token == refreshTokenCommand.RefreshToken);
+            var storedRefreshToken = await _refreshTokenRepository.SignleOrDefaultAsync(x => x.Token == refreshTokenCommand.RefreshToken);
 
             if (storedRefreshToken == null ||
                 storedRefreshToken.ExpiryDate >= DateTime.UtcNow ||
-                !storedRefreshToken.IsValid ||
-                storedRefreshToken.Used ||
                 storedRefreshToken.JwtId != jti)
             {
                 var errors = new List<string> { "This refresh token does not exist or is invalid" };
                 return new Response<RefreshTokenResponse>(false, errors);
             }
 
-            storedRefreshToken.Used = true;
-            await _refreshTokenRepository.Update(storedRefreshToken);
-
             var user = await _userManager.FindByIdAsync(userId);
-            return AuthenticateUserAync()
+            var (jwtToken, newJti) = _jwtService.CreateJwtToken(user);
+            var refreshToken = await CreateRefreshToken(newJti, user);
+
+            var result = new RefreshTokenResponse
+            {
+                Token = jwtToken,
+                RefreshToken = refreshToken
+            };
+
+            return new Response<RefreshTokenResponse>(true, result);
+        }
+
+        private async Task<string> CreateRefreshToken(string jti, ApplicationUser user)
+        {
+            if (user.RefreshToken != null)
+            {
+                await _refreshTokenRepository.Delete(user.RefreshToken);
+            }
+
+            var refreshToken = new RefreshToken
+            {
+                Token = GetUniqueToken(),
+                JwtId = jti,
+                CreationDate = DateTime.UtcNow,
+                ExpiryDate = DateTime.UtcNow.AddDays(_jwtOptions.RefreshTokenExpirationInDays),
+                UserId = user.Id,
+                User = user
+            };
+
+            await _refreshTokenRepository.Add(refreshToken);
+            return refreshToken.Token;
+        }
+
+        private string GetUniqueToken()
+        {
+            var token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+            var tokenIsUsed = _userManager.Users.Any(u => u.RefreshToken != null && u.RefreshToken.Token == token);
+
+            if (tokenIsUsed)
+            {
+                return GetUniqueToken();
+            }
+
+            return token;
         }
     }
 }

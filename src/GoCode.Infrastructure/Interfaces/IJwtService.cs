@@ -5,8 +5,8 @@ namespace GoCode.Infrastructure.Interfaces
 {
     public interface IJwtService
     {
-        string CreateJwtToken(ApplicationUser user);
+        (string jwtToken, string jti) CreateJwtToken(ApplicationUser user);
 
-        ClaimsPrincipal? GetPrincipalFromToken(string token);
+        ClaimsPrincipal? GetPrincipalFromJwtToken(string token);
     }
 }

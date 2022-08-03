@@ -160,18 +160,15 @@ namespace GoCode.Infrastructure.Persistence.Migrations
                 name: "RefreshTokens",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Token = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     JwtId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Used = table.Column<bool>(type: "bit", nullable: false),
-                    IsValid = table.Column<bool>(type: "bit", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RefreshTokens", x => x.Id);
+                    table.PrimaryKey("PK_RefreshTokens", x => x.Token);
                     table.ForeignKey(
                         name: "FK_RefreshTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -222,7 +219,8 @@ namespace GoCode.Infrastructure.Persistence.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_RefreshTokens_UserId",
                 table: "RefreshTokens",
-                column: "UserId");
+                column: "UserId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

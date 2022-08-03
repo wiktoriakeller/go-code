@@ -15,10 +15,11 @@ namespace GoCode.Application.Identity.Handlers
             _identityService = identityService;
         }
 
-        public Task<Response<RefreshTokenResponse>> Handle(RefreshTokenCommand request,
+        public async Task<Response<RefreshTokenResponse>> Handle(RefreshTokenCommand request,
             CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var response = await _identityService.RefreshTokenAsync(request);
+            return response;
         }
     }
 }
