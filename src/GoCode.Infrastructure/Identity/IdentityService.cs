@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using GoCode.Infrastructure.Constants;
 
 namespace GoCode.Infrastructure.Identity.Entities
 {
@@ -45,7 +46,9 @@ namespace GoCode.Infrastructure.Identity.Entities
             if (!result.Succeeded)
             {
                 var errors = result.Errors.Select(e => e.Description);
-                return new Response<CreateUserResponse>(false, errors);
+                var errorResponse = new Response<CreateUserResponse>(false);
+                errorResponse.AddErrorMessage("Identity", errors);
+                return errorResponse;
             }
 
             var response = new CreateUserResponse
@@ -58,20 +61,21 @@ namespace GoCode.Infrastructure.Identity.Entities
 
         public async Task<Response<AuthenticateUserResponse>> AuthenticateUserAync(AuthenticateUserCommand authenticateUserCommand)
         {
+            var errorResponse = new Response<AuthenticateUserResponse>(false);
             var user = await _userManager.FindByEmailAsync(authenticateUserCommand.Email);
 
             if (user == null)
             {
-                var errors = new List<string> { "Incorrect credentials" };
-                return new Response<AuthenticateUserResponse>(false, errors);
+                errorResponse.AddErrorMessage("Identity", ErrorMessages.Identity.IncorrectCredentials);
+                return errorResponse;
             }
 
             var userPasswordIsValid = await _userManager.CheckPasswordAsync(user, authenticateUserCommand.Password);
 
             if (!userPasswordIsValid)
             {
-                var errors = new List<string> { "Incorrect credentials" };
-                return new Response<AuthenticateUserResponse>(false, errors);
+                errorResponse.AddErrorMessage("Identity", ErrorMessages.Identity.IncorrectCredentials);
+                return errorResponse;
             }
 
             var (jwtToken, jti) = _jwtService.CreateJwtToken(user);
@@ -88,12 +92,13 @@ namespace GoCode.Infrastructure.Identity.Entities
 
         public async Task<Response<RefreshTokenResponse>> RefreshTokenAsync(RefreshTokenCommand refreshTokenCommand)
         {
+            var errorResponse = new Response<RefreshTokenResponse>(false);
             var validatedJwt = _jwtService.GetPrincipalFromJwtToken(refreshTokenCommand.Token);
 
             if (validatedJwt == null)
             {
-                var errors = new List<string> { "Invalid JWT token" };
-                return new Response<RefreshTokenResponse>(false, errors);
+                errorResponse.AddErrorMessage("Identity", ErrorMessages.Identity.InvalidJwt);
+                return errorResponse;
             }
 
             var jti = validatedJwt.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti)?.Value;
@@ -101,8 +106,8 @@ namespace GoCode.Infrastructure.Identity.Entities
 
             if (jti == null || userId == null)
             {
-                var errors = new List<string> { "Invalid JWT token" };
-                return new Response<RefreshTokenResponse>(false, errors);
+                errorResponse.AddErrorMessage("Identity", ErrorMessages.Identity.InvalidJwt);
+                return errorResponse;
             }
 
             var storedRefreshToken = await _refreshTokenRepository.SignleOrDefaultAsync(x => x.Token == refreshTokenCommand.RefreshToken);
@@ -111,8 +116,8 @@ namespace GoCode.Infrastructure.Identity.Entities
                 storedRefreshToken.ExpiryDate >= DateTime.UtcNow ||
                 storedRefreshToken.JwtId != jti)
             {
-                var errors = new List<string> { "This refresh token does not exist or is invalid" };
-                return new Response<RefreshTokenResponse>(false, errors);
+                errorResponse.AddErrorMessage("Identity", ErrorMessages.Identity.InvalidRefreshToken);
+                return errorResponse;
             }
 
             var user = await _userManager.FindByIdAsync(userId);

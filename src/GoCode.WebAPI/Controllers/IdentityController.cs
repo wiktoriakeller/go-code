@@ -32,7 +32,7 @@ namespace GoCode.WebAPI.Controllers
                 return BadRequest(response);
             }
 
-            return Created($"api/v1/identity/{response.Result.UserId}", null);
+            return Created($"api/v1/identity/{response.Value.UserId}", null);
         }
 
         [HttpPost("login")]
