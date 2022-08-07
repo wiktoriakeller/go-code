@@ -13,19 +13,19 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-    dotnet-build-and-test:
-        # The type of runner that the job will run on
-        runs-on: ubuntu-latest
-        steps:
+  dotnet-build-and-test:
+  # The type of runner that the job will run on
+      runs-on: ubuntu-latest
+      steps:
         - name: Checkout repository
-            uses: actions/checkout@v3
+          uses: actions/checkout@v3
         - name: Setup .NET
-            uses: actions/setup-dotnet@v2.1.0
-            with:
+          uses: actions/setup-dotnet@v2.1.0
+          with:
             dotnet-version: 6.0.x
         - name: Restore dependencies
-            run: dotnet restore GoCode.sln
+          run: dotnet restore GoCode.sln
         - name: Build
-            run: dotnet build GoCode.sln --configuration Release --no-restore
+          run: dotnet build GoCode.sln --configuration Release --no-restore
         - name: Run unit tests
-            run: dotnet test ./tests/GoCode.UnitTests/GoCode.UnitTests.csproj --verbosity normal
+          run: dotnet test ./tests/GoCode.UnitTests/GoCode.UnitTests.csproj --verbosity normal
