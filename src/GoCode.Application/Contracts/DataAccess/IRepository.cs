@@ -2,22 +2,22 @@
 
 namespace GoCode.Application.Contracts.DataAccess
 {
-    public interface IRepository<T> where T : class
+    public interface IRepository<TEntity> where TEntity : class
     {
-        Task<IEnumerable<T>> GetAllAsync();
+        Task<IEnumerable<TEntity>> GetAllAsync();
 
-        Task<IEnumerable<T>> GetWhereAsync(Expression<Func<T, bool>> predicate);
+        Task<IEnumerable<TEntity>> GetWhereAsync(Expression<Func<TEntity, bool>> predicate);
 
-        Task<T?> SignleOrDefaultAsync(Expression<Func<T, bool>> predicate);
+        Task<TEntity?> SignleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
 
-        Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate);
+        Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
 
-        Task AddAsync(T entity);
+        Task<TEntity> AddAsync(TEntity entity);
 
-        Task UpdateAsync(T entity);
+        Task<TEntity> UpdateAsync(TEntity entity);
 
-        Task BulkUpdateAsync(IEnumerable<T> entities);
+        Task BulkUpdateAsync(IEnumerable<TEntity> entities);
 
-        Task DeleteAsync(T entity);
+        Task DeleteAsync(TEntity entity);
     }
 }
