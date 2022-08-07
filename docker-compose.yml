@@ -19,8 +19,8 @@ services:
         build: .
         environment:
             - "ASPNETCORE_ENVIRONMENT=Development"
-            - "ConnectionStrings:DefaultConnection=Server=db-sql;Database=GoCodeTestDb;User=sa;Password=Your_password123;"
-            - "Authentication:JwtOptions:Key=super_secret_key"
+            - "ConnectionStrings:DefaultConnection=${CONNECTION_STRING?err}"
+            - "Authentication:JwtOptions:Key=${JWT_KEY?err}"
             - "Authentication:JwtOptions:Issuer=http://localhost:5000/"
             - "Authentication:JwtOptions:Audience=http://localhost:5000/"
         restart: always
