@@ -16,7 +16,7 @@ services:
         networks:
             - localdev
     api:
-        build: .
+        build: ./src/
         environment:
             - "ASPNETCORE_ENVIRONMENT=Development"
             - "ConnectionStrings:DefaultConnection=${CONNECTION_STRING?err}"
