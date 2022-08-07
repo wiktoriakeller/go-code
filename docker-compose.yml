@@ -10,17 +10,17 @@ services:
         container_name: db-sql
         environment:
             ACCEPT_EULA: "Y"
-            SA_PASSWORD: "Your_password123"
+            SA_PASSWORD: ${SA_PASSWORD}
         ports:
             - "1433:1433"
         networks:
             - localdev
     api:
-        build: .
+        build: ./src/
         environment:
             - "ASPNETCORE_ENVIRONMENT=Development"
-            - "ConnectionStrings:DefaultConnection=Server=db-sql;Database=GoCodeTestDb;User=sa;Password=Your_password123;"
-            - "Authentication:JwtOptions:Key=super_secret_key"
+            - "ConnectionStrings:DefaultConnection=${CONNECTION_STRING?err}"
+            - "Authentication:JwtOptions:Key=${JWT_KEY?err}"
             - "Authentication:JwtOptions:Issuer=http://localhost:5000/"
             - "Authentication:JwtOptions:Audience=http://localhost:5000/"
         restart: always

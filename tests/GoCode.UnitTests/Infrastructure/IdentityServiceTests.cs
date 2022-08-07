@@ -7,10 +7,9 @@ using GoCode.Application.Contracts.DataAccess;
 using GoCode.UnitTests.Attributes;
 using FluentAssertions;
 using GoCode.Application.Identity.Commands;
-using Moq;
 using AutoFixture.Xunit2;
 using GoCode.Infrastructure.Constants;
-using System;
+using Moq;
 
 namespace GoCode.UnitTests.Infrastructure
 {
