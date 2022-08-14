@@ -103,7 +103,7 @@ namespace GoCode.Infrastructure.Identity.Entities
                 return ResponseResult.ValidationError<RefreshTokenResponse>(ErrorMessages.Identity.InvalidJwt);
             }
 
-            var storedTokens = await _refreshTokenRepository.GetWhere(x => x.Token == refreshTokenCommand.RefreshToken);
+            var storedTokens = _refreshTokenRepository.GetWhere(x => x.Token == refreshTokenCommand.RefreshToken);
 
             if (storedTokens.Count() != 1)
             {
