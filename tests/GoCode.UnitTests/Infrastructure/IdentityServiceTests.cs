@@ -1,18 +1,20 @@
-﻿using GoCode.Infrastructure.Identity.Entities;
-using Microsoft.AspNetCore.Identity;
-using GoCode.Infrastructure.Interfaces;
-using Microsoft.Extensions.Options;
-using GoCode.Infrastructure.Identity;
-using GoCode.Application.Contracts.DataAccess;
-using GoCode.UnitTests.Attributes;
+﻿using AutoFixture.Xunit2;
 using FluentAssertions;
+using GoCode.Application.Contracts.DataAccess;
 using GoCode.Application.Identity.Commands;
-using AutoFixture.Xunit2;
 using GoCode.Infrastructure.Constants;
+using GoCode.Infrastructure.Identity;
+using GoCode.Infrastructure.Identity.Entities;
+using GoCode.Infrastructure.Interfaces;
+using GoCode.UnitTests.Attributes;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Moq;
+using System.Diagnostics.CodeAnalysis;
 
 namespace GoCode.UnitTests.Infrastructure
 {
+    [ExcludeFromCodeCoverage]
     public class IdentityServiceTests
     {
         [Theory]
@@ -88,7 +90,7 @@ namespace GoCode.UnitTests.Infrastructure
             var result = await sut.AuthenticateUserAync(command);
 
             //Assert
-            result.Errors["Identity"].Should().Contain(ErrorMessages.Identity.IncorrectCredentials);
+            result.Errors.Should().Contain(ErrorMessages.Identity.IncorrectCredentials);
         }
 
         [Theory]
@@ -117,7 +119,7 @@ namespace GoCode.UnitTests.Infrastructure
             var result = await sut.AuthenticateUserAync(command);
 
             //Assert
-            result.Errors["Identity"].Should().Contain(ErrorMessages.Identity.IncorrectCredentials);
+            result.Errors.Should().Contain(ErrorMessages.Identity.IncorrectCredentials);
         }
 
         [Theory]

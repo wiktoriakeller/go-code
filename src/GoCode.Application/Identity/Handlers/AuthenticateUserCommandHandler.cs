@@ -1,7 +1,7 @@
-﻿using GoCode.Application.Contracts.Identity;
-using GoCode.Application.Dtos.Responses;
+﻿using GoCode.Application.BaseResponse;
+using GoCode.Application.Contracts.Identity;
 using GoCode.Application.Identity.Commands;
-using GoCode.Application.Dtos;
+using GoCode.Application.Identity.Responses;
 using MediatR;
 
 namespace GoCode.Application.Identity.Handlers
@@ -15,10 +15,10 @@ namespace GoCode.Application.Identity.Handlers
             _identityService = identityService;
         }
 
-        public Task<Response<AuthenticateUserResponse>> Handle(AuthenticateUserCommand request,
+        public async Task<Response<AuthenticateUserResponse>> Handle(AuthenticateUserCommand request,
             CancellationToken cancellationToken)
         {
-            var response = _identityService.AuthenticateUserAync(request);
+            var response = await _identityService.AuthenticateUserAync(request);
             return response;
         }
     }

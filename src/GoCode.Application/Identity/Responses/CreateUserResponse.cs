@@ -1,4 +1,4 @@
-﻿namespace GoCode.Application.Dtos.Responses
+﻿namespace GoCode.Application.Identity.Responses
 {
     public record CreateUserResponse
     {

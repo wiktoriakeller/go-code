@@ -1,7 +1,7 @@
-using GoCode.Infrastructure.Extensions;
 using GoCode.Application.Extensions;
-using GoCode.WebAPI.Extensions;
+using GoCode.Infrastructure.Extensions;
 using GoCode.Infrastructure.Persistence;
+using GoCode.WebAPI.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

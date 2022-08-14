@@ -1,6 +1,6 @@
-﻿namespace GoCode.Application.Dtos.Responses
+﻿namespace GoCode.Application.Identity.Responses
 {
-    public class RefreshTokenResponse
+    public record AuthenticateUserResponse
     {
         public string Token { get; set; }
         public string RefreshToken { get; set; }

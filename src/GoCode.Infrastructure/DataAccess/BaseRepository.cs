@@ -1,7 +1,7 @@
 ﻿using GoCode.Application.Contracts.DataAccess;
 using GoCode.Infrastructure.Persistence;
-using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace GoCode.Infrastructure.DataAccess
 {
@@ -14,16 +14,16 @@ namespace GoCode.Infrastructure.DataAccess
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync() => await _dbContext.Set<TEntity>().ToListAsync();
+        public IEnumerable<TEntity> GetAll() => _dbContext.Set<TEntity>();
 
-        public async Task<IEnumerable<TEntity>> GetWhereAsync(Expression<Func<TEntity, bool>> predicate) =>
-            await _dbContext.Set<TEntity>().Where(predicate).ToListAsync();
+        public IEnumerable<TEntity> GetWhere(Expression<Func<TEntity, bool>> predicate) =>
+            _dbContext.Set<TEntity>().Where(predicate);
 
-        public Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate) =>
-            _dbContext.Set<TEntity>().FirstOrDefaultAsync(predicate);
+        public async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate) =>
+            await _dbContext.Set<TEntity>().FirstOrDefaultAsync(predicate);
 
-        public Task<TEntity?> SignleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate) =>
-            _dbContext.Set<TEntity>().SingleOrDefaultAsync(predicate);
+        public async Task<TEntity?> SignleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate) =>
+            await _dbContext.Set<TEntity>().SingleOrDefaultAsync(predicate);
 
         public async Task<TEntity> AddAsync(TEntity entity)
         {

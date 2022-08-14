@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using GoCode.Application.Identity.Commands;
 
-namespace GoCode.Application.Dtos.Requests
+namespace GoCode.Application.Identity.Requests
 {
     public class RefreshTokenRequest
     {
