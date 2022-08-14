@@ -1,0 +1,16 @@
+name: Feature template
+description: A template for a feature
+title: "[Feature]: "
+labels: ["enhancement"]
+assignees:
+  - wiktoriakeller
+body:
+  - type: markdown
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      placeholder: Issue description
+      value: "Issue description"
+    validations:
+      required: true
