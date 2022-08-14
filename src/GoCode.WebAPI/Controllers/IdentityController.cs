@@ -8,15 +8,10 @@ namespace GoCode.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/v1/identity")]
-    public class IdentityController : ControllerBase
+    public class IdentityController : BaseApiController
     {
-        private readonly IMediator _medaitor;
-        private readonly IMapper _mapper;
-
-        public IdentityController(IMediator mediator, IMapper mapper)
+        public IdentityController(IMediator mediator, IMapper mapper) : base(mediator, mapper)
         {
-            _medaitor = mediator;
-            _mapper = mapper;
         }
 
         [HttpPost("register")]
