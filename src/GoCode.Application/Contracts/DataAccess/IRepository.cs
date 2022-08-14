@@ -4,9 +4,9 @@ namespace GoCode.Application.Contracts.DataAccess
 {
     public interface IRepository<TEntity> where TEntity : class
     {
-        Task<IEnumerable<TEntity>> GetAllAsync();
+        IEnumerable<TEntity> GetAll();
 
-        Task<IEnumerable<TEntity>> GetWhereAsync(Expression<Func<TEntity, bool>> predicate);
+        IEnumerable<TEntity> GetWhere(Expression<Func<TEntity, bool>> predicate);
 
         Task<TEntity?> SignleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
 
