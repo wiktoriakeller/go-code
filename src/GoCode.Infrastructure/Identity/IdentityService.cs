@@ -1,15 +1,15 @@
-﻿using GoCode.Application.Contracts.DataAccess;
+﻿using GoCode.Application.BaseResponse;
+using GoCode.Application.Contracts.DataAccess;
 using GoCode.Application.Contracts.Identity;
-using GoCode.Application.Dtos;
-using GoCode.Application.Dtos.Responses;
 using GoCode.Application.Identity.Commands;
+using GoCode.Application.Identity.Responses;
+using GoCode.Infrastructure.Constants;
 using GoCode.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using GoCode.Infrastructure.Constants;
 
 namespace GoCode.Infrastructure.Identity.Entities
 {
@@ -46,9 +46,7 @@ namespace GoCode.Infrastructure.Identity.Entities
             if (!result.Succeeded)
             {
                 var errors = result.Errors.Select(e => e.Description);
-                var errorResponse = new Response<CreateUserResponse>(false);
-                errorResponse.AddErrorMessage("Identity", errors);
-                return errorResponse;
+                return ResponseResult.ValidationError<CreateUserResponse>(errors);
             }
 
             var response = new CreateUserResponse
@@ -56,26 +54,23 @@ namespace GoCode.Infrastructure.Identity.Entities
                 UserId = newUser.Id
             };
 
-            return new Response<CreateUserResponse>(true, response);
+            return ResponseResult.Ok(response);
         }
 
         public async Task<Response<AuthenticateUserResponse>> AuthenticateUserAync(AuthenticateUserCommand authenticateUserCommand)
         {
-            var errorResponse = new Response<AuthenticateUserResponse>(false);
             var user = await _userManager.FindByEmailAsync(authenticateUserCommand.Email);
 
             if (user == null)
             {
-                errorResponse.AddErrorMessage("Identity", ErrorMessages.Identity.IncorrectCredentials);
-                return errorResponse;
+                return ResponseResult.ValidationError<AuthenticateUserResponse>(ErrorMessages.Identity.IncorrectCredentials);
             }
 
             var userPasswordIsValid = await _userManager.CheckPasswordAsync(user, authenticateUserCommand.Password);
 
             if (!userPasswordIsValid)
             {
-                errorResponse.AddErrorMessage("Identity", ErrorMessages.Identity.IncorrectCredentials);
-                return errorResponse;
+                return ResponseResult.ValidationError<AuthenticateUserResponse>(ErrorMessages.Identity.IncorrectCredentials);
             }
 
             var (jwtToken, jti) = _jwtService.CreateJwtToken(user);
@@ -88,18 +83,16 @@ namespace GoCode.Infrastructure.Identity.Entities
                 RefreshToken = refreshToken
             };
 
-            return new Response<AuthenticateUserResponse>(true, response);
+            return ResponseResult.Ok(response);
         }
 
         public async Task<Response<RefreshTokenResponse>> RefreshTokenAsync(RefreshTokenCommand refreshTokenCommand)
         {
-            var errorResponse = new Response<RefreshTokenResponse>(false);
             var validatedJwt = _jwtService.GetPrincipalFromJwtToken(refreshTokenCommand.Token);
 
             if (validatedJwt == null)
             {
-                errorResponse.AddErrorMessage("Identity", ErrorMessages.Identity.InvalidJwt);
-                return errorResponse;
+                return ResponseResult.ValidationError<RefreshTokenResponse>(ErrorMessages.Identity.InvalidJwt);
             }
 
             var jti = validatedJwt.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti)?.Value;
@@ -107,16 +100,14 @@ namespace GoCode.Infrastructure.Identity.Entities
 
             if (jti == null || userId == null)
             {
-                errorResponse.AddErrorMessage("Identity", ErrorMessages.Identity.InvalidJwt);
-                return errorResponse;
+                return ResponseResult.ValidationError<RefreshTokenResponse>(ErrorMessages.Identity.InvalidJwt);
             }
 
             var storedTokens = await _refreshTokenRepository.GetWhereAsync(x => x.Token == refreshTokenCommand.RefreshToken);
 
             if (storedTokens.Count() != 1)
             {
-                errorResponse.AddErrorMessage("Identity", ErrorMessages.Identity.InvalidJwt);
-                return errorResponse;
+                return ResponseResult.ValidationError<RefreshTokenResponse>(ErrorMessages.Identity.InvalidJwt);
             }
 
             var storedToken = storedTokens.First();
@@ -124,21 +115,20 @@ namespace GoCode.Infrastructure.Identity.Entities
             if (storedToken.ExpiryDate >= DateTime.UtcNow ||
                 storedToken.JwtId != jti)
             {
-                errorResponse.AddErrorMessage("Identity", ErrorMessages.Identity.InvalidRefreshToken);
-                return errorResponse;
+                return ResponseResult.ValidationError<RefreshTokenResponse>(ErrorMessages.Identity.InvalidRefreshToken);
             }
 
             var user = await _userManager.FindByIdAsync(userId);
             var (jwtToken, newJti) = _jwtService.CreateJwtToken(user);
             var refreshToken = await CreateRefreshToken(newJti, user, storedToken);
 
-            var result = new RefreshTokenResponse
+            var response = new RefreshTokenResponse
             {
                 Token = jwtToken,
                 RefreshToken = refreshToken
             };
 
-            return new Response<RefreshTokenResponse>(true, result);
+            return ResponseResult.Ok(response);
         }
 
         private async Task<string> CreateRefreshToken(string jti, ApplicationUser user, RefreshToken? storedRefresh = null)

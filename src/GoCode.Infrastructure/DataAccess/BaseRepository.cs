@@ -1,7 +1,7 @@
 ﻿using GoCode.Application.Contracts.DataAccess;
 using GoCode.Infrastructure.Persistence;
-using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace GoCode.Infrastructure.DataAccess
 {

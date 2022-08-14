@@ -1,7 +1,7 @@
-﻿using GoCode.Application.Dtos;
-using GoCode.Application.Dtos.Responses;
-using GoCode.Application.Identity.Commands;
+﻿using GoCode.Application.BaseResponse;
 using GoCode.Application.Contracts.Identity;
+using GoCode.Application.Identity.Commands;
+using GoCode.Application.Identity.Responses;
 using MediatR;
 
 namespace GoCode.Application.Identity.Handlers

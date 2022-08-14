@@ -1,5 +1,5 @@
-﻿using GoCode.Application.Dtos.Responses;
-using GoCode.Application.Dtos;
+﻿using GoCode.Application.BaseResponse;
+using GoCode.Application.Identity.Responses;
 using MediatR;
 
 namespace GoCode.Application.Identity.Commands

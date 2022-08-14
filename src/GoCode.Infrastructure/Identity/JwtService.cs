@@ -72,8 +72,6 @@ namespace GoCode.Infrastructure.Identity
                 new Claim(JwtRegisteredClaimNames.Iss, _jwtOptions.Issuer),
                 new Claim(JwtRegisteredClaimNames.Aud, _jwtOptions.Audience),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.FirstName ?? ""),
-                new Claim(ClaimTypes.Surname, user.LastName ?? ""),
                 new Claim(ClaimTypes.Email, user.Email)
             };
 

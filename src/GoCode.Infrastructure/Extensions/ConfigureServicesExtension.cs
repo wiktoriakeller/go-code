@@ -1,16 +1,16 @@
-﻿using GoCode.Application.Contracts.Identity;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.DependencyInjection;
+﻿using GoCode.Application.Contracts.DataAccess;
+using GoCode.Application.Contracts.Identity;
+using GoCode.Infrastructure.DataAccess;
+using GoCode.Infrastructure.Identity;
 using GoCode.Infrastructure.Identity.Entities;
 using GoCode.Infrastructure.Interfaces;
 using GoCode.Infrastructure.Persistence;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
-using GoCode.Infrastructure.Identity;
-using GoCode.Infrastructure.DataAccess;
-using GoCode.Application.Contracts.DataAccess;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 namespace GoCode.Infrastructure.Extensions
@@ -65,9 +65,9 @@ namespace GoCode.Infrastructure.Extensions
                 cfg.TokenValidationParameters = tokenValidationParameters;
             });
 
+            //Options bindings
             services.AddSingleton(tokenValidationParameters);
 
-            //Options bindings
             services.Configure<JwtOptions>(configuration.GetSection("Authentication:JwtOptions"));
 
             return services;

@@ -1,13 +1,13 @@
-﻿using MediatR;
-using AutoMapper;
-using GoCode.Application.Dtos.Requests;
+﻿using AutoMapper;
 using GoCode.Application.Identity.Commands;
+using GoCode.Application.Identity.Requests;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GoCode.WebAPI.Controllers
 {
-    [Route("api/v1/identity")]
     [ApiController]
+    [Route("api/v1/identity")]
     public class IdentityController : ControllerBase
     {
         private readonly IMediator _medaitor;
@@ -20,8 +20,6 @@ namespace GoCode.WebAPI.Controllers
         }
 
         [HttpPost("register")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Register([FromBody] CreateUserRequest request)
         {
             var command = _mapper.Map<CreateUserCommand>(request);
@@ -29,42 +27,26 @@ namespace GoCode.WebAPI.Controllers
 
             if (!response.Succeeded)
             {
-                return BadRequest(response);
+                return StatusCode((int)response.HttpStatusCode, response);
             }
 
-            return Created($"api/v1/identity/{response.Value.UserId}", null);
+            return Created($"api/v1/identity/{response.Data.UserId}", null);
         }
 
         [HttpPost("login")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Login([FromBody] AuthenticateUserRequest request)
         {
             var command = _mapper.Map<AuthenticateUserCommand>(request);
             var response = await _medaitor.Send(command);
-
-            if (!response.Succeeded)
-            {
-                return BadRequest(response);
-            }
-
-            return Ok(response);
+            return StatusCode((int)response.HttpStatusCode, response);
         }
 
         [HttpPost("refresh")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
         {
             var command = _mapper.Map<RefreshTokenCommand>(request);
             var response = await _medaitor.Send(command);
-
-            if (!response.Succeeded)
-            {
-                return BadRequest(response);
-            }
-
-            return Ok(response);
+            return StatusCode((int)response.HttpStatusCode, response);
         }
     }
 }
