@@ -1,4 +1,4 @@
-﻿namespace GoCode.Application.Dto.Identity
+﻿namespace GoCode.Application.Identity.Dto
 {
     public class UserDto
     {

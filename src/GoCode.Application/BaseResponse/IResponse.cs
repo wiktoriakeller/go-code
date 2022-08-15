@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace GoCode.Application.Dto.BaseResponse
+namespace GoCode.Application.BaseResponse
 {
     public interface IResponse<T>
     {

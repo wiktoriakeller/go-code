@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
+using GoCode.Application.BaseResponse;
 using GoCode.Application.Contracts.DataAccess;
 using GoCode.Application.Contracts.Identity;
-using GoCode.Application.Dto.BaseResponse;
-using GoCode.Application.Dto.Identity;
 using GoCode.Application.Identity.Commands;
+using GoCode.Application.Identity.Dto;
 using GoCode.Application.Identity.Responses;
 using GoCode.Infrastructure.Constants;
+using GoCode.Infrastructure.Identity.Entities;
 using GoCode.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -13,7 +14,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 
-namespace GoCode.Infrastructure.Identity.Entities
+namespace GoCode.Infrastructure.Identity
 {
     public class IdentityService : IIdentityService
     {

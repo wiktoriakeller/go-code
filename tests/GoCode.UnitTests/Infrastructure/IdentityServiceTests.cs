@@ -1,10 +1,8 @@
-﻿using AutoFixture.Xunit2;
-using AutoMapper;
-using FluentAssertions;
+﻿using AutoMapper;
+using GoCode.Application.BaseResponse;
 using GoCode.Application.Contracts.DataAccess;
-using GoCode.Application.Dto.BaseResponse;
-using GoCode.Application.Dto.Identity;
 using GoCode.Application.Identity.Commands;
+using GoCode.Application.Identity.Dto;
 using GoCode.Infrastructure.Constants;
 using GoCode.Infrastructure.Identity;
 using GoCode.Infrastructure.Identity.Entities;
