@@ -6,7 +6,7 @@ namespace GoCode.Application.Identity
 {
     internal class IdentityMappingProfile : Profile
     {
-        internal IdentityMappingProfile()
+        public IdentityMappingProfile()
         {
             CreateMap<AuthenticateUserRequest, AuthenticateUserCommand>();
             CreateMap<CreateUserRequest, CreateUserCommand>();

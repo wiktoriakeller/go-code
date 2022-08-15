@@ -51,7 +51,14 @@ namespace GoCode.Infrastructure.Identity.Entities
 
         public async Task<Response<CreateUserResponse>> CreateUserAsync(CreateUserCommand createUserCommand)
         {
-            var newUser = _mapper.Map<ApplicationUser>(createUserCommand);
+            var newUser = new ApplicationUser
+            {
+                Email = createUserCommand.Email,
+                UserName = createUserCommand.Email,
+                FirstName = createUserCommand.FirstName,
+                LastName = createUserCommand.LastName
+            };
+
             var result = await _userManager.CreateAsync(newUser, createUserCommand.Password);
 
             if (!result.Succeeded)
