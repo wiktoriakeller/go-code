@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace GoCode.Application.BaseResponse
+namespace GoCode.Application.Dto.BaseResponse
 {
     public static class ResponseResult
     {

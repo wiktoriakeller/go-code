@@ -1,4 +1,4 @@
-﻿namespace GoCode.Application.BaseResponse
+﻿namespace GoCode.Application.Dto.BaseResponse
 {
     public enum ResponseError
     {

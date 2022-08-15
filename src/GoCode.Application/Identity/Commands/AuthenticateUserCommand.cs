@@ -1,4 +1,4 @@
-﻿using GoCode.Application.BaseResponse;
+﻿using GoCode.Application.Dto.BaseResponse;
 using GoCode.Application.Identity.Responses;
 using MediatR;
 

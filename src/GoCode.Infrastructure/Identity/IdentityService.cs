@@ -1,6 +1,6 @@
-﻿using GoCode.Application.BaseResponse;
-using GoCode.Application.Contracts.DataAccess;
+﻿using GoCode.Application.Contracts.DataAccess;
 using GoCode.Application.Contracts.Identity;
+using GoCode.Application.Dto.BaseResponse;
 using GoCode.Application.Identity.Commands;
 using GoCode.Application.Identity.Responses;
 using GoCode.Infrastructure.Constants;
