@@ -1,6 +1,9 @@
 ﻿using AutoFixture.Xunit2;
+using AutoMapper;
 using FluentAssertions;
 using GoCode.Application.Contracts.DataAccess;
+using GoCode.Application.Dto.BaseResponse;
+using GoCode.Application.Dto.Identity;
 using GoCode.Application.Identity.Commands;
 using GoCode.Infrastructure.Constants;
 using GoCode.Infrastructure.Identity;
@@ -17,15 +20,76 @@ namespace GoCode.UnitTests.Infrastructure
     [ExcludeFromCodeCoverage]
     public class IdentityServiceTests
     {
+        private readonly IOptions<JwtOptions> _jwtOptions;
+        private readonly Mock<IRepository<RefreshToken>> _refreshTokenRepository;
+
+        public IdentityServiceTests()
+        {
+            _jwtOptions = Options.Create(new JwtOptions());
+            _refreshTokenRepository = new Mock<IRepository<RefreshToken>>();
+        }
+
+        [Theory]
+        [ApplicationUserWithoutTokenData]
+        public async Task GetUserById_GivenUserId_ResultShouldBeOk(string userId, ApplicationUser user, UserDto userDto)
+        {
+            //Arrange
+            var mapper = new Mock<IMapper>();
+            var jwtService = new Mock<IJwtService>();
+            var userManager = MockUserManager<ApplicationUser>();
+
+            userManager.Setup(x => x.FindByIdAsync(userId))
+                .Returns(Task.FromResult(user));
+
+            mapper.Setup(x => x.Map<UserDto>(user))
+                .Returns(userDto);
+
+            var sut = new IdentityService(userManager.Object,
+                jwtService.Object,
+                _refreshTokenRepository.Object,
+                mapper.Object,
+                _jwtOptions);
+
+            //Act
+            var result = await sut.GetUserById(userId);
+
+            //Assert
+            result.Data.Should().BeEquivalentTo(userDto);
+        }
+
+        [Theory]
+        [AutoData]
+        public async Task GetUserById_GivenUserId_ResultShouldBeNotFound(string userId)
+        {
+            //Arrange
+            var mapper = new Mock<IMapper>();
+            var jwtService = new Mock<IJwtService>();
+            var userManager = MockUserManager<ApplicationUser>();
+
+            userManager.Setup(x => x.FindByIdAsync(userId))
+                .Returns(Task.FromResult<ApplicationUser?>(null));
+
+            var sut = new IdentityService(userManager.Object,
+                jwtService.Object,
+                _refreshTokenRepository.Object,
+                mapper.Object,
+                _jwtOptions);
+
+            //Act
+            var result = await sut.GetUserById(userId);
+
+            //Assert
+            result.ResponseError.Should().Be(ResponseError.NotFound);
+        }
+
         [Theory]
         [ApplicationUserWithoutTokenData]
         public async Task CreateUserAsync_GivenCreateUserCommand_UsersCountShouldIncrease(CreateUserCommand command,
             List<ApplicationUser> users)
         {
             //Arrange
+            var mapper = new Mock<IMapper>();
             var jwtService = new Mock<IJwtService>();
-            var jwtOptions = Options.Create(new JwtOptions());
-            var refreshTokenRepository = new Mock<IRepository<RefreshToken>>();
             var userManager = MockUserManager<ApplicationUser>();
 
             userManager.Setup(x => x.CreateAsync(It.IsAny<ApplicationUser>(), command.Password))
@@ -33,8 +97,9 @@ namespace GoCode.UnitTests.Infrastructure
 
             var sut = new IdentityService(userManager.Object,
                 jwtService.Object,
-                refreshTokenRepository.Object,
-                jwtOptions);
+                _refreshTokenRepository.Object,
+                mapper.Object,
+                _jwtOptions);
 
             //Act
             await sut.CreateUserAsync(command);
@@ -48,9 +113,8 @@ namespace GoCode.UnitTests.Infrastructure
         public async Task CreateUserAsync_GivenCreateUserCommand_WhenUserManagerFails_ResponseErrorsShouldNotBeEmpty(CreateUserCommand command)
         {
             //Arrange
+            var mapper = new Mock<IMapper>();
             var jwtService = new Mock<IJwtService>();
-            var jwtOptions = Options.Create(new JwtOptions());
-            var refreshTokenRepository = new Mock<IRepository<RefreshToken>>();
             var userManager = MockUserManager<ApplicationUser>();
 
             userManager.Setup(x => x.CreateAsync(It.IsAny<ApplicationUser>(), command.Password))
@@ -58,8 +122,9 @@ namespace GoCode.UnitTests.Infrastructure
 
             var sut = new IdentityService(userManager.Object,
                 jwtService.Object,
-                refreshTokenRepository.Object,
-                jwtOptions);
+                _refreshTokenRepository.Object,
+                mapper.Object,
+                _jwtOptions);
 
             //Act
             var result = await sut.CreateUserAsync(command);
@@ -73,6 +138,7 @@ namespace GoCode.UnitTests.Infrastructure
         public async Task AuthenticateUserAync_GivenAuthenticateUserCommand_WhenUserIsNull_ResponseErrorsShouldNotBeEmpty(AuthenticateUserCommand command)
         {
             //Arrange
+            var mapper = new Mock<IMapper>();
             var jwtService = new Mock<IJwtService>();
             var jwtOptions = Options.Create(new JwtOptions());
             var refreshTokenRepository = new Mock<IRepository<RefreshToken>>();
@@ -84,6 +150,7 @@ namespace GoCode.UnitTests.Infrastructure
             var sut = new IdentityService(userManager.Object,
                 jwtService.Object,
                 refreshTokenRepository.Object,
+                mapper.Object,
                 jwtOptions);
 
             //Act
@@ -99,9 +166,8 @@ namespace GoCode.UnitTests.Infrastructure
             ApplicationUser user)
         {
             //Arrange
+            var mapper = new Mock<IMapper>();
             var jwtService = new Mock<IJwtService>();
-            var jwtOptions = Options.Create(new JwtOptions());
-            var refreshTokenRepository = new Mock<IRepository<RefreshToken>>();
             var userManager = MockUserManager<ApplicationUser>();
 
             userManager.Setup(x => x.FindByEmailAsync(command.Email))
@@ -112,8 +178,9 @@ namespace GoCode.UnitTests.Infrastructure
 
             var sut = new IdentityService(userManager.Object,
                 jwtService.Object,
-                refreshTokenRepository.Object,
-                jwtOptions);
+                _refreshTokenRepository.Object,
+                mapper.Object,
+                _jwtOptions);
 
             //Act
             var result = await sut.AuthenticateUserAync(command);
@@ -131,9 +198,8 @@ namespace GoCode.UnitTests.Infrastructure
             string jti)
         {
             //Arrange
+            var mapper = new Mock<IMapper>();
             var jwtService = new Mock<IJwtService>();
-            var jwtOptions = Options.Create(new JwtOptions());
-            var refreshTokenRepository = new Mock<IRepository<RefreshToken>>();
             var userManager = MockUserManager<ApplicationUser>();
 
             userManager.Setup(x => x.FindByEmailAsync(command.Email))
@@ -150,8 +216,9 @@ namespace GoCode.UnitTests.Infrastructure
 
             var sut = new IdentityService(userManager.Object,
                 jwtService.Object,
-                refreshTokenRepository.Object,
-                jwtOptions);
+                _refreshTokenRepository.Object,
+                mapper.Object,
+                _jwtOptions);
 
             //Act
             var result = await sut.AuthenticateUserAync(command);
