@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using GoCode.Application.BaseResponse;
+using GoCode.Application.Constants;
 using GoCode.Application.Contracts.DataAccess;
 using GoCode.Application.Contracts.Identity;
 using GoCode.Application.Identity.Commands;
 using GoCode.Application.Identity.Dto;
 using GoCode.Application.Identity.Responses;
-using GoCode.Infrastructure.Constants;
 using GoCode.Infrastructure.Identity.Entities;
 using GoCode.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -151,14 +151,14 @@ namespace GoCode.Infrastructure.Identity
         {
             if (token is null)
             {
-                return (ResponseResult.AuthenticationFail<T>(ErrorMessages.Identity.InvalidToken), null, null);
+                return (ResponseResult.ValidationError<T>(ErrorMessages.Identity.InvalidToken), null, null);
             }
 
             var validatedJwt = _jwtService.GetPrincipalFromJwtToken(token);
 
             if (validatedJwt == null)
             {
-                return (ResponseResult.AuthenticationFail<T>(ErrorMessages.Identity.InvalidToken), null, null);
+                return (ResponseResult.ValidationError<T>(ErrorMessages.Identity.InvalidToken), null, null);
             }
 
             var jti = validatedJwt.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti)?.Value;
@@ -166,7 +166,7 @@ namespace GoCode.Infrastructure.Identity
 
             if (jti == null || userId == null)
             {
-                return (ResponseResult.AuthenticationFail<T>(ErrorMessages.Identity.InvalidToken), null, null);
+                return (ResponseResult.ValidationError<T>(ErrorMessages.Identity.InvalidToken), null, null);
             }
 
             return (ResponseResult.Ok<T>(), userId, jti);

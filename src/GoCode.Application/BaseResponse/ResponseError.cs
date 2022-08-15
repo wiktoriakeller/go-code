@@ -3,11 +3,11 @@
     public enum ResponseError
     {
         None,
-        NotFound,
-        AuthenticationFail,
-        ValidationError,
-        HttpError,
+        AuthorizationFail,
         Fail,
-        Unknown
+        HttpError,
+        NotFound,
+        Unknown,
+        ValidationError
     }
 }
