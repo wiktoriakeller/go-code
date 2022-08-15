@@ -2,6 +2,7 @@ using GoCode.Application.Extensions;
 using GoCode.Infrastructure.Extensions;
 using GoCode.Infrastructure.Persistence;
 using GoCode.WebAPI.Extensions;
+using GoCode.WebAPI.Middleware;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,6 +36,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseMiddleware<IdentityMiddleware>();
 
 app.MapControllers();
 

@@ -4,6 +4,7 @@
     {
         None,
         NotFound,
+        AuthenticationFail,
         ValidationError,
         HttpError,
         Fail,

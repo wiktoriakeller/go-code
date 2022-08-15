@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using GoCode.Application.BaseResponse;
 using GoCode.Application.Contracts.DataAccess;
 using GoCode.Application.Identity.Commands;
-using GoCode.Application.Identity.Dto;
 using GoCode.Infrastructure.Constants;
 using GoCode.Infrastructure.Identity;
 using GoCode.Infrastructure.Identity.Entities;
@@ -25,59 +23,6 @@ namespace GoCode.UnitTests.Infrastructure
         {
             _jwtOptions = Options.Create(new JwtOptions());
             _refreshTokenRepository = new Mock<IRepository<RefreshToken>>();
-        }
-
-        [Theory]
-        [ApplicationUserWithoutTokenData]
-        public async Task GetUserById_GivenUserId_ResultShouldBeOk(string userId, ApplicationUser user, UserDto userDto)
-        {
-            //Arrange
-            var mapper = new Mock<IMapper>();
-            var jwtService = new Mock<IJwtService>();
-            var userManager = MockUserManager<ApplicationUser>();
-
-            userManager.Setup(x => x.FindByIdAsync(userId))
-                .Returns(Task.FromResult(user));
-
-            mapper.Setup(x => x.Map<UserDto>(user))
-                .Returns(userDto);
-
-            var sut = new IdentityService(userManager.Object,
-                jwtService.Object,
-                _refreshTokenRepository.Object,
-                mapper.Object,
-                _jwtOptions);
-
-            //Act
-            var result = await sut.GetUserById(userId);
-
-            //Assert
-            result.Data.Should().BeEquivalentTo(userDto);
-        }
-
-        [Theory]
-        [AutoData]
-        public async Task GetUserById_GivenUserId_ResultShouldBeNotFound(string userId)
-        {
-            //Arrange
-            var mapper = new Mock<IMapper>();
-            var jwtService = new Mock<IJwtService>();
-            var userManager = MockUserManager<ApplicationUser>();
-
-            userManager.Setup(x => x.FindByIdAsync(userId))
-                .Returns(Task.FromResult<ApplicationUser?>(null));
-
-            var sut = new IdentityService(userManager.Object,
-                jwtService.Object,
-                _refreshTokenRepository.Object,
-                mapper.Object,
-                _jwtOptions);
-
-            //Act
-            var result = await sut.GetUserById(userId);
-
-            //Assert
-            result.ResponseError.Should().Be(ResponseError.NotFound);
         }
 
         [Theory]
