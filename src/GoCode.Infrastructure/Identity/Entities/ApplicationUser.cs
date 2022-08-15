@@ -2,7 +2,7 @@
 
 namespace GoCode.Infrastructure.Identity.Entities
 {
-    public class ApplicationUser : IdentityUser<Guid>
+    public class ApplicationUser : IdentityUser<string>
     {
         public string? FirstName { get; set; }
         public string? LastName { get; set; }

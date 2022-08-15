@@ -1,6 +1,8 @@
-﻿using GoCode.Application.Contracts.DataAccess;
+﻿using AutoMapper;
+using GoCode.Application.Contracts.DataAccess;
 using GoCode.Application.Contracts.Identity;
 using GoCode.Application.Dto.BaseResponse;
+using GoCode.Application.Dto.Identity;
 using GoCode.Application.Identity.Commands;
 using GoCode.Application.Identity.Responses;
 using GoCode.Infrastructure.Constants;
@@ -18,29 +20,38 @@ namespace GoCode.Infrastructure.Identity.Entities
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IJwtService _jwtService;
         private readonly IRepository<RefreshToken> _refreshTokenRepository;
+        private readonly IMapper _mapper;
         private readonly JwtOptions _jwtOptions;
 
         public IdentityService(UserManager<ApplicationUser> userManager,
             IJwtService jwtService,
             IRepository<RefreshToken> refreshTokenRepository,
+            IMapper mapper,
             IOptions<JwtOptions> jwtOptions)
         {
             _userManager = userManager;
             _jwtService = jwtService;
             _refreshTokenRepository = refreshTokenRepository;
+            _mapper = mapper;
             _jwtOptions = jwtOptions.Value;
+        }
+
+        public async Task<Response<UserDto>> GetUserById(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                return ResponseResult.NotFound<UserDto>(ErrorMessages.Identity.UserNotFound);
+            }
+
+            var userDto = _mapper.Map<UserDto>(user);
+            return ResponseResult.Ok(userDto);
         }
 
         public async Task<Response<CreateUserResponse>> CreateUserAsync(CreateUserCommand createUserCommand)
         {
-            var newUser = new ApplicationUser
-            {
-                Email = createUserCommand.Email,
-                UserName = createUserCommand.Email,
-                FirstName = createUserCommand.FirstName,
-                LastName = createUserCommand.LastName
-            };
-
+            var newUser = _mapper.Map<ApplicationUser>(createUserCommand);
             var result = await _userManager.CreateAsync(newUser, createUserCommand.Password);
 
             if (!result.Succeeded)
@@ -49,11 +60,7 @@ namespace GoCode.Infrastructure.Identity.Entities
                 return ResponseResult.ValidationError<CreateUserResponse>(errors);
             }
 
-            var response = new CreateUserResponse
-            {
-                UserId = newUser.Id
-            };
-
+            var response = _mapper.Map<CreateUserResponse>(newUser);
             return ResponseResult.Ok(response);
         }
 

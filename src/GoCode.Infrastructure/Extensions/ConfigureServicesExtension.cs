@@ -65,6 +65,9 @@ namespace GoCode.Infrastructure.Extensions
                 cfg.TokenValidationParameters = tokenValidationParameters;
             });
 
+            //Mapping profiles
+            services.AddAutoMapper(typeof(ConfigureServicesExtension).Assembly);
+
             //Options bindings
             services.AddSingleton(tokenValidationParameters);
 
