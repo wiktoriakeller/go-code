@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace GoCode.Application.Extensions
+namespace GoCode.Application.Common.Extensions
 {
     public static class ConfigureServicesExtension
     {

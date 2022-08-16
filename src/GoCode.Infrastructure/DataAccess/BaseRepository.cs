@@ -1,4 +1,4 @@
-﻿using GoCode.Application.Contracts.DataAccess;
+﻿using GoCode.Application.Common.Contracts.DataAccess;
 using GoCode.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;

@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace GoCode.Application.Contracts.DataAccess
+namespace GoCode.Application.Common.Contracts.DataAccess
 {
     public interface IRepository<TEntity> where TEntity : class
     {

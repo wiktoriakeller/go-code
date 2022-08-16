@@ -1,5 +1,5 @@
-﻿using GoCode.Application.BaseResponse;
-using GoCode.Application.Contracts.Identity;
+﻿using GoCode.Application.Common.BaseResponse;
+using GoCode.Application.Common.Contracts.Identity;
 using GoCode.Application.Identity.Commands;
 using GoCode.Application.Identity.Responses;
 using MediatR;

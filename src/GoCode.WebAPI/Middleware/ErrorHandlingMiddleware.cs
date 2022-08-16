@@ -1,4 +1,4 @@
-﻿using GoCode.Application.BaseResponse;
+﻿using GoCode.Application.Common.BaseResponse;
 using System.Net;
 using System.Text.Json;
 

@@ -1,4 +1,4 @@
-﻿namespace GoCode.Application.Constants
+﻿namespace GoCode.Application.Common.Constants
 {
     public static class ErrorMessages
     {

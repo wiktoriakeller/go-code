@@ -1,4 +1,4 @@
-using GoCode.Application.Extensions;
+using GoCode.Application.Common.Extensions;
 using GoCode.Infrastructure.Extensions;
 using GoCode.Infrastructure.Persistence;
 using GoCode.WebAPI.Extensions;

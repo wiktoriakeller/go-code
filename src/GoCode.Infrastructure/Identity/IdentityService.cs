@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using GoCode.Application.BaseResponse;
-using GoCode.Application.Constants;
-using GoCode.Application.Contracts.DataAccess;
-using GoCode.Application.Contracts.Identity;
+using GoCode.Application.Common.BaseResponse;
+using GoCode.Application.Common.Constants;
+using GoCode.Application.Common.Contracts.DataAccess;
+using GoCode.Application.Common.Contracts.Identity;
 using GoCode.Application.Identity.Commands;
 using GoCode.Application.Identity.Dto;
 using GoCode.Application.Identity.Responses;

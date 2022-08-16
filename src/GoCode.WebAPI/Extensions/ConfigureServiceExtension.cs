@@ -1,4 +1,4 @@
-﻿using GoCode.Application.Contracts.Identity;
+﻿using GoCode.Application.Common.Contracts.Identity;
 using GoCode.WebAPI.Services;
 
 namespace GoCode.WebAPI.Extensions

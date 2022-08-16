@@ -1,5 +1,5 @@
-﻿using GoCode.Application.Contracts.DataAccess;
-using GoCode.Application.Contracts.Identity;
+﻿using GoCode.Application.Common.Contracts.DataAccess;
+using GoCode.Application.Common.Contracts.Identity;
 using GoCode.Infrastructure.DataAccess;
 using GoCode.Infrastructure.Identity;
 using GoCode.Infrastructure.Identity.Entities;

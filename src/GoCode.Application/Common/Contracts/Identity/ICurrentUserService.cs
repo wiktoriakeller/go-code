@@ -1,6 +1,6 @@
 ﻿using GoCode.Application.Identity.Dto;
 
-namespace GoCode.Application.Contracts.Identity
+namespace GoCode.Application.Common.Contracts.Identity
 {
     public interface ICurrentUserService
     {

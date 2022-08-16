@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using GoCode.Application.Constants;
-using GoCode.Application.Contracts.DataAccess;
+using GoCode.Application.Common.Constants;
+using GoCode.Application.Common.Contracts.DataAccess;
 using GoCode.Application.Identity.Commands;
 using GoCode.Infrastructure.Identity;
 using GoCode.Infrastructure.Identity.Entities;
