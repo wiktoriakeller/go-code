@@ -31,7 +31,7 @@ namespace GoCode.Infrastructure.Extensions
                     b => b.MigrationsAssembly(typeof(ConfigureServicesExtension).Assembly.FullName)));
 
             //Register identity and jwt
-            services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+            services.AddIdentity<User, Role>(options =>
             {
                 options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = true;

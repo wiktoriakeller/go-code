@@ -3,7 +3,7 @@ using GoCode.Application.Common.Contracts.Identity;
 using GoCode.Application.Common.Validators.Extensions;
 using GoCode.Application.Identity.Commands;
 
-namespace GoCode.Application.Common.Validators
+namespace GoCode.Application.Common.Validators.Identity
 {
     public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
     {

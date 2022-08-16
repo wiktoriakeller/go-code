@@ -1,4 +1,6 @@
-﻿namespace GoCode.Application.Identity.Dto
+﻿using GoCode.Domain.Entities;
+
+namespace GoCode.Application.Identity.Dto
 {
     public class UserDto
     {
@@ -6,5 +8,8 @@
         public string Email { get; init; }
         public string? FirstName { get; init; }
         public string? LastName { get; init; }
+        public uint TotalXp { get; init; }
+        public uint Level { get; init; }
+        public ICollection<UserCourse> UserCourses { get; set; }
     }
 }

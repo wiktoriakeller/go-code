@@ -20,7 +20,7 @@ namespace GoCode.Infrastructure.Identity
             _tokenValidationParameters = tokenValidationParameters;
         }
 
-        public (string jwtToken, string jti) CreateJwtToken(ApplicationUser user)
+        public (string jwtToken, string jti) CreateJwtToken(User user)
         {
             var (claims, jti) = GetJwtTokenClaims(user);
 
@@ -63,7 +63,7 @@ namespace GoCode.Infrastructure.Identity
             (validatedToken is JwtSecurityToken jwtSecurityToken) &&
             jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase);
 
-        private (IEnumerable<Claim> claims, string jti) GetJwtTokenClaims(ApplicationUser user)
+        private (IEnumerable<Claim> claims, string jti) GetJwtTokenClaims(User user)
         {
             var jti = Guid.NewGuid().ToString();
             var claims = new List<Claim>()

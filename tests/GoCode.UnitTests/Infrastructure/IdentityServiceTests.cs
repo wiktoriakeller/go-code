@@ -28,12 +28,12 @@ namespace GoCode.UnitTests.Infrastructure
 
         [Theory]
         [ApplicationUserWithoutTokenData]
-        public async Task GetUserByEmail_GivenEmail_ResponseShouldBeNotFound(string email, ApplicationUser user)
+        public async Task GetUserByEmail_GivenEmail_ResponseShouldBeNotFound(string email, User user)
         {
             //Arrange
             var mapper = new Mock<IMapper>();
             var jwtService = new Mock<IJwtService>();
-            var userManager = MockUserManager<ApplicationUser>();
+            var userManager = MockUserManager<User>();
 
             var sut = new IdentityService(userManager.Object,
                 jwtService.Object,
@@ -50,12 +50,12 @@ namespace GoCode.UnitTests.Infrastructure
 
         [Theory]
         [ApplicationUserWithoutTokenData]
-        public async Task GetUserByEmail_GivenEmail_ResponseShouldBeOk(string email, ApplicationUser user)
+        public async Task GetUserByEmail_GivenEmail_ResponseShouldBeOk(string email, User user)
         {
             //Arrange
             var mapper = new Mock<IMapper>();
             var jwtService = new Mock<IJwtService>();
-            var userManager = MockUserManager<ApplicationUser>();
+            var userManager = MockUserManager<User>();
 
             userManager.Setup(x => x.FindByEmailAsync(email))
                 .Returns(Task.FromResult(user));
@@ -76,15 +76,15 @@ namespace GoCode.UnitTests.Infrastructure
         [Theory]
         [ApplicationUserWithoutTokenData]
         public async Task CreateUserAsync_GivenCreateUserCommand_UsersCountShouldIncrease(CreateUserCommand command,
-            List<ApplicationUser> users)
+            List<User> users)
         {
             //Arrange
             var mapper = new Mock<IMapper>();
             var jwtService = new Mock<IJwtService>();
-            var userManager = MockUserManager<ApplicationUser>();
+            var userManager = MockUserManager<User>();
 
-            userManager.Setup(x => x.CreateAsync(It.IsAny<ApplicationUser>(), command.Password))
-                .ReturnsAsync(IdentityResult.Success).Callback<ApplicationUser, string>((x, y) => users.Add(x));
+            userManager.Setup(x => x.CreateAsync(It.IsAny<User>(), command.Password))
+                .ReturnsAsync(IdentityResult.Success).Callback<User, string>((x, y) => users.Add(x));
 
             var sut = new IdentityService(userManager.Object,
                 jwtService.Object,
@@ -106,9 +106,9 @@ namespace GoCode.UnitTests.Infrastructure
             //Arrange
             var mapper = new Mock<IMapper>();
             var jwtService = new Mock<IJwtService>();
-            var userManager = MockUserManager<ApplicationUser>();
+            var userManager = MockUserManager<User>();
 
-            userManager.Setup(x => x.CreateAsync(It.IsAny<ApplicationUser>(), command.Password))
+            userManager.Setup(x => x.CreateAsync(It.IsAny<User>(), command.Password))
                 .ReturnsAsync(IdentityResult.Failed(new IdentityError { Code = "Identity", Description = "Invalid user data" }));
 
             var sut = new IdentityService(userManager.Object,
@@ -133,10 +133,10 @@ namespace GoCode.UnitTests.Infrastructure
             var jwtService = new Mock<IJwtService>();
             var jwtOptions = Options.Create(new JwtOptions());
             var refreshTokenRepository = new Mock<IRepository<RefreshToken>>();
-            var userManager = MockUserManager<ApplicationUser>();
+            var userManager = MockUserManager<User>();
 
             userManager.Setup(x => x.FindByEmailAsync(command.Email))
-                .Returns(Task.FromResult<ApplicationUser?>(null));
+                .Returns(Task.FromResult<User?>(null));
 
             var sut = new IdentityService(userManager.Object,
                 jwtService.Object,
@@ -154,12 +154,12 @@ namespace GoCode.UnitTests.Infrastructure
         [Theory]
         [ApplicationUserWithoutTokenData]
         public async Task AuthenticateUserAync_GivenAuthenticateUserCommand_WhenPasswordIsInvalid_ResponseErrorsShouldNotBeEmpty(AuthenticateUserCommand command,
-            ApplicationUser user)
+            User user)
         {
             //Arrange
             var mapper = new Mock<IMapper>();
             var jwtService = new Mock<IJwtService>();
-            var userManager = MockUserManager<ApplicationUser>();
+            var userManager = MockUserManager<User>();
 
             userManager.Setup(x => x.FindByEmailAsync(command.Email))
                 .Returns(Task.FromResult(user));
@@ -184,14 +184,14 @@ namespace GoCode.UnitTests.Infrastructure
         [ApplicationUserWithoutTokenData]
         public async Task AuthenticateUserAync_GivenAuthenticateUserCommand_WhenPasswordIsInvalid_ResponseResultShouldIndicateSuccess(
             AuthenticateUserCommand command,
-            ApplicationUser user,
+            User user,
             string token,
             string jti)
         {
             //Arrange
             var mapper = new Mock<IMapper>();
             var jwtService = new Mock<IJwtService>();
-            var userManager = MockUserManager<ApplicationUser>();
+            var userManager = MockUserManager<User>();
 
             userManager.Setup(x => x.FindByEmailAsync(command.Email))
                 .Returns(Task.FromResult(user));
@@ -200,7 +200,7 @@ namespace GoCode.UnitTests.Infrastructure
                 .ReturnsAsync(true);
 
             userManager.Setup(x => x.FindByIdAsync(It.IsAny<string>()))
-                .Returns(Task.FromResult<ApplicationUser?>(null));
+                .Returns(Task.FromResult<User?>(null));
 
             jwtService.Setup(x => x.CreateJwtToken(user))
                 .Returns((token, jti));

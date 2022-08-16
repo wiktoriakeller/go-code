@@ -18,13 +18,13 @@ namespace GoCode.Infrastructure.Identity
 {
     public class IdentityService : IIdentityService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly IJwtService _jwtService;
         private readonly IRepository<RefreshToken> _refreshTokenRepository;
         private readonly IMapper _mapper;
         private readonly JwtOptions _jwtOptions;
 
-        public IdentityService(UserManager<ApplicationUser> userManager,
+        public IdentityService(UserManager<User> userManager,
             IJwtService jwtService,
             IRepository<RefreshToken> refreshTokenRepository,
             IMapper mapper,
@@ -72,7 +72,7 @@ namespace GoCode.Infrastructure.Identity
 
         public async Task<Response<CreateUserResponse>> CreateUserAsync(CreateUserCommand createUserCommand)
         {
-            var newUser = new ApplicationUser
+            var newUser = new User
             {
                 Email = createUserCommand.Email,
                 UserName = createUserCommand.Email,
@@ -185,7 +185,7 @@ namespace GoCode.Infrastructure.Identity
             return (ResponseResult.Ok<T>(), userId, jti);
         }
 
-        private async Task<string> CreateRefreshToken(string jti, ApplicationUser user, RefreshToken? storedRefresh = null)
+        private async Task<string> CreateRefreshToken(string jti, User user, RefreshToken? storedRefresh = null)
         {
             if (storedRefresh != null)
             {

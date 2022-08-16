@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using GoCode.Application.Identity.Commands;
 
-namespace GoCode.Application.Common.Validators
+namespace GoCode.Application.Common.Validators.Identity
 {
     public class RefreshTokenCommandValidator : AbstractValidator<RefreshTokenCommand>
     {

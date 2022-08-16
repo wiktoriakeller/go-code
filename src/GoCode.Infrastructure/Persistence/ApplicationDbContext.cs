@@ -1,11 +1,14 @@
-﻿using GoCode.Infrastructure.Identity.Entities;
+﻿using GoCode.Domain.Entities;
+using GoCode.Infrastructure.Identity.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace GoCode.Infrastructure.Persistence
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
+    public class ApplicationDbContext : IdentityDbContext<User, Role, string>
     {
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Question> Questions { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         public ApplicationDbContext(DbContextOptions options) : base(options)
@@ -22,6 +25,23 @@ namespace GoCode.Infrastructure.Persistence
 
                 eb.Property(x => x.Token)
                     .HasMaxLength(100);
+            });
+
+            modelBuilder.Entity<Question>(eb =>
+            {
+                eb.Property(q => q.Content)
+                    .IsRequired()
+                    .HasMaxLength(500);
+
+                eb.Property(q => q.XP)
+                    .IsRequired();
+            });
+
+            modelBuilder.Entity<Course>(eb =>
+            {
+                eb.Property(c => c.Name)
+                    .IsRequired()
+                    .HasMaxLength(500);
             });
         }
     }

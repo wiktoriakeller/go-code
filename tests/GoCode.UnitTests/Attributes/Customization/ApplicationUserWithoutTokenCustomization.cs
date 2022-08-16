@@ -7,7 +7,7 @@ namespace GoCode.UnitTests.Attributes.Customization
     {
         public void Customize(IFixture fixture)
         {
-            fixture.Customize<ApplicationUser>(transform => transform
+            fixture.Customize<User>(transform => transform
                 .Without(u => u.RefreshToken));
         }
     }

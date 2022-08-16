@@ -9,8 +9,8 @@ namespace GoCode.Infrastructure.Identity
     {
         public IdentityMappingProfile()
         {
-            CreateMap<ApplicationUser, UserDto>();
-            CreateMap<ApplicationUser, CreateUserResponse>();
+            CreateMap<User, UserDto>();
+            CreateMap<User, CreateUserResponse>();
         }
     }
 }
