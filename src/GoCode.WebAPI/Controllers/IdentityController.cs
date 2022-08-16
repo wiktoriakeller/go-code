@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GoCode.WebAPI.Controllers
 {
-    [ApiController]
     [Route("api/v1/identity")]
     public class IdentityController : BaseApiController
     {

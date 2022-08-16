@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace GoCode.WebAPI.Controllers
 {
     [Authorize]
-    [ApiController]
     [Route("api/v1/courses")]
     public class CoursesController : BaseApiController
     {
