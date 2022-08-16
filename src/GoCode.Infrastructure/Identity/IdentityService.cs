@@ -37,6 +37,19 @@ namespace GoCode.Infrastructure.Identity
             _jwtOptions = jwtOptions.Value;
         }
 
+        public async Task<Response<UserDto>> GetUserByEmail(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                return ResponseResult.NotFound<UserDto>(ErrorMessages.Identity.UserNotFound);
+            }
+
+            var userDto = _mapper.Map<UserDto>(user);
+            return ResponseResult.Ok(userDto);
+        }
+
         public async Task<Response<UserDto>> GetUserFromTokenAsync(string? token)
         {
             var result = IsJwtTokenValid<UserDto>(token);

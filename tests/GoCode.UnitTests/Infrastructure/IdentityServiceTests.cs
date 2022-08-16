@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GoCode.Application.Common.BaseResponse;
 using GoCode.Application.Common.Constants;
 using GoCode.Application.Common.Contracts.DataAccess;
 using GoCode.Application.Identity.Commands;
@@ -23,6 +24,53 @@ namespace GoCode.UnitTests.Infrastructure
         {
             _jwtOptions = Options.Create(new JwtOptions());
             _refreshTokenRepository = new Mock<IRepository<RefreshToken>>();
+        }
+
+        [Theory]
+        [ApplicationUserWithoutTokenData]
+        public async Task GetUserByEmail_GivenEmail_ResponseShouldBeNotFound(string email, ApplicationUser user)
+        {
+            //Arrange
+            var mapper = new Mock<IMapper>();
+            var jwtService = new Mock<IJwtService>();
+            var userManager = MockUserManager<ApplicationUser>();
+
+            var sut = new IdentityService(userManager.Object,
+                jwtService.Object,
+                _refreshTokenRepository.Object,
+                mapper.Object,
+                _jwtOptions);
+
+            //Act
+            var response = await sut.GetUserByEmail(email);
+
+            //Assert
+            response.ResponseError.Should().Be(ResponseError.NotFound);
+        }
+
+        [Theory]
+        [ApplicationUserWithoutTokenData]
+        public async Task GetUserByEmail_GivenEmail_ResponseShouldBeOk(string email, ApplicationUser user)
+        {
+            //Arrange
+            var mapper = new Mock<IMapper>();
+            var jwtService = new Mock<IJwtService>();
+            var userManager = MockUserManager<ApplicationUser>();
+
+            userManager.Setup(x => x.FindByEmailAsync(email))
+                .Returns(Task.FromResult(user));
+
+            var sut = new IdentityService(userManager.Object,
+                jwtService.Object,
+                _refreshTokenRepository.Object,
+                mapper.Object,
+                _jwtOptions);
+
+            //Act
+            var response = await sut.GetUserByEmail(email);
+
+            //Assert
+            response.Succeeded.Should().BeTrue();
         }
 
         [Theory]

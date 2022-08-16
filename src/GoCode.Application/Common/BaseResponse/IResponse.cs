@@ -2,13 +2,12 @@
 
 namespace GoCode.Application.Common.BaseResponse
 {
-    public interface IResponse<T>
+    public interface IResponse
     {
         List<string> Errors { get; }
         HttpStatusCode HttpStatusCode { get; }
         ResponseError ResponseError { get; }
         bool Succeeded { get; }
-        T? Data { get; }
 
         void AddErrorMessage(IEnumerable<string> messages);
 

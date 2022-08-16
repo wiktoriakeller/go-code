@@ -1,24 +1,25 @@
 ﻿using FluentValidation;
 using GoCode.Application.Common.BaseResponse;
 using MediatR;
+using System.Net;
 
 namespace GoCode.Application.Common.PipelineBehaviors
 {
-    public class ValidationBehavior<TReuest, TResponse> : IPipelineBehavior<TReuest, Response<TResponse>>
-        where TReuest : IRequest<Response<TResponse>>
+    public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+        where TRequest : IRequest<TResponse>
     {
-        private readonly IEnumerable<IValidator<TReuest>> _validators;
+        private readonly IEnumerable<IValidator<TRequest>> _validators;
 
-        public ValidationBehavior(IEnumerable<IValidator<TReuest>> validators)
+        public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
         {
             _validators = validators;
         }
 
-        public async Task<Response<TResponse>> Handle(TReuest request, CancellationToken cancellationToken, RequestHandlerDelegate<Response<TResponse>> next)
+        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
         {
             if (_validators.Any())
             {
-                var context = new ValidationContext<TReuest>(request);
+                var context = new ValidationContext<TRequest>(request);
                 var validationTasks = _validators.Select(x => x.ValidateAsync(request));
 
                 var results = await Task.WhenAll(validationTasks);
@@ -31,7 +32,8 @@ namespace GoCode.Application.Common.PipelineBehaviors
 
                 if (errors.Any())
                 {
-                    return ResponseResult.ValidationError<TResponse>(errors);
+                    return (TResponse)Activator.CreateInstance(typeof(TResponse), errors,
+                       ResponseError.ValidationError, HttpStatusCode.BadRequest, default);
                 }
             }
 

@@ -1,4 +1,6 @@
-﻿namespace GoCode.Application.Identity.Responses
+﻿using GoCode.Application.Common;
+
+namespace GoCode.Application.Identity.Responses
 {
     public record AuthenticateUserResponse
     {

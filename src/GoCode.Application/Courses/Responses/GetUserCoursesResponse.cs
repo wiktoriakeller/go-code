@@ -2,7 +2,7 @@
 
 namespace GoCode.Application.Courses.Responses
 {
-    public class GetUserCoursesResponse
+    public record GetUserCoursesResponse
     {
         public ICollection<CourseDto> Courses { get; init; }
     }

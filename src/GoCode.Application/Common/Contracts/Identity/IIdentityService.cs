@@ -7,6 +7,8 @@ namespace GoCode.Application.Common.Contracts.Identity
 {
     public interface IIdentityService
     {
+        Task<Response<UserDto>> GetUserByEmail(string email);
+
         Task<Response<UserDto>> GetUserFromTokenAsync(string? token);
 
         Task<Response<CreateUserResponse>> CreateUserAsync(CreateUserCommand createUserCommand);

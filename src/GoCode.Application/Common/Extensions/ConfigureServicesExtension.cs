@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using GoCode.Application.Common.PipelineBehaviors;
+using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +12,12 @@ namespace GoCode.Application.Common.Extensions
         {
             services.AddAutoMapper(typeof(ConfigureServicesExtension).Assembly);
             services.AddMediatR(typeof(ConfigureServicesExtension).Assembly);
+
+            //Validators
+            services.AddValidatorsFromAssembly(typeof(ConfigureServicesExtension).Assembly);
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            ValidatorOptions.Global.LanguageManager.Enabled = false;
+
             return services;
         }
     }

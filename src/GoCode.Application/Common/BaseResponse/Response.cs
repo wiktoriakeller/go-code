@@ -2,7 +2,7 @@
 
 namespace GoCode.Application.Common.BaseResponse
 {
-    public class Response<T> : IResponse<T>
+    public class Response<T> : IResponse
     {
         public T? Data { get; init; }
         public List<string> Errors { get; private set; } = new();
