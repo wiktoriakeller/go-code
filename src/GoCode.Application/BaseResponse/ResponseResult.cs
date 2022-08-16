@@ -4,17 +4,23 @@ namespace GoCode.Application.BaseResponse
 {
     public static class ResponseResult
     {
-        public static Response<T> Ok<T>(T value) => new(value, HttpStatusCode.OK);
+        public static Response<T> Ok<T>(T value) => new(HttpStatusCode.OK, value);
 
-        public static Response<T> Created<T>(T value) => new(value, HttpStatusCode.Created);
+        public static Response<T> Ok<T>() => new(HttpStatusCode.OK);
 
-        public static Response<T> Updated<T>(T value) => new(value, HttpStatusCode.OK);
+        public static Response<T> Created<T>(T value) => new(HttpStatusCode.Created, value);
 
-        public static Response<T> Deleted<T>(T value) => new(value, HttpStatusCode.OK);
+        public static Response<T> Updated<T>(T value) => new(HttpStatusCode.OK, value);
+
+        public static Response<T> Deleted<T>(T value) => new(HttpStatusCode.OK, value);
 
         public static Response<T> NotFound<T>(IEnumerable<string> errors) => new(errors, ResponseError.NotFound, HttpStatusCode.BadRequest);
 
         public static Response<T> NotFound<T>(string error) => new(error, ResponseError.NotFound, HttpStatusCode.BadRequest);
+
+        public static Response<T> AuthorizationFail<T>(IEnumerable<string> errors) => new(errors, ResponseError.AuthorizationFail, HttpStatusCode.Unauthorized);
+
+        public static Response<T> AuthorizationFail<T>(string error) => new(error, ResponseError.AuthorizationFail, HttpStatusCode.Unauthorized);
 
         public static Response<T> ValidationError<T>(IEnumerable<string> errors) => new(errors, ResponseError.ValidationError, HttpStatusCode.BadRequest);
 

@@ -10,7 +10,7 @@ namespace GoCode.Application.BaseResponse
         public HttpStatusCode HttpStatusCode { get; init; }
         public bool Succeeded => ResponseError == ResponseError.None;
 
-        public Response(T value, HttpStatusCode httpStatusCode)
+        public Response(HttpStatusCode httpStatusCode, T? value = default)
         {
             ResponseError = ResponseError.None;
             HttpStatusCode = httpStatusCode;

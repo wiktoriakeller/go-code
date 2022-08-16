@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GoCode.Infrastructure.Persistence
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
         public DbSet<RefreshToken> RefreshTokens { get; set; }
 

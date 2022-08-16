@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GoCode.WebAPI.Controllers
 {
-    [ApiController]
     [Route("api/v1/identity")]
     public class IdentityController : BaseApiController
     {
@@ -25,7 +24,7 @@ namespace GoCode.WebAPI.Controllers
                 return StatusCode((int)response.HttpStatusCode, response);
             }
 
-            return Created($"api/v1/identity/{response.Data.UserId}", null);
+            return Created($"api/v1/identity/{response.Data?.Id}", null);
         }
 
         [HttpPost("login")]

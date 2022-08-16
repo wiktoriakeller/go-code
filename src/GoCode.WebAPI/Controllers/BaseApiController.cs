@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GoCode.WebAPI.Controllers
 {
+    [ApiController]
     public class BaseApiController : ControllerBase
     {
         protected readonly IMediator _medaitor;

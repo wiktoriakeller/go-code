@@ -8,7 +8,7 @@ using System.Text;
 
 namespace GoCode.Infrastructure.Identity
 {
-    public class JwtService : IJwtService
+    internal class JwtService : IJwtService
     {
         private readonly JwtOptions _jwtOptions;
         private readonly TokenValidationParameters _tokenValidationParameters;
@@ -22,7 +22,7 @@ namespace GoCode.Infrastructure.Identity
 
         public (string jwtToken, string jti) CreateJwtToken(ApplicationUser user)
         {
-            var (claims, jti) = GetTokenClaims(user);
+            var (claims, jti) = GetJwtTokenClaims(user);
 
             var key = Encoding.UTF8.GetBytes(_jwtOptions.Key);
             var signingCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);
@@ -63,7 +63,7 @@ namespace GoCode.Infrastructure.Identity
             (validatedToken is JwtSecurityToken jwtSecurityToken) &&
             jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase);
 
-        private (IEnumerable<Claim> claims, string jti) GetTokenClaims(ApplicationUser user)
+        private (IEnumerable<Claim> claims, string jti) GetJwtTokenClaims(ApplicationUser user)
         {
             var jti = Guid.NewGuid().ToString();
             var claims = new List<Claim>()
@@ -71,8 +71,7 @@ namespace GoCode.Infrastructure.Identity
                 new Claim(JwtRegisteredClaimNames.Jti, jti),
                 new Claim(JwtRegisteredClaimNames.Iss, _jwtOptions.Issuer),
                 new Claim(JwtRegisteredClaimNames.Aud, _jwtOptions.Audience),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             };
 
             return (claims, jti);

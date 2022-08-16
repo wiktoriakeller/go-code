@@ -2,6 +2,6 @@
 {
     public record CreateUserResponse
     {
-        public Guid UserId { get; set; }
+        public string Id { get; init; }
     }
 }
