@@ -42,4 +42,6 @@ app.UseMiddleware<IdentityMiddleware>();
 
 app.MapControllers();
 
+app.UseMiddleware<ErrorHandlingMiddleware>();
+
 app.Run();
