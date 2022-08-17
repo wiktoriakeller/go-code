@@ -23,12 +23,10 @@ namespace GoCode.Application.Common.PipelineBehaviors
                 var validationTasks = _validators.Select(x => x.ValidateAsync(request));
 
                 var results = await Task.WhenAll(validationTasks);
-                var failures = results
+                var errors = results
                     .SelectMany(x => x.Errors)
                     .Where(x => x != null)
-                    .ToList();
-
-                var errors = failures.Select(x => $"{x.PropertyName}: {x.ErrorMessage}");
+                    .Select(x => $"{x.PropertyName}: {x.ErrorMessage}");
 
                 if (errors.Any())
                 {

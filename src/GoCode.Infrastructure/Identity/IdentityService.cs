@@ -4,8 +4,8 @@ using GoCode.Application.Common.Constants;
 using GoCode.Application.Common.Contracts.DataAccess;
 using GoCode.Application.Common.Contracts.Identity;
 using GoCode.Application.Identity.Commands;
-using GoCode.Application.Identity.Dto;
 using GoCode.Application.Identity.Responses;
+using GoCode.Domain.Interfaces;
 using GoCode.Infrastructure.Identity.Entities;
 using GoCode.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -37,22 +37,21 @@ namespace GoCode.Infrastructure.Identity
             _jwtOptions = jwtOptions.Value;
         }
 
-        public async Task<Response<UserDto>> GetUserByEmail(string email)
+        public async Task<Response<IUser>> GetUserByEmail(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
 
             if (user == null)
             {
-                return ResponseResult.NotFound<UserDto>(ErrorMessages.Identity.UserNotFound);
+                return ResponseResult.NotFound<IUser>(ErrorMessages.Identity.UserNotFound);
             }
 
-            var userDto = _mapper.Map<UserDto>(user);
-            return ResponseResult.Ok(userDto);
+            return ResponseResult.Ok<IUser>(user);
         }
 
-        public async Task<Response<UserDto>> GetUserFromTokenAsync(string? token)
+        public async Task<Response<IUser>> GetUserFromTokenAsync(string? token)
         {
-            var result = IsJwtTokenValid<UserDto>(token);
+            var result = IsJwtTokenValid<IUser>(token);
 
             if (!result.response.Succeeded)
             {
@@ -63,11 +62,10 @@ namespace GoCode.Infrastructure.Identity
 
             if (user == null)
             {
-                return ResponseResult.NotFound<UserDto>(ErrorMessages.Identity.UserNotFound);
+                return ResponseResult.NotFound<IUser>(ErrorMessages.Identity.UserNotFound);
             }
 
-            var userDto = _mapper.Map<UserDto>(user);
-            return ResponseResult.Ok(userDto);
+            return ResponseResult.Ok<IUser>(user);
         }
 
         public async Task<Response<CreateUserResponse>> CreateUserAsync(CreateUserCommand createUserCommand)

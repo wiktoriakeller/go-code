@@ -1,9 +1,9 @@
-﻿using GoCode.Application.Identity.Dto;
+﻿using GoCode.Domain.Interfaces;
 
 namespace GoCode.Application.Common.Contracts.Identity
 {
     public interface ICurrentUserService
     {
-        UserDto? User { get; }
+        IUser? User { get; }
     }
 }

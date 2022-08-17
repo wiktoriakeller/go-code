@@ -1,15 +1,15 @@
 ﻿using GoCode.Application.Common.BaseResponse;
 using GoCode.Application.Identity.Commands;
-using GoCode.Application.Identity.Dto;
 using GoCode.Application.Identity.Responses;
+using GoCode.Domain.Interfaces;
 
 namespace GoCode.Application.Common.Contracts.Identity
 {
     public interface IIdentityService
     {
-        Task<Response<UserDto>> GetUserByEmail(string email);
+        Task<Response<IUser>> GetUserByEmail(string email);
 
-        Task<Response<UserDto>> GetUserFromTokenAsync(string? token);
+        Task<Response<IUser>> GetUserFromTokenAsync(string? token);
 
         Task<Response<CreateUserResponse>> CreateUserAsync(CreateUserCommand createUserCommand);
 
