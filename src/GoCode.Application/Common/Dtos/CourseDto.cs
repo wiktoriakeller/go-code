@@ -1,6 +1,6 @@
-﻿namespace GoCode.Application.Courses.Dto
+﻿namespace GoCode.Application.Common.Dtos
 {
-    public class CourseDto
+    public record CourseDto
     {
         public int Id { get; init; }
         public string Name { get; init; }

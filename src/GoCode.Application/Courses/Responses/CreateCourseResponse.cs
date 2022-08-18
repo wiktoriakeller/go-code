@@ -1,6 +1,6 @@
 ﻿namespace GoCode.Application.Courses.Responses
 {
-    public class CreateCourseResponse
+    public record CreateCourseResponse
     {
         public int Id { get; set; }
         public string Name { get; set; }

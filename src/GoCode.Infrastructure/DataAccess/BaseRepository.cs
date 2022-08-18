@@ -5,19 +5,29 @@ using System.Linq.Expressions;
 
 namespace GoCode.Infrastructure.DataAccess
 {
-    public class BaseRepositoryAsync<TEntity> : IRepository<TEntity> where TEntity : class
+    public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         protected readonly ApplicationDbContext _dbContext;
 
-        public BaseRepositoryAsync(ApplicationDbContext dbContext)
+        public BaseRepository(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
         public IEnumerable<TEntity> GetAll() => _dbContext.Set<TEntity>();
 
+        public IEnumerable<TEntity> GetAllWith(Expression<Func<TEntity, bool>> include) => _dbContext
+            .Set<TEntity>()
+            .Include(include);
+
         public IEnumerable<TEntity> GetWhere(Expression<Func<TEntity, bool>> predicate) =>
             _dbContext.Set<TEntity>().Where(predicate);
+
+        public IEnumerable<TEntity> GetWhereWith(Expression<Func<TEntity, bool>> predicate,
+            Expression<Func<TEntity, bool>> include) => _dbContext
+            .Set<TEntity>()
+            .Where(predicate)
+            .Include(include);
 
         public async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate) =>
             await _dbContext.Set<TEntity>().FirstOrDefaultAsync(predicate);

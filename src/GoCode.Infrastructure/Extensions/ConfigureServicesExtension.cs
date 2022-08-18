@@ -22,7 +22,7 @@ namespace GoCode.Infrastructure.Extensions
             //Service registrattion
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddSingleton<IJwtService, JwtService>();
-            services.AddScoped<IRepository<RefreshToken>, BaseRepositoryAsync<RefreshToken>>();
+            services.AddScoped<IRepository<RefreshToken>, BaseRepository<RefreshToken>>();
 
             //Register db
             services.AddDbContext<ApplicationDbContext>(options =>

@@ -1,6 +1,6 @@
 ﻿using GoCode.Application.Common.BaseResponse;
 using GoCode.Application.Common.Contracts.Identity;
-using GoCode.Application.Courses.Dto;
+using GoCode.Application.Common.Dtos;
 using GoCode.Application.Courses.Queries;
 using GoCode.Application.Courses.Responses;
 using MediatR;

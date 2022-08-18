@@ -6,7 +6,12 @@ namespace GoCode.Application.Common.Contracts.DataAccess
     {
         IEnumerable<TEntity> GetAll();
 
+        IEnumerable<TEntity> GetAllWith(Expression<Func<TEntity, bool>> include);
+
         IEnumerable<TEntity> GetWhere(Expression<Func<TEntity, bool>> predicate);
+
+        IEnumerable<TEntity> GetWhereWith(Expression<Func<TEntity, bool>> predicate,
+            Expression<Func<TEntity, bool>> include);
 
         Task<TEntity?> SignleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
 

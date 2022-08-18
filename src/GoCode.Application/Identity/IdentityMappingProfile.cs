@@ -4,9 +4,9 @@ using GoCode.Application.Identity.Requests;
 
 namespace GoCode.Application.Identity
 {
-    internal class IdentityMappingProfile : Profile
+    internal class CoursesMappingProfile : Profile
     {
-        public IdentityMappingProfile()
+        public CoursesMappingProfile()
         {
             CreateMap<AuthenticateUserRequest, AuthenticateUserCommand>();
             CreateMap<CreateUserRequest, CreateUserCommand>();
