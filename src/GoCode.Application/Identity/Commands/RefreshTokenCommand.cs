@@ -1,10 +1,9 @@
-﻿using GoCode.Application.Common.BaseResponse;
+﻿using GoCode.Application.Common;
 using GoCode.Application.Identity.Responses;
-using MediatR;
 
 namespace GoCode.Application.Identity.Commands
 {
-    public class RefreshTokenCommand : IRequest<Response<RefreshTokenResponse>>
+    public class RefreshTokenCommand : IRequestWrapper<RefreshTokenResponse>
     {
         public string Token { get; set; }
         public string RefreshToken { get; set; }

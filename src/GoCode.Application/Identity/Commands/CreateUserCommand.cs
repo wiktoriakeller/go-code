@@ -1,10 +1,9 @@
-﻿using GoCode.Application.Common.BaseResponse;
+﻿using GoCode.Application.Common;
 using GoCode.Application.Identity.Responses;
-using MediatR;
 
 namespace GoCode.Application.Identity.Commands
 {
-    public class CreateUserCommand : IRequest<Response<CreateUserResponse>>
+    public class CreateUserCommand : IRequestWrapper<CreateUserResponse>
     {
         public string Email { get; set; }
         public string Password { get; set; }

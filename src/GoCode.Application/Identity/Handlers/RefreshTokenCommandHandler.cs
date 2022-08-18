@@ -1,12 +1,12 @@
-﻿using GoCode.Application.Common.BaseResponse;
+﻿using GoCode.Application.Common;
+using GoCode.Application.Common.BaseResponse;
 using GoCode.Application.Common.Contracts.Identity;
 using GoCode.Application.Identity.Commands;
 using GoCode.Application.Identity.Responses;
-using MediatR;
 
 namespace GoCode.Application.Identity.Handlers
 {
-    public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, Response<RefreshTokenResponse>>
+    public class RefreshTokenCommandHandler : IHandlerWrapper<RefreshTokenCommand, RefreshTokenResponse>
     {
         private readonly IIdentityService _identityService;
 

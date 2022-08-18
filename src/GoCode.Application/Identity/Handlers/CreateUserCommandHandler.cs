@@ -1,12 +1,12 @@
-﻿using GoCode.Application.Common.BaseResponse;
+﻿using GoCode.Application.Common;
+using GoCode.Application.Common.BaseResponse;
 using GoCode.Application.Common.Contracts.Identity;
 using GoCode.Application.Identity.Commands;
 using GoCode.Application.Identity.Responses;
-using MediatR;
 
 namespace GoCode.Application.Identity.Handlers
 {
-    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Response<CreateUserResponse>>
+    public class CreateUserCommandHandler : IHandlerWrapper<CreateUserCommand, CreateUserResponse>
     {
         private readonly IIdentityService _identitySerivce;
 
