@@ -2,6 +2,8 @@
 {
     public static class ErrorMessages
     {
+        public const string NotFound = "{0} was not found";
+
         public static class Identity
         {
             public const string UnauthorizedUser = "User is unauthorized";

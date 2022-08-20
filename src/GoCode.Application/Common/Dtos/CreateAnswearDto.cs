@@ -2,7 +2,7 @@
 {
     public record CreateAnswearDto
     {
-        public string Content { get; set; }
-        public bool IsCorrect { get; set; }
+        public string Content { get; init; }
+        public bool IsCorrect { get; init; }
     }
 }

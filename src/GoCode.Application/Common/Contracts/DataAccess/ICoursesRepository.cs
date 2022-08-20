@@ -8,5 +8,7 @@ namespace GoCode.Application.Common.Contracts.DataAccess
         IEnumerable<Course> GetCoursesWithAll();
 
         IEnumerable<Course> GetCoursesWithAll(Expression<Func<Course, bool>> predicate);
+
+        Task<Course?> FirstOrDefaultWithAllAsync(Expression<Func<Course, bool>> predicate);
     }
 }

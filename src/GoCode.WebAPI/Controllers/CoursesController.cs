@@ -37,5 +37,13 @@ namespace GoCode.WebAPI.Controllers
 
             return Created($"api/v1/courses/{response.Data?.Id}", response);
         }
+
+        [HttpPatch("signup/{courseId}")]
+        public async Task<IActionResult> SignUpForACourse([FromRoute] int courseId)
+        {
+            var command = new SignUpForCourseCommand() { Id = courseId };
+            var response = await _medaitor.Send(command);
+            return StatusCode((int)response.HttpStatusCode, response);
+        }
     }
 }

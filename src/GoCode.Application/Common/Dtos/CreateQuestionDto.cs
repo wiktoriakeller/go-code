@@ -2,8 +2,8 @@
 {
     public record CreateQuestionDto
     {
-        public string Content { get; set; }
-        public int XP { get; set; }
-        public ICollection<CreateAnswearDto> Answers { get; set; }
+        public string Content { get; init; }
+        public int XP { get; init; }
+        public ICollection<CreateAnswearDto> Answers { get; init; }
     }
 }

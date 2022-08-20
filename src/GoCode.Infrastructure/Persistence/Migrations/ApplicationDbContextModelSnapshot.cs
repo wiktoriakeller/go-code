@@ -105,9 +105,6 @@ namespace GoCode.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<long>("CourseCompletionPercent")
-                        .HasColumnType("bigint");
-
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
 
