@@ -28,7 +28,7 @@ namespace GoCode.UnitTests.Infrastructure
 
         [Theory]
         [ApplicationUserWithoutTokenData]
-        public async Task GetUserByEmail_GivenEmail_ResponseShouldBeNotFound(string email, User user)
+        public async Task GetUserByEmail_GivenEmail_ResponseShouldBeNotFound(string email)
         {
             //Arrange
             var mapper = new Mock<IMapper>();

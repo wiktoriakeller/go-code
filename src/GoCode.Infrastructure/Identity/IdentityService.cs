@@ -73,9 +73,7 @@ namespace GoCode.Infrastructure.Identity
             var newUser = new User
             {
                 Email = createUserCommand.Email,
-                UserName = createUserCommand.Email,
-                FirstName = createUserCommand.FirstName,
-                LastName = createUserCommand.LastName
+                UserName = createUserCommand.UserName ?? createUserCommand.Email
             };
 
             var result = await _userManager.CreateAsync(newUser, createUserCommand.Password);

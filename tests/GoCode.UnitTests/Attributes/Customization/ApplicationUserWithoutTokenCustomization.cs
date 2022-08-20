@@ -8,7 +8,8 @@ namespace GoCode.UnitTests.Attributes.Customization
         public void Customize(IFixture fixture)
         {
             fixture.Customize<User>(transform => transform
-                .Without(u => u.RefreshToken));
+                .Without(u => u.RefreshToken)
+                .Without(u => u.UserCourses));
         }
     }
 }

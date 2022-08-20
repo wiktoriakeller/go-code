@@ -1,5 +1,4 @@
 ﻿using AutoFixture;
-using AutoFixture.Xunit2;
 using GoCode.UnitTests.Attributes.Customization;
 
 namespace GoCode.UnitTests.Attributes

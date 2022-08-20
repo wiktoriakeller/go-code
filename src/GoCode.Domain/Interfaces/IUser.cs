@@ -5,8 +5,7 @@ namespace GoCode.Domain.Interfaces
     public interface IUser
     {
         public string Id { get; }
-        public string FirstName { get; }
-        public string LastName { get; }
+        public string UserName { get; }
         public int TotalXP { get; }
         public int Level { get; }
 
