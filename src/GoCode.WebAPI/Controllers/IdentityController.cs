@@ -24,7 +24,7 @@ namespace GoCode.WebAPI.Controllers
                 return StatusCode((int)response.HttpStatusCode, response);
             }
 
-            return Created($"api/v1/identity/{response.Data?.Id}", null);
+            return Created($"api/v1/identity/{response.Data?.Id}", response);
         }
 
         [HttpPost("login")]

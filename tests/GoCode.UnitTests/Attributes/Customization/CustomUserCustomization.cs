@@ -3,7 +3,7 @@ using GoCode.Infrastructure.Identity.Entities;
 
 namespace GoCode.UnitTests.Attributes.Customization
 {
-    public class ApplicationUserWithoutTokenCustomization : ICustomization
+    public class CustomUserCustomization : ICustomization
     {
         public void Customize(IFixture fixture)
         {

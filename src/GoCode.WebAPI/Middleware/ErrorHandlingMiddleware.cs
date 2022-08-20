@@ -20,10 +20,11 @@ namespace GoCode.WebAPI.Middleware
             {
                 await _next.Invoke(context);
             }
-            catch (Exception ex)
+            catch
             {
                 var response = context.Response;
                 response.ContentType = "application/json";
+                response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 var httpResponse = ResponseResult.HttpError<int>(ErrorMessage, HttpStatusCode.InternalServerError);
                 var result = JsonSerializer.Serialize(httpResponse);
                 await response.WriteAsync(result);

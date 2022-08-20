@@ -20,15 +20,16 @@ namespace GoCode.Infrastructure.Extensions
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
             //Service registrattion
-            services.AddScoped<IIdentityService, IdentityService>();
-            services.AddSingleton<IJwtService, JwtService>();
-            services.AddScoped<IRepository<RefreshToken>, BaseRepository<RefreshToken>>();
-
-            //Register db
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly(typeof(ConfigureServicesExtension).Assembly.FullName)));
+
+            services.AddScoped<ApplicationDbSeeder>();
+            services.AddScoped<IIdentityService, IdentityService>();
+            services.AddSingleton<IJwtService, JwtService>();
+
+            RegisterRepositories(services);
 
             //Register identity and jwt
             services.AddIdentity<User, Role>(options =>
@@ -74,6 +75,12 @@ namespace GoCode.Infrastructure.Extensions
             services.Configure<JwtOptions>(configuration.GetSection("Authentication:JwtOptions"));
 
             return services;
+        }
+
+        private static void RegisterRepositories(IServiceCollection services)
+        {
+            services.AddScoped<IRepository<RefreshToken>, BaseRepository<RefreshToken>>();
+            services.AddScoped<ICoursesRepository, CoursesRepository>();
         }
     }
 }

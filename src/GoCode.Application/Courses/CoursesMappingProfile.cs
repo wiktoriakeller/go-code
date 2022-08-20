@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using GoCode.Application.Common.Dtos;
 using GoCode.Application.Courses.Commands;
 using GoCode.Application.Courses.Requests;
+using GoCode.Application.Courses.Responses;
+using GoCode.Domain.Entities;
 
 namespace GoCode.Application.Courses
 {
@@ -9,6 +12,12 @@ namespace GoCode.Application.Courses
         public CoursesMappingProfile()
         {
             CreateMap<CreateCourseRequest, CreateCourseCommand>();
+            CreateMap<CreateCourseCommand, Course>();
+            CreateMap<Course, CreateCourseResponse>();
+            CreateMap<CreateQuestionDto, Question>()
+                .ReverseMap();
+            CreateMap<CreateAnswearDto, Answear>()
+                .ReverseMap();
         }
     }
 }

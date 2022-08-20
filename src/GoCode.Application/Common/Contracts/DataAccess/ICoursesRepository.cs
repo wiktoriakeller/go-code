@@ -5,8 +5,8 @@ namespace GoCode.Application.Common.Contracts.DataAccess
 {
     public interface ICoursesRepository : IRepository<Course>
     {
-        IEnumerable<Course> GetCoursesWithAllIncluded();
+        IEnumerable<Course> GetCoursesWithAll();
 
-        IEnumerable<Course> GetCoursesWithAllIncluded(Expression<Func<Course, bool>> predicate);
+        IEnumerable<Course> GetCoursesWithAll(Expression<Func<Course, bool>> predicate);
     }
 }

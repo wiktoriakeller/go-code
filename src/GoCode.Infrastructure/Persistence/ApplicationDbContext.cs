@@ -27,6 +27,16 @@ namespace GoCode.Infrastructure.Persistence
                     .HasMaxLength(100);
             });
 
+            modelBuilder.Entity<Answear>(eb =>
+            {
+                eb.Property(a => a.Content)
+                    .IsRequired()
+                    .HasMaxLength(500);
+
+                eb.Property(a => a.IsCorrect)
+                    .IsRequired();
+            });
+
             modelBuilder.Entity<Question>(eb =>
             {
                 eb.Property(q => q.Content)
@@ -40,6 +50,10 @@ namespace GoCode.Infrastructure.Persistence
             modelBuilder.Entity<Course>(eb =>
             {
                 eb.Property(c => c.Name)
+                    .IsRequired()
+                    .HasMaxLength(500);
+
+                eb.Property(c => c.Description)
                     .IsRequired()
                     .HasMaxLength(500);
             });

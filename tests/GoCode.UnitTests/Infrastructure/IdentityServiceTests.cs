@@ -27,7 +27,7 @@ namespace GoCode.UnitTests.Infrastructure
         }
 
         [Theory]
-        [ApplicationUserWithoutTokenData]
+        [CustomUser]
         public async Task GetUserByEmail_GivenEmail_ResponseShouldBeNotFound(string email)
         {
             //Arrange
@@ -49,7 +49,7 @@ namespace GoCode.UnitTests.Infrastructure
         }
 
         [Theory]
-        [ApplicationUserWithoutTokenData]
+        [CustomUser]
         public async Task GetUserByEmail_GivenEmail_ResponseShouldBeOk(string email, User user)
         {
             //Arrange
@@ -74,7 +74,7 @@ namespace GoCode.UnitTests.Infrastructure
         }
 
         [Theory]
-        [ApplicationUserWithoutTokenData]
+        [CustomUser]
         public async Task CreateUserAsync_GivenCreateUserCommand_UsersCountShouldIncrease(CreateUserCommand command,
             List<User> users)
         {
@@ -152,7 +152,7 @@ namespace GoCode.UnitTests.Infrastructure
         }
 
         [Theory]
-        [ApplicationUserWithoutTokenData]
+        [CustomUser]
         public async Task AuthenticateUserAync_GivenAuthenticateUserCommand_WhenPasswordIsInvalid_ResponseErrorsShouldNotBeEmpty(AuthenticateUserCommand command,
             User user)
         {
@@ -181,7 +181,7 @@ namespace GoCode.UnitTests.Infrastructure
         }
 
         [Theory]
-        [ApplicationUserWithoutTokenData]
+        [CustomUser]
         public async Task AuthenticateUserAync_GivenAuthenticateUserCommand_WhenPasswordIsInvalid_ResponseResultShouldIndicateSuccess(
             AuthenticateUserCommand command,
             User user,
