@@ -32,8 +32,8 @@ namespace GoCode.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("bit");
@@ -44,6 +44,9 @@ namespace GoCode.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("QuestionId");
+
+                    b.HasIndex("Content", "QuestionId")
+                        .IsUnique();
 
                     b.ToTable("Answear");
                 });
@@ -58,15 +61,18 @@ namespace GoCode.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Courses");
                 });
@@ -81,10 +87,10 @@ namespace GoCode.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
-                    b.Property<int?>("CourseId")
+                    b.Property<int>("CourseId")
                         .HasColumnType("int");
 
                     b.Property<int>("XP")
@@ -93,6 +99,9 @@ namespace GoCode.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
+
+                    b.HasIndex("Content", "CourseId")
+                        .IsUnique();
 
                     b.ToTable("Questions");
                 });
@@ -366,9 +375,13 @@ namespace GoCode.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("GoCode.Domain.Entities.Question", b =>
                 {
-                    b.HasOne("GoCode.Domain.Entities.Course", null)
+                    b.HasOne("GoCode.Domain.Entities.Course", "Course")
                         .WithMany("Questions")
-                        .HasForeignKey("CourseId");
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
                 });
 
             modelBuilder.Entity("GoCode.Domain.Entities.UserCourse", b =>

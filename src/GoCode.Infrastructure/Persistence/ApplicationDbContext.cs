@@ -31,7 +31,7 @@ namespace GoCode.Infrastructure.Persistence
             {
                 eb.Property(a => a.Content)
                     .IsRequired()
-                    .HasMaxLength(500);
+                    .HasMaxLength(2000);
 
                 eb.Property(a => a.IsCorrect)
                     .IsRequired();
@@ -41,7 +41,7 @@ namespace GoCode.Infrastructure.Persistence
             {
                 eb.Property(q => q.Content)
                     .IsRequired()
-                    .HasMaxLength(500);
+                    .HasMaxLength(2000);
 
                 eb.Property(q => q.XP)
                     .IsRequired();
@@ -51,12 +51,24 @@ namespace GoCode.Infrastructure.Persistence
             {
                 eb.Property(c => c.Name)
                     .IsRequired()
-                    .HasMaxLength(500);
+                    .HasMaxLength(1000);
 
                 eb.Property(c => c.Description)
                     .IsRequired()
-                    .HasMaxLength(500);
+                    .HasMaxLength(2000);
             });
+
+            modelBuilder.Entity<Course>()
+                .HasIndex(c => c.Name)
+                .IsUnique();
+
+            modelBuilder.Entity<Question>()
+                .HasIndex(q => new { q.Content, q.CourseId })
+                .IsUnique();
+
+            modelBuilder.Entity<Answear>()
+                .HasIndex(a => new { a.Content, a.QuestionId })
+                .IsUnique();
         }
     }
 }
