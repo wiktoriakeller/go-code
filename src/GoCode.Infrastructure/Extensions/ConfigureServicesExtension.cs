@@ -81,6 +81,8 @@ namespace GoCode.Infrastructure.Extensions
         {
             services.AddScoped<IRepository<RefreshToken>, BaseRepository<RefreshToken>>();
             services.AddScoped<ICoursesRepository, CoursesRepository>();
+            services.AddScoped<IQuestionsRepository, QuestionsRepository>();
+            services.AddScoped<IAnswersRepository, AnswersRepository>();
             services.AddScoped<IUserCoursesRepository, UserCoursesRepository>();
         }
     }

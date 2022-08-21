@@ -5,7 +5,7 @@ namespace GoCode.Application.Common.Validators.Extensions
 {
     public static class UserValidationExtension
     {
-        private const string ErrorMessage = "Email does not fulfill condition";
+        private const string ErrorMessage = "Email is invalid";
 
         public static IRuleBuilderOptions<T, string> EmailIsPresent<T>(this IRuleBuilder<T, string> ruleBuilder, bool isPresent,
             IIdentityService identityService)

@@ -27,14 +27,15 @@ namespace GoCode.Infrastructure.Persistence
                     .HasMaxLength(100);
             });
 
-            modelBuilder.Entity<Answear>(eb =>
+            modelBuilder.Entity<Course>(eb =>
             {
-                eb.Property(a => a.Content)
+                eb.Property(c => c.Name)
+                    .IsRequired()
+                    .HasMaxLength(1000);
+
+                eb.Property(c => c.Description)
                     .IsRequired()
                     .HasMaxLength(2000);
-
-                eb.Property(a => a.IsCorrect)
-                    .IsRequired();
             });
 
             modelBuilder.Entity<Question>(eb =>
@@ -47,15 +48,14 @@ namespace GoCode.Infrastructure.Persistence
                     .IsRequired();
             });
 
-            modelBuilder.Entity<Course>(eb =>
+            modelBuilder.Entity<Answear>(eb =>
             {
-                eb.Property(c => c.Name)
-                    .IsRequired()
-                    .HasMaxLength(1000);
-
-                eb.Property(c => c.Description)
+                eb.Property(a => a.Content)
                     .IsRequired()
                     .HasMaxLength(2000);
+
+                eb.Property(a => a.IsCorrect)
+                    .IsRequired();
             });
 
             modelBuilder.Entity<Course>()
