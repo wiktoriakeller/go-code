@@ -6,8 +6,8 @@ namespace GoCode.Application.Courses.Commands
 {
     public class CreateCourseCommand : IRequestWrapper<CreateCourseResponse>
     {
-        public string Name { get; init; }
-        public string Description { get; init; }
-        public IEnumerable<CreateQuestionDto> Questions { get; init; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public IEnumerable<CreateQuestionDto> Questions { get; set; }
     }
 }

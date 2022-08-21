@@ -5,6 +5,6 @@ namespace GoCode.Application.Courses.Commands
 {
     public class SignUpForCourseCommand : IRequestWrapper<SignUpForCourseResponse>
     {
-        public int Id { get; init; }
+        public int Id { get; set; }
     }
 }

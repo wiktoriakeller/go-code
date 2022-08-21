@@ -9,7 +9,6 @@ using GoCode.Infrastructure.Interfaces;
 using GoCode.UnitTests.Attributes;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using Moq;
 using System.Diagnostics.CodeAnalysis;
 
 namespace GoCode.UnitTests.Infrastructure

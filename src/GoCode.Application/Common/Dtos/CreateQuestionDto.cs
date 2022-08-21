@@ -2,8 +2,8 @@
 {
     public record CreateQuestionDto
     {
-        public string Content { get; init; }
-        public int XP { get; init; }
-        public IEnumerable<CreateAnswearDto> Answers { get; init; }
+        public string Content { get; set; }
+        public int XP { get; set; }
+        public IEnumerable<CreateAnswearDto> Answers { get; set; }
     }
 }

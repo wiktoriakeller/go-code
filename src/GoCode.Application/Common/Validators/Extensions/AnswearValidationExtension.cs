@@ -19,13 +19,20 @@ namespace GoCode.Application.Common.Validators.Extensions
                     }
                     else if (answer.IsCorrect && foundTrue)
                     {
+                        //Multiple correct answears
                         return false;
                     }
                 }
 
+                //No correct answear
+                if (!foundTrue)
+                {
+                    return false;
+                }
+
                 return true;
             })
-            .WithMessage(ErrorMessages.Answear.OnlyOneAnswarCanBeCorrect);
+            .WithMessage(ErrorMessages.Answear.OnlyOneAnswearCanBeCorrect);
         }
     }
 }

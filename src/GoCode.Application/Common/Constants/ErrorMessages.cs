@@ -15,7 +15,7 @@
 
         public static class Answear
         {
-            public const string OnlyOneAnswarCanBeCorrect = "Only one answear can be correct";
+            public const string OnlyOneAnswearCanBeCorrect = "Only one answear can be correct";
             public const string AnswersMinimumCount = "At least two answears are required";
             public const string AnswersMustBeUnique = "Answers within a question should be unique";
         }
