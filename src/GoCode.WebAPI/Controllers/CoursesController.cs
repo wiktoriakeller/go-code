@@ -17,6 +17,14 @@ namespace GoCode.WebAPI.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetAllCourses()
+        {
+            var query = new GetAllCoursesQuery();
+            var response = await _medaitor.Send(query);
+            return StatusCode((int)response.HttpStatusCode, response);
+        }
+
+        [HttpGet("user")]
         public async Task<IActionResult> GetUserCourses()
         {
             var query = new GetUserCoursesQuery();

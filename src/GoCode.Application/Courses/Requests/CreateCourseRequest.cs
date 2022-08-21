@@ -2,7 +2,7 @@
 
 namespace GoCode.Application.Courses.Requests
 {
-    public class CreateCourseRequest
+    public record CreateCourseRequest
     {
         public string Name { get; init; }
         public string Description { get; init; }

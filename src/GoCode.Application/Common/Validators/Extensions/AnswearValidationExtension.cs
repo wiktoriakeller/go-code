@@ -1,12 +1,11 @@
 ﻿using FluentValidation;
+using GoCode.Application.Common.Constants;
 using GoCode.Application.Common.Dtos;
 
 namespace GoCode.Application.Common.Validators.Extensions
 {
     public static class AnswearValidationExtension
     {
-        private const string CorrectAnswearError = "Only one answear can be correct";
-
         public static IRuleBuilderOptions<T, IEnumerable<CreateAnswearDto>> OnlyOneCorrectAnswear<T>(this IRuleBuilder<T, IEnumerable<CreateAnswearDto>> ruleBuilder)
         {
             return ruleBuilder.Must((rootObject, answers, context) =>
@@ -26,7 +25,7 @@ namespace GoCode.Application.Common.Validators.Extensions
 
                 return true;
             })
-            .WithMessage(CorrectAnswearError);
+            .WithMessage(ErrorMessages.Answear.OnlyOneAnswarCanBeCorrect);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using GoCode.Application.Common.Constants;
 using GoCode.Application.Common.Dtos;
 using GoCode.Application.Common.Validators.Extensions;
 
@@ -6,8 +7,7 @@ namespace GoCode.Application.Common.Validators.Courses
 {
     public class CreateQuestionDtoValidator : AbstractValidator<CreateQuestionDto>
     {
-        private const string AnswearsLengthError = "At least two answears are required";
-        private const string NotUnqiueAsnwearError = "Answers within a question must be unique";
+        private const int AnswearsMinimumCount = 2;
 
         public CreateQuestionDtoValidator(IValidator<CreateAnswearDto> createAnswearValidator)
         {
@@ -24,12 +24,12 @@ namespace GoCode.Application.Common.Validators.Courses
                 .ForEach(x => x.SetValidator(createAnswearValidator));
 
             RuleFor(x => x.Answers)
-                .Must(x => x.Count() >= 2)
-                .WithMessage(AnswearsLengthError);
+                .Must(x => x.Count() >= AnswearsMinimumCount)
+                .WithMessage(ErrorMessages.Answear.AnswersMinimumCount);
 
             RuleFor(x => x.Answers.Select(a => a.Content))
                 .CollectionMustBeUnique()
-                .WithMessage(NotUnqiueAsnwearError);
+                .WithMessage(ErrorMessages.Answear.AnswersMustBeUnique);
         }
     }
 }

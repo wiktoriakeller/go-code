@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using GoCode.Application.Common.Constants;
 using GoCode.Application.Common.Contracts.Identity;
 using GoCode.Application.Common.Validators.Extensions;
 using GoCode.Application.Identity.Commands;
@@ -7,8 +8,6 @@ namespace GoCode.Application.Common.Validators.Identity
 {
     public class AuthenticateUserCommandValidator : AbstractValidator<AuthenticateUserCommand>
     {
-        private const string EmailNotFound = "Email was not found";
-
         public AuthenticateUserCommandValidator(IIdentityService identityService)
         {
             RuleFor(x => x.Email)
@@ -17,7 +16,7 @@ namespace GoCode.Application.Common.Validators.Identity
 
             RuleFor(x => x.Email)
                 .EmailIsPresent(true, identityService)
-                .WithMessage(EmailNotFound);
+                .WithMessage(string.Format(ErrorMessages.NotFound, "Email"));
 
             RuleFor(x => x.Password)
                 .NotEmpty();

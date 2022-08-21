@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using GoCode.Application.Common.Constants;
 using GoCode.Application.Common.Dtos;
 using GoCode.Application.Common.Validators.Extensions;
 using GoCode.Application.Courses.Commands;
@@ -7,8 +8,6 @@ namespace GoCode.Application.Common.Validators.Courses
 {
     public class CreateCourseCommandValidator : AbstractValidator<CreateCourseCommand>
     {
-        private const string NotUniqueQuestionError = "Questions within a course must be unique";
-
         public CreateCourseCommandValidator(IValidator<CreateQuestionDto> createQuestionValidator)
         {
             RuleFor(x => x.Name)
@@ -25,7 +24,7 @@ namespace GoCode.Application.Common.Validators.Courses
 
             RuleFor(x => x.Questions.Select(q => q.Content))
                 .CollectionMustBeUnique()
-                .WithMessage(NotUniqueQuestionError);
+                .WithMessage(ErrorMessages.Question.QuestionsMustBeUnique);
         }
     }
 }
