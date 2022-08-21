@@ -4,6 +4,6 @@ namespace GoCode.Application.Courses.Responses
 {
     public record GetUserCoursesResponse
     {
-        public ICollection<CourseDto> Courses { get; init; }
+        public IEnumerable<CourseDto> Courses { get; init; }
     }
 }

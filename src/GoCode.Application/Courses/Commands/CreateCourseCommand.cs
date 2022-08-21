@@ -8,6 +8,6 @@ namespace GoCode.Application.Courses.Commands
     {
         public string Name { get; init; }
         public string Description { get; init; }
-        public ICollection<CreateQuestionDto> Questions { get; init; }
+        public IEnumerable<CreateQuestionDto> Questions { get; init; }
     }
 }

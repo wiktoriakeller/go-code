@@ -17,7 +17,6 @@ namespace GoCode.Application.Common.Extensions
             services.AddValidatorsFromAssembly(typeof(ConfigureServicesExtension).Assembly);
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             ValidatorOptions.Global.LanguageManager.Enabled = false;
-
             return services;
         }
     }

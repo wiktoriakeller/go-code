@@ -26,7 +26,7 @@ namespace GoCode.Application.Common.PipelineBehaviors
                 var errors = results
                     .SelectMany(x => x.Errors)
                     .Where(x => x != null)
-                    .Select(x => $"{x.PropertyName}: {x.ErrorMessage}");
+                    .Select(x => x.ErrorMessage);
 
                 if (errors.Any())
                 {

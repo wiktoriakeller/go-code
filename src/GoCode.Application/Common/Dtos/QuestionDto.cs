@@ -1,9 +1,10 @@
 ﻿namespace GoCode.Application.Common.Dtos
 {
-    public record CreateQuestionDto
+    public class QuestionDto
     {
+        public int Id { get; set; }
         public string Content { get; init; }
         public int XP { get; init; }
-        public IEnumerable<CreateAnswearDto> Answers { get; init; }
+        public IEnumerable<AnswearDto> Answers { get; init; }
     }
 }

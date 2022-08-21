@@ -15,11 +15,11 @@ namespace GoCode.Application.Courses.Handlers
         private readonly ICoursesRepository _courseRepository;
         private readonly IUserCoursesRepository _userCoursesRepository;
 
-        public SignUpForCourseHandler(ICurrentUserService currentUserService,
+        public SignUpForCourseHandler(ICurrentUserService currentUser,
             ICoursesRepository coursesRepository,
             IUserCoursesRepository userCoursesRepository)
         {
-            _currentUser = currentUserService;
+            _currentUser = currentUser;
             _courseRepository = coursesRepository;
             _userCoursesRepository = userCoursesRepository;
         }
