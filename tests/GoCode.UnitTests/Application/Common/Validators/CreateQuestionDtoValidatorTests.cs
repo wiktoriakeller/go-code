@@ -4,9 +4,7 @@ using FluentValidation.TestHelper;
 using GoCode.Application.Common.Constants;
 using GoCode.Application.Common.Dtos;
 using GoCode.Application.Common.Validators.Courses;
-using GoCode.UnitTests.Attributes;
 using GoCode.UnitTests.Attributes.Customization;
-using System.Diagnostics.CodeAnalysis;
 
 namespace GoCode.UnitTests.Application.Common.Validators
 {
@@ -44,14 +42,14 @@ namespace GoCode.UnitTests.Application.Common.Validators
         }
 
         private readonly IValidator<CreateQuestionDto> _sut;
-        private readonly Mock<IValidator<CreateAnswearDto>> _answearValidator;
+        private readonly Mock<IValidator<CreateAnswearDto>> _answearValidatorMock;
 
         public CreateQuestionDtoValidatorTests()
         {
-            _answearValidator = new();
-            _answearValidator.Setup(x => x.Validate(It.IsAny<CreateAnswearDto>()))
+            _answearValidatorMock = new();
+            _answearValidatorMock.Setup(x => x.Validate(It.IsAny<CreateAnswearDto>()))
                 .Returns(new ValidationResult());
-            _sut = new CreateQuestionDtoValidator(_answearValidator.Object);
+            _sut = new CreateQuestionDtoValidator(_answearValidatorMock.Object);
         }
 
         [Theory]
@@ -72,9 +70,7 @@ namespace GoCode.UnitTests.Application.Common.Validators
         public void Validate_GivenQuestion_WhenContentIsInvalid_ShouldReturnErrror(int charCount)
         {
             //Arrange
-            var fixture = new Fixture();
-            fixture.Customize(new CorrectQuestionCustomization());
-            var createQuestionDto = fixture.Create<CreateQuestionDto>();
+            var createQuestionDto = GetCreateQuestionDtoFixture();
             createQuestionDto.Content = new string('a', charCount);
 
             //Act
@@ -91,9 +87,7 @@ namespace GoCode.UnitTests.Application.Common.Validators
         public void Validate_GivenQuestion_WhenXPPointAreLessThanOrEqualToZero_ShouldReturnErrror(int XP)
         {
             //Arrange
-            var fixture = new Fixture();
-            var customizedFixture = fixture.Customize(new CorrectQuestionCustomization());
-            var createQuestionDto = customizedFixture.Create<CreateQuestionDto>();
+            var createQuestionDto = GetCreateQuestionDtoFixture();
             createQuestionDto.XP = XP;
 
             //Act
@@ -197,6 +191,13 @@ namespace GoCode.UnitTests.Application.Common.Validators
             //Assert
             result.ShouldHaveValidationErrorFor(x => x.Answers)
                 .WithErrorMessage(ErrorMessages.Answear.OnlyOneAnswearCanBeCorrect);
+        }
+
+        private CreateQuestionDto GetCreateQuestionDtoFixture()
+        {
+            var fixture = new Fixture();
+            var cutomizedFixture = fixture.Customize(new CorrectQuestionCustomization());
+            return cutomizedFixture.Create<CreateQuestionDto>();
         }
     }
 }

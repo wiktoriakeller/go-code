@@ -3,6 +3,7 @@ using GoCode.Infrastructure.Identity.Entities;
 
 namespace GoCode.UnitTests.Attributes.Customization
 {
+    [ExcludeFromCodeCoverage]
     public class CustomUserCustomization : ICustomization
     {
         public void Customize(IFixture fixture)

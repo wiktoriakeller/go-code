@@ -1,13 +1,11 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using FluentValidation.TestHelper;
+using GoCode.Application.Common.Constants;
 using GoCode.Application.Common.Dtos;
 using GoCode.Application.Common.Validators.Courses;
 using GoCode.Application.Courses.Commands;
 using GoCode.UnitTests.Attributes.Customization;
-using System.Diagnostics.CodeAnalysis;
-using GoCode.UnitTests.Attributes;
-using GoCode.Application.Common.Constants;
 
 namespace GoCode.UnitTests.Application.Common.Validators
 {
@@ -40,14 +38,14 @@ namespace GoCode.UnitTests.Application.Common.Validators
         }
 
         private readonly IValidator<CreateCourseCommand> _sut;
-        private readonly Mock<IValidator<CreateQuestionDto>> _questionValidator;
+        private readonly Mock<IValidator<CreateQuestionDto>> _questionValidatorMock;
 
         public CreateCourseCommandValidatorTests()
         {
-            _questionValidator = new();
-            _questionValidator.Setup(x => x.Validate(It.IsAny<CreateQuestionDto>()))
+            _questionValidatorMock = new();
+            _questionValidatorMock.Setup(x => x.Validate(It.IsAny<CreateQuestionDto>()))
                 .Returns(new ValidationResult());
-            _sut = new CreateCourseCommandValidator(_questionValidator.Object);
+            _sut = new CreateCourseCommandValidator(_questionValidatorMock.Object);
         }
 
         [Theory]
@@ -68,9 +66,7 @@ namespace GoCode.UnitTests.Application.Common.Validators
         public void Validate_GivenCreateCourseCommand_WhenNameHasIncorrectLength_ShouldReturnErrror(int charCount)
         {
             //Arrange
-            var fixture = new Fixture();
-            var customizedFixture = fixture.Customize(new CorrectCourseCustomization());
-            var command = customizedFixture.Create<CreateCourseCommand>();
+            var command = GetCreateCourseCommandFixture();
             command.Name = new string('a', charCount);
 
             //Act
@@ -87,9 +83,7 @@ namespace GoCode.UnitTests.Application.Common.Validators
         public void Validate_GivenCreateCourseCommand_WhenDescriptionHasIncorrectLength_ShouldReturnErrror(int charCount)
         {
             //Arrange
-            var fixture = new Fixture();
-            var customizedFixture = fixture.Customize(new CorrectCourseCustomization());
-            var command = customizedFixture.Create<CreateCourseCommand>();
+            var command = GetCreateCourseCommandFixture();
             command.Description = new string('a', charCount);
 
             //Act
@@ -124,6 +118,13 @@ namespace GoCode.UnitTests.Application.Common.Validators
             //Assert
             result.ShouldHaveAnyValidationError()
                 .WithErrorMessage(ErrorMessages.Question.QuestionsMustBeUnique);
+        }
+
+        private CreateCourseCommand GetCreateCourseCommandFixture()
+        {
+            var fixture = new Fixture();
+            var customizedFixture = fixture.Customize(new CorrectCourseCustomization());
+            return customizedFixture.Create<CreateCourseCommand>();
         }
     }
 }

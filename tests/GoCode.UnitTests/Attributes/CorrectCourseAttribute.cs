@@ -2,6 +2,7 @@
 
 namespace GoCode.UnitTests.Attributes
 {
+    [ExcludeFromCodeCoverage]
     public class CorrectCourseAttribute : AutoDataAttribute
     {
         public CorrectCourseAttribute() : base(() =>

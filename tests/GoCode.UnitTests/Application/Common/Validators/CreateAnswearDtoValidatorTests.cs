@@ -2,7 +2,6 @@
 using FluentValidation.TestHelper;
 using GoCode.Application.Common.Dtos;
 using GoCode.Application.Common.Validators.Courses;
-using System.Diagnostics.CodeAnalysis;
 
 namespace GoCode.UnitTests.Application.Common.Validators
 {

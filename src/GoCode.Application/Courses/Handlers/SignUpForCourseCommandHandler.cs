@@ -9,13 +9,13 @@ using GoCode.Domain.Entities;
 
 namespace GoCode.Application.Courses.Handlers
 {
-    public class SignUpForCourseHandler : IHandlerWrapper<SignUpForCourseCommand, SignUpForCourseResponse>
+    public class SignUpForCourseCommandHandler : IHandlerWrapper<SignUpForCourseCommand, SignUpForCourseResponse>
     {
         private readonly ICurrentUserService _currentUser;
         private readonly ICoursesRepository _courseRepository;
         private readonly IUserCoursesRepository _userCoursesRepository;
 
-        public SignUpForCourseHandler(ICurrentUserService currentUser,
+        public SignUpForCourseCommandHandler(ICurrentUserService currentUser,
             ICoursesRepository coursesRepository,
             IUserCoursesRepository userCoursesRepository)
         {

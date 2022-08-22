@@ -6,10 +6,8 @@ using GoCode.Application.Identity.Commands;
 using GoCode.Infrastructure.Identity;
 using GoCode.Infrastructure.Identity.Entities;
 using GoCode.Infrastructure.Interfaces;
-using GoCode.UnitTests.Attributes;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using System.Diagnostics.CodeAnalysis;
 
 namespace GoCode.UnitTests.Infrastructure
 {

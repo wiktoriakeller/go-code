@@ -10,13 +10,13 @@ using MediatR;
 
 namespace GoCode.Application.Courses.Handlers
 {
-    public class GetUserCoursesHandler : IRequestHandler<GetUserCoursesQuery, Response<GetUserCoursesResponse>>
+    public class GetUserCoursesQueryHandler : IRequestHandler<GetUserCoursesQuery, Response<GetUserCoursesResponse>>
     {
         private readonly ICurrentUserService _currentUser;
         private readonly ICoursesRepository _coursesRepository;
         private readonly IMapper _mapper;
 
-        public GetUserCoursesHandler(ICurrentUserService currentUser,
+        public GetUserCoursesQueryHandler(ICurrentUserService currentUser,
             ICoursesRepository coursesRepository,
             IMapper mapper)
         {
