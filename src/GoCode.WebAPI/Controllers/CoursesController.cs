@@ -46,18 +46,18 @@ namespace GoCode.WebAPI.Controllers
             return Created($"api/v1/courses/{response.Data?.Id}", response);
         }
 
-        [HttpPatch("signup/{courseId}")]
-        public async Task<IActionResult> SignUpForACourse([FromRoute] int courseId)
+        [HttpPatch("signup/{id}")]
+        public async Task<IActionResult> SignUpForACourse([FromRoute] int id)
         {
-            var command = new SignUpForCourseCommand() { Id = courseId };
+            var command = new SignUpForCourseCommand() { Id = id };
             var response = await _medaitor.Send(command);
             return StatusCode((int)response.HttpStatusCode, response);
         }
 
-        [HttpDelete("{courseId}")]
-        public async Task<IActionResult> DeleteCourse([FromRoute] int courseId)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCourse([FromRoute] int id)
         {
-            var command = new DeleteCourseCommand() { Id = courseId };
+            var command = new DeleteCourseCommand() { Id = id };
             var response = await _medaitor.Send(command);
             return StatusCode((int)response.HttpStatusCode, response);
         }

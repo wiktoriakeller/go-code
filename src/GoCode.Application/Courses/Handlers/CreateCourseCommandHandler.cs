@@ -25,7 +25,7 @@ namespace GoCode.Application.Courses.Handlers
             var courseToAdd = _mapper.Map<Course>(request);
             var course = await _coursesRepository.AddAsync(courseToAdd);
             var response = _mapper.Map<CreateCourseResponse>(course);
-            return ResponseResult.Ok(response);
+            return ResponseResult.Created(response);
         }
     }
 }
