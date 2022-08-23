@@ -36,7 +36,7 @@ namespace GoCode.Application.Courses.Handlers
 
             var courses = _coursesRepository.GetCoursesWithAll(x => x.UserCourses.Any(uc => uc.UserId == currentUser.Id));
             var mappedCourses = _mapper.Map<IEnumerable<CourseDto>>(courses);
-            var response = new GetUserCoursesResponse { Courses = mappedCourses };
+            var response = new GetUserCoursesResponse() { Courses = mappedCourses };
             return ResponseResult.Ok(response);
         }
     }

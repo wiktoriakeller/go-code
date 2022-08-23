@@ -4,6 +4,8 @@ namespace GoCode.Application.Common.Contracts.DataAccess
 {
     public interface IRepository<TEntity> where TEntity : class
     {
+        ValueTask<TEntity?> GetByIdAsync<TId>(TId id);
+
         IEnumerable<TEntity> GetAll();
 
         IEnumerable<TEntity> GetAllWith(Expression<Func<TEntity, bool>> include);

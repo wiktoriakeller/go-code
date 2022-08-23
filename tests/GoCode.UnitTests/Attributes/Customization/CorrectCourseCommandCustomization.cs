@@ -4,7 +4,7 @@ using GoCode.Application.Courses.Commands;
 namespace GoCode.UnitTests.Attributes.Customization
 {
     [ExcludeFromCodeCoverage]
-    public class CorrectCourseCustomization : ICustomization
+    public class CorrectCourseCommandCustomization : ICustomization
     {
         public void Customize(IFixture fixture)
         {

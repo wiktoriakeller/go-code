@@ -24,7 +24,7 @@ namespace GoCode.Application.Courses.Handlers
         {
             var courses = _coursesRepository.GetCoursesWithAll();
             var mappedCourses = _mapper.Map<IEnumerable<CourseDto>>(courses);
-            var response = new GetAllCoursesResponse { Courses = mappedCourses };
+            var response = new GetAllCoursesResponse() { Courses = mappedCourses };
             return Task.FromResult(ResponseResult.Ok(response));
         }
     }

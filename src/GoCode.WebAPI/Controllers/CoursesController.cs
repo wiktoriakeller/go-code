@@ -53,5 +53,13 @@ namespace GoCode.WebAPI.Controllers
             var response = await _medaitor.Send(command);
             return StatusCode((int)response.HttpStatusCode, response);
         }
+
+        [HttpDelete("{courseId}")]
+        public async Task<IActionResult> DeleteCourse([FromRoute] int courseId)
+        {
+            var command = new DeleteCourseCommand() { Id = courseId };
+            var response = await _medaitor.Send(command);
+            return StatusCode((int)response.HttpStatusCode, response);
+        }
     }
 }

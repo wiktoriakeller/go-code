@@ -94,7 +94,7 @@ namespace GoCode.UnitTests.Application.Common.Validators
         }
 
         [Theory]
-        [CorrectCourse]
+        [CorrectCourseCommand]
         public void Validate_GivenCreateCourseCommand_WhenQuestionsAreDuplicated_ShouldReturnErrror(CreateCourseCommand createCourseCommand)
         {
             //Arrange
@@ -123,7 +123,7 @@ namespace GoCode.UnitTests.Application.Common.Validators
         private CreateCourseCommand GetCreateCourseCommandFixture()
         {
             var fixture = new Fixture();
-            var customizedFixture = fixture.Customize(new CorrectCourseCustomization());
+            var customizedFixture = fixture.Customize(new CorrectCourseCommandCustomization());
             return customizedFixture.Create<CreateCourseCommand>();
         }
     }

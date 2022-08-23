@@ -14,6 +14,8 @@ namespace GoCode.Infrastructure.DataAccess
             _dbContext = dbContext;
         }
 
+        public async ValueTask<TEntity?> GetByIdAsync<TId>(TId id) => await _dbContext.Set<TEntity>().FindAsync(id);
+
         public IEnumerable<TEntity> GetAll() => _dbContext.Set<TEntity>();
 
         public IEnumerable<TEntity> GetAllWith(Expression<Func<TEntity, bool>> include) => _dbContext
