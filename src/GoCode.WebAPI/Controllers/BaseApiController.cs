@@ -1,8 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
-
-namespace GoCode.WebAPI.Controllers
+﻿namespace GoCode.WebAPI.Controllers
 {
     [ApiController]
     public class BaseApiController : ControllerBase

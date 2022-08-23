@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using GoCode.Application.Common.Constants;
 using GoCode.Application.Common.Contracts.DataAccess;
 using GoCode.Application.Common.Dtos;
 using GoCode.Application.Common.Validators.Extensions;
@@ -12,7 +13,8 @@ namespace GoCode.Application.Common.Validators.Questions
             ICoursesRepository coursesRepository)
         {
             RuleFor(x => x.CourseId)
-                .EntityWithIdExists(coursesRepository);
+                .EntityWithIdExists(coursesRepository)
+                .WithMessage(string.Format(ErrorMessages.NotFound, "Question"));
 
             RuleFor(x => x)
                 .QuestionContentMustBeUnique(coursesRepository);
