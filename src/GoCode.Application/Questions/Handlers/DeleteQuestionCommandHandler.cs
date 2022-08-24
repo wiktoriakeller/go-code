@@ -20,8 +20,7 @@ namespace GoCode.Application.Questions.Handlers
             var question = await _questionsRepository.GetByIdAsync(request.Id);
             await _questionsRepository.DeleteAsync(question);
             var response = new DeleteQuestionResponse() { Id = request.Id };
-            return ResponseResult.Ok(response);
-            return ResponseResult.Ok(response);
+            return ResponseResult.Deleted(response);
         }
     }
 }

@@ -25,7 +25,7 @@ namespace GoCode.Application.Questions.Handlers
             var question = _mapper.Map<Question>(request.Question);
             question.CourseId = request.CourseId;
             var addedQuestion = await _questionsRepository.AddAsync(question);
-            var response = new CreateQuestionResponse() { Id = addedQuestion.Id };
+            var response = _mapper.Map<CreateQuestionResponse>(addedQuestion);
             return ResponseResult.Created(response);
         }
     }

@@ -18,21 +18,16 @@ namespace GoCode.Infrastructure.DataAccess
 
         public IEnumerable<TEntity> GetAll() => _dbContext.Set<TEntity>();
 
-        public IEnumerable<TEntity> GetAllWith(Expression<Func<TEntity, bool>> include) => _dbContext
-            .Set<TEntity>()
-            .Include(include);
-
         public IEnumerable<TEntity> GetWhere(Expression<Func<TEntity, bool>> predicate) =>
             _dbContext.Set<TEntity>().Where(predicate);
 
-        public IEnumerable<TEntity> GetWhereWith(Expression<Func<TEntity, bool>> predicate,
-            Expression<Func<TEntity, bool>> include) => _dbContext
-            .Set<TEntity>()
-            .Where(predicate)
-            .Include(include);
-
         public async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate) =>
             await _dbContext.Set<TEntity>().FirstOrDefaultAsync(predicate);
+
+        public async Task<TEntity?> FirstOrDefaultAsyncWith<TProperty>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, TProperty>> include) =>
+            await _dbContext.Set<TEntity>()
+            .Include(include)
+            .FirstOrDefaultAsync(predicate);
 
         public async Task<TEntity?> SignleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate) =>
             await _dbContext.Set<TEntity>().SingleOrDefaultAsync(predicate);

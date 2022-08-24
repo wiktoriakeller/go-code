@@ -2,9 +2,8 @@
 
 namespace GoCode.Application.Questions.Requests
 {
-    public record CreateQuestionRequest
+    public record UpdateQuestionRequest
     {
-        public int CourseId { get; init; }
         public string Content { get; set; }
         public int XP { get; set; }
         public IEnumerable<CreateAnswearDto> Answers { get; set; }

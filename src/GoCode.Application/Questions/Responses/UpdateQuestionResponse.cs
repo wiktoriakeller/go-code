@@ -2,7 +2,7 @@
 
 namespace GoCode.Application.Questions.Responses
 {
-    public record CreateQuestionResponse
+    public class UpdateQuestionResponse
     {
         public int Id { get; init; }
         public string Content { get; init; }

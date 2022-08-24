@@ -14,10 +14,10 @@ namespace GoCode.Application.Common.Validators.Questions
         {
             RuleFor(x => x.CourseId)
                 .EntityWithIdExists(coursesRepository)
-                .WithMessage(string.Format(ErrorMessages.NotFound, "Question"));
+                .WithMessage(string.Format(ErrorMessages.NotFound, "Course"));
 
             RuleFor(x => x)
-                .QuestionContentMustBeUnique(coursesRepository);
+                .CreateQuestionCommandContentMustBeUnique(coursesRepository);
 
             RuleFor(x => x.Question)
                 .SetValidator(questionDtoValidator);

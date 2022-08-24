@@ -27,7 +27,7 @@ namespace GoCode.Application.Courses.Handlers
 
             await _coursesRepository.DeleteAsync(course);
             var response = new DeleteCourseResponse() { Id = request.Id };
-            return ResponseResult.Ok(response);
+            return ResponseResult.Deleted(response);
         }
     }
 }

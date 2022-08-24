@@ -27,5 +27,14 @@ namespace GoCode.WebAPI.Controllers
             var response = await _medaitor.Send(command);
             return StatusCode((int)response.HttpStatusCode, response);
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateQuestion([FromRoute] int id, [FromBody] UpdateQuestionRequest request)
+        {
+            var command = _mapper.Map<UpdateQuestionCommand>(request);
+            command.Id = id;
+            var response = await _medaitor.Send(command);
+            return StatusCode((int)response.HttpStatusCode, response);
+        }
     }
 }
