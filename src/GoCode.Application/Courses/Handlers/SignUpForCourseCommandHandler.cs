@@ -35,11 +35,6 @@ namespace GoCode.Application.Courses.Handlers
 
             var selectedCourse = await _courseRepository.FirstOrDefaultWithAllAsync(x => x.Id == request.Id);
 
-            if (selectedCourse is null)
-            {
-                return ResponseResult.NotFound<SignUpForCourseResponse>(string.Format(ErrorMessages.NotFound, "Course"));
-            }
-
             var userCourse = new UserCourse()
             {
                 CourseId = selectedCourse.Id,
