@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace GoCode.WebAPI.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [Route("api/v1/questions")]
     public class QuestionsController : BaseApiController
     {

@@ -27,7 +27,7 @@ namespace GoCode.Infrastructure.Extensions
 
             services.AddScoped<ApplicationDbSeeder>();
             services.AddScoped<IIdentityService, IdentityService>();
-            services.AddSingleton<IJwtService, JwtService>();
+            services.AddScoped<IJwtService, JwtService>();
 
             RegisterRepositories(services);
 
@@ -73,6 +73,7 @@ namespace GoCode.Infrastructure.Extensions
             services.AddSingleton(tokenValidationParameters);
 
             services.Configure<JwtOptions>(configuration.GetSection("Authentication:JwtOptions"));
+            services.Configure<AdminCredentials>(configuration.GetSection("Admin"));
 
             return services;
         }

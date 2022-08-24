@@ -200,7 +200,7 @@ namespace GoCode.UnitTests.Infrastructure
                 .Returns(Task.FromResult<User?>(null));
 
             jwtService.Setup(x => x.CreateJwtToken(user))
-                .Returns((token, jti));
+                .ReturnsAsync((token, jti));
 
             var sut = new IdentityService(userManager.Object,
                 jwtService.Object,

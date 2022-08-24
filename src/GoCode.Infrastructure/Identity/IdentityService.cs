@@ -104,7 +104,7 @@ namespace GoCode.Infrastructure.Identity
                 return ResponseResult.ValidationError<AuthenticateUserResponse>(ErrorMessages.Identity.IncorrectCredentials);
             }
 
-            var (jwtToken, jti) = _jwtService.CreateJwtToken(user);
+            var (jwtToken, jti) = await _jwtService.CreateJwtToken(user);
             var storedRefresh = await _refreshTokenRepository.FirstOrDefaultAsync(t => t.UserId == user.Id);
             var refreshToken = await CreateRefreshToken(jti, user, storedRefresh);
 
@@ -144,7 +144,7 @@ namespace GoCode.Infrastructure.Identity
             }
 
             var user = await _userManager.FindByIdAsync(result.userId);
-            var (jwtToken, newJti) = _jwtService.CreateJwtToken(user);
+            var (jwtToken, newJti) = await _jwtService.CreateJwtToken(user);
             var refreshToken = await CreateRefreshToken(newJti, user, storedToken);
 
             var response = new RefreshTokenResponse

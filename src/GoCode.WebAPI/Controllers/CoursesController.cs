@@ -1,10 +1,7 @@
-﻿using AutoMapper;
-using GoCode.Application.Courses.Commands;
+﻿using GoCode.Application.Courses.Commands;
 using GoCode.Application.Courses.Queries;
 using GoCode.Application.Courses.Requests;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace GoCode.WebAPI.Controllers
 {
@@ -33,6 +30,7 @@ namespace GoCode.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateCourse([FromBody] CreateCourseRequest request)
         {
             var command = _mapper.Map<CreateCourseCommand>(request);
@@ -55,6 +53,7 @@ namespace GoCode.WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteCourse([FromRoute] int id)
         {
             var command = new DeleteCourseCommand() { Id = id };
