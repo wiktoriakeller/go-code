@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.TestHelper;
 using GoCode.Application.Common.Dtos;
-using GoCode.Application.Common.Validators.Answears;
+using GoCode.Application.Common.Validators.Answers;
 
 namespace GoCode.UnitTests.Application.Common.Validators
 {

@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using GoCode.Application.Common.Dtos;
 
-namespace GoCode.Application.Common.Validators.Answears
+namespace GoCode.Application.Common.Validators.Answers
 {
     public class CreateAnswearDtoValidator : AbstractValidator<CreateAnswearDto>
     {
