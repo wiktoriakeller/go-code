@@ -3,7 +3,7 @@ using FluentValidation.Results;
 using FluentValidation.TestHelper;
 using GoCode.Application.Common.Constants;
 using GoCode.Application.Common.Dtos;
-using GoCode.Application.Common.Validators.Courses;
+using GoCode.Application.Common.Validators.Questions;
 using GoCode.UnitTests.Attributes.Customization;
 
 namespace GoCode.UnitTests.Application.Common.Validators

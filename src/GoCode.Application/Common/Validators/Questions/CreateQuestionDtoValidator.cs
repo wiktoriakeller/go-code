@@ -3,7 +3,7 @@ using GoCode.Application.Common.Constants;
 using GoCode.Application.Common.Dtos;
 using GoCode.Application.Common.Validators.Extensions;
 
-namespace GoCode.Application.Common.Validators.Courses
+namespace GoCode.Application.Common.Validators.Questions
 {
     public class CreateQuestionDtoValidator : AbstractValidator<CreateQuestionDto>
     {
