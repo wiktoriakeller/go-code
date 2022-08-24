@@ -19,12 +19,6 @@ namespace GoCode.Application.Courses.Handlers
         public async Task<Response<DeleteCourseResponse>> Handle(DeleteCourseCommand request, CancellationToken cancellationToken)
         {
             var course = await _coursesRepository.GetByIdAsync(request.Id);
-
-            if (course is null)
-            {
-                return ResponseResult.NotFound<DeleteCourseResponse>(string.Format(ErrorMessages.NotFound, "Course"));
-            }
-
             await _coursesRepository.DeleteAsync(course);
             var response = new DeleteCourseResponse() { Id = request.Id };
             return ResponseResult.Deleted(response);

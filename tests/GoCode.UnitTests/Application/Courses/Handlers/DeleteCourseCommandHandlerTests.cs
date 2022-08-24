@@ -11,8 +11,7 @@ namespace GoCode.UnitTests.Application.Courses.Handlers
     {
         [Theory]
         [CustomCourse]
-        public async Task Handle_GivenDeleteCourseCommand_WhenCourseIsNotNull_ShouldReturnSuccess(DeleteCourseCommand command,
-            Course course)
+        public async Task Handle_GivenDeleteCourseCommand_ShouldReturnSuccess(DeleteCourseCommand command, Course course)
         {
             //Arrange
             var coursesRepositoryMock = new Mock<ICoursesRepository>();
@@ -26,24 +25,6 @@ namespace GoCode.UnitTests.Application.Courses.Handlers
 
             //Assert
             response.Succeeded.Should().BeTrue();
-        }
-
-        [Theory]
-        [AutoData]
-        public async Task Handle_GivenDeleteCourseCommand_WhenCourseIsNull_ShouldReturnNotFound(DeleteCourseCommand command)
-        {
-            //Arrange
-            var coursesRepositoryMock = new Mock<ICoursesRepository>();
-            coursesRepositoryMock.Setup(x => x.GetByIdAsync(command.Id))
-                .ReturnsAsync((Course)null);
-
-            var sut = new DeleteCourseCommandHandler(coursesRepositoryMock.Object);
-
-            //Act
-            var response = await sut.Handle(command, CancellationToken.None);
-
-            //Assert
-            response.ResponseError.Should().Be(ResponseError.NotFound);
         }
     }
 }
