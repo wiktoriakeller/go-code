@@ -3,7 +3,7 @@ using FluentValidation.TestHelper;
 using GoCode.Application.Common.Dtos;
 using GoCode.Application.Common.Validators.Answers;
 
-namespace GoCode.UnitTests.Application.Common.Validators
+namespace GoCode.UnitTests.Application.Common.Validators.Answers
 {
     [ExcludeFromCodeCoverage]
     public class CreateAnswearDtoValidatorTests

@@ -6,7 +6,7 @@ namespace GoCode.Application.Common.Validators.Extensions
 {
     public static class EntityExistsExtension
     {
-        public static IRuleBuilderOptions<T, int> EntityWithIdExists<T, TEntity>(this IRuleBuilder<T, int> ruleBuilder,
+        public static IRuleBuilderOptions<T, int> EntityWithIdMustExist<T, TEntity>(this IRuleBuilder<T, int> ruleBuilder,
             IRepository<TEntity> repository) where TEntity : class
         {
             return ruleBuilder.MustAsync(async (rootObject, id, context) =>

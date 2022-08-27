@@ -12,12 +12,12 @@ namespace GoCode.Application.Common.Validators.Questions
         public CreateQuestionCommandValidator(IValidator<CreateQuestionDto> questionDtoValidator,
             ICoursesRepository coursesRepository)
         {
-            RuleFor(x => x.CourseId)
-                .EntityWithIdExists(coursesRepository)
-                .WithMessage(string.Format(ErrorMessages.NotFound, "Course"));
-
             RuleFor(x => x)
                 .CreateQuestionCommandContentMustBeUnique(coursesRepository);
+
+            RuleFor(x => x.CourseId)
+                .EntityWithIdMustExist(coursesRepository)
+                .WithMessage(string.Format(ErrorMessages.NotFound, "Course"));
 
             RuleFor(x => x.Question)
                 .SetValidator(questionDtoValidator);

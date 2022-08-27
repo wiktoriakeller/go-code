@@ -2,12 +2,13 @@
 using FluentValidation.Results;
 using FluentValidation.TestHelper;
 using GoCode.Application.Common.Constants;
+using GoCode.Application.Common.Contracts.DataAccess;
 using GoCode.Application.Common.Dtos;
 using GoCode.Application.Common.Validators.Courses;
 using GoCode.Application.Courses.Commands;
 using GoCode.UnitTests.Attributes.Customization;
 
-namespace GoCode.UnitTests.Application.Common.Validators
+namespace GoCode.UnitTests.Application.Common.Validators.Courses
 {
     [ExcludeFromCodeCoverage]
     public class CreateCourseCommandValidatorTests
@@ -39,13 +40,15 @@ namespace GoCode.UnitTests.Application.Common.Validators
 
         private readonly IValidator<CreateCourseCommand> _sut;
         private readonly Mock<IValidator<CreateQuestionDto>> _questionValidatorMock;
+        private readonly Mock<ICoursesRepository> _coursesRepositoryMock;
 
         public CreateCourseCommandValidatorTests()
         {
             _questionValidatorMock = new();
+            _coursesRepositoryMock = new();
             _questionValidatorMock.Setup(x => x.Validate(It.IsAny<CreateQuestionDto>()))
                 .Returns(new ValidationResult());
-            _sut = new CreateCourseCommandValidator(_questionValidatorMock.Object);
+            _sut = new CreateCourseCommandValidator(_questionValidatorMock.Object, _coursesRepositoryMock.Object);
         }
 
         [Theory]

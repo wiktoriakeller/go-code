@@ -12,9 +12,7 @@ namespace GoCode.Application.Common.Validators.Identity
         {
             RuleFor(x => x.Email)
                 .NotEmpty()
-                .EmailAddress();
-
-            RuleFor(x => x.Email)
+                .EmailAddress()
                 .EmailIsPresent(false, identityService)
                 .WithMessage(ErrorMessages.Identity.UserExists);
 

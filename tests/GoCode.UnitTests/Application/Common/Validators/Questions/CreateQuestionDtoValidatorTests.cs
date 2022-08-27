@@ -6,7 +6,7 @@ using GoCode.Application.Common.Dtos;
 using GoCode.Application.Common.Validators.Questions;
 using GoCode.UnitTests.Attributes.Customization;
 
-namespace GoCode.UnitTests.Application.Common.Validators
+namespace GoCode.UnitTests.Application.Common.Validators.Questions
 {
     [ExcludeFromCodeCoverage]
     public class CreateQuestionDtoValidatorTests

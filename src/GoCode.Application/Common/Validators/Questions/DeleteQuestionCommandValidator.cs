@@ -11,7 +11,7 @@ namespace GoCode.Application.Common.Validators.Questions
         public DeleteQuestionCommandValidator(IQuestionsRepository questionsRepository)
         {
             RuleFor(x => x.Id)
-                .EntityWithIdExists(questionsRepository)
+                .EntityWithIdMustExist(questionsRepository)
                 .WithMessage(string.Format(ErrorMessages.NotFound, "Question"));
         }
     }

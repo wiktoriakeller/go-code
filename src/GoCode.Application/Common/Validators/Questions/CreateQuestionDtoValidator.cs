@@ -17,12 +17,10 @@ namespace GoCode.Application.Common.Validators.Questions
 
             RuleFor(x => x.Answers)
                 .NotEmpty()
-                .OnlyOneCorrectAnswear()
-                .ForEach(x => x.SetValidator(createAnswearValidator));
-
-            RuleFor(x => x.Answers)
+                .MustHaveOnlyOneCorrectAnswear()
                 .Must(x => x.Count() >= AnswearsMinimumCount)
-                .WithMessage(ErrorMessages.Answear.AnswersMinimumCount);
+                .WithMessage(ErrorMessages.Answear.AnswersMinimumCount)
+                .ForEach(x => x.SetValidator(createAnswearValidator));
 
             RuleFor(x => x.Answers.Select(a => a.Content))
                 .CollectionMustBeUnique()

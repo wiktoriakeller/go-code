@@ -52,6 +52,16 @@ namespace GoCode.WebAPI.Controllers
             return GetStatusCode(response);
         }
 
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateCourse([FromRoute] int id, [FromBody] UpdateCourseRequest request)
+        {
+            var command = _mapper.Map<UpdateCourseCommand>(request);
+            command.Id = id;
+            var response = await _medaitor.Send(command);
+            return GetStatusCode(response);
+        }
+
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteCourse([FromRoute] int id)

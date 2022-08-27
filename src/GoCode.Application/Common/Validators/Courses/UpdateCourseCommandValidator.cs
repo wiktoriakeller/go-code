@@ -7,14 +7,18 @@ using GoCode.Application.Courses.Commands;
 
 namespace GoCode.Application.Common.Validators.Courses
 {
-    public class CreateCourseCommandValidator : AbstractValidator<CreateCourseCommand>
+    public class UpdateCourseCommandValidator : AbstractValidator<UpdateCourseCommand>
     {
-        public CreateCourseCommandValidator(IValidator<CreateQuestionDto> createQuestionValidator,
+        public UpdateCourseCommandValidator(IValidator<CreateQuestionDto> createQuestionValidator,
             ICoursesRepository coursesRepository)
         {
             RuleFor(x => x)
-                .PropertyMustBeUnique(false, "Name", coursesRepository)
+                .PropertyMustBeUnique(true, "Name", coursesRepository)
                 .WithMessage(ErrorMessages.Course.NameMustBeUnique);
+
+            RuleFor(x => x.Id)
+                .EntityWithIdMustExist(coursesRepository)
+                .WithMessage(string.Format(ErrorMessages.NotFound, "Course"));
 
             RuleFor(x => x.Name)
                 .NotEmpty()

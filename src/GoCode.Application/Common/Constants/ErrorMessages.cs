@@ -24,5 +24,10 @@
         {
             public const string QuestionsMustBeUnique = "Questions within a course should be unique";
         }
+
+        public static class Course
+        {
+            public const string NameMustBeUnique = "Courses name should be unique";
+        }
     }
 }

@@ -11,8 +11,10 @@ namespace GoCode.Application.Courses
         public CoursesMappingProfile()
         {
             CreateMap<CreateCourseRequest, CreateCourseCommand>();
+            CreateMap<UpdateCourseRequest, UpdateCourseCommand>();
             CreateMap<CreateCourseCommand, Course>();
             CreateMap<Course, CreateCourseResponse>();
+            CreateMap<Course, UpdateCourseResponse>();
         }
     }
 }

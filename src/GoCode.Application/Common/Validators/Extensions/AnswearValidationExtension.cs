@@ -6,7 +6,7 @@ namespace GoCode.Application.Common.Validators.Extensions
 {
     public static class AnswearValidationExtension
     {
-        public static IRuleBuilderOptions<T, IEnumerable<CreateAnswearDto>> OnlyOneCorrectAnswear<T>(this IRuleBuilder<T, IEnumerable<CreateAnswearDto>> ruleBuilder)
+        public static IRuleBuilderOptions<T, IEnumerable<CreateAnswearDto>> MustHaveOnlyOneCorrectAnswear<T>(this IRuleBuilder<T, IEnumerable<CreateAnswearDto>> ruleBuilder)
         {
             return ruleBuilder.Must((rootObject, answers, context) =>
             {
