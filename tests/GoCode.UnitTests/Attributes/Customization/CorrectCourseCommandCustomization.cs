@@ -9,6 +9,8 @@ namespace GoCode.UnitTests.Attributes.Customization
         public void Customize(IFixture fixture)
         {
             fixture.Customize<CreateCourseCommand>(transform => transform
+                .With(x => x.XP, 5)
+                .With(x => x.PassPercentTreshold, 50)
                 .With(x => x.Questions, new List<CreateQuestionDto>
                 {
                     new CreateQuestionDto

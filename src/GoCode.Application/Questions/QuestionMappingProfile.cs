@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using GoCode.Application.Common.Dtos;
 using GoCode.Application.Questions.Commands;
 using GoCode.Application.Questions.Requests;
 using GoCode.Application.Questions.Responses;
@@ -18,7 +17,6 @@ namespace GoCode.Application.Questions
                 {
                     command.Question = new();
                     command.Question.Content = request.Content;
-                    command.Question.XP = request.XP;
                     command.Question.Answers = request.Answers;
                 });
 
@@ -27,7 +25,6 @@ namespace GoCode.Application.Questions
                 {
                     command.Question = new();
                     command.Question.Content = request.Content;
-                    command.Question.XP = request.XP;
                     command.Question.Answers = request.Answers;
                 });
 

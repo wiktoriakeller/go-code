@@ -23,10 +23,8 @@ namespace GoCode.Application.Questions.Handlers
         public async Task<Response<UpdateQuestionResponse>> Handle(UpdateQuestionCommand request, CancellationToken cancellationToken)
         {
             var question = await _questionsRepository.GetByIdAsync(request.Id);
-
             question.Content = request.Question.Content;
             question.Answers = _mapper.Map<ICollection<Answear>>(request.Question.Answers);
-            question.XP = request.Question.XP;
 
             var updatedEntity = await _questionsRepository.UpdateAsync(question);
             var response = _mapper.Map<UpdateQuestionResponse>(updatedEntity);

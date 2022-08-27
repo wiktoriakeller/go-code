@@ -36,6 +36,12 @@ namespace GoCode.Infrastructure.Persistence
                 eb.Property(c => c.Description)
                     .IsRequired()
                     .HasMaxLength(2000);
+
+                eb.Property(c => c.XP)
+                    .IsRequired();
+
+                eb.Property(c => c.PassPercentTreshold)
+                    .IsRequired();
             });
 
             modelBuilder.Entity<Question>(eb =>
@@ -43,9 +49,6 @@ namespace GoCode.Infrastructure.Persistence
                 eb.Property(q => q.Content)
                     .IsRequired()
                     .HasMaxLength(2000);
-
-                eb.Property(q => q.XP)
-                    .IsRequired();
             });
 
             modelBuilder.Entity<Answear>(eb =>

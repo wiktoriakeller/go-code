@@ -15,9 +15,6 @@ namespace GoCode.Application.Common.Validators.Questions
                 .NotEmpty()
                 .MaximumLength(2000);
 
-            RuleFor(x => x.XP)
-                .GreaterThan(0);
-
             RuleFor(x => x.Answers)
                 .NotEmpty()
                 .OnlyOneCorrectAnswear()

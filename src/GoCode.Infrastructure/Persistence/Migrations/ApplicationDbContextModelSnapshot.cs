@@ -69,6 +69,12 @@ namespace GoCode.Infrastructure.Persistence.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
+                    b.Property<int>("PassPercentTreshold")
+                        .HasColumnType("int");
+
+                    b.Property<int>("XP")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
@@ -93,9 +99,6 @@ namespace GoCode.Infrastructure.Persistence.Migrations
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
 
-                    b.Property<int>("XP")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
@@ -116,6 +119,9 @@ namespace GoCode.Infrastructure.Persistence.Migrations
 
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("UserGainedXP")
+                        .HasColumnType("bit");
 
                     b.Property<string>("UserId")
                         .IsRequired()

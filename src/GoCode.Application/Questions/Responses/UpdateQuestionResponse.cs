@@ -6,7 +6,6 @@ namespace GoCode.Application.Questions.Responses
     {
         public int Id { get; init; }
         public string Content { get; init; }
-        public int XP { get; init; }
         public IEnumerable<AnswearDto> Answers { get; init; }
     }
 }

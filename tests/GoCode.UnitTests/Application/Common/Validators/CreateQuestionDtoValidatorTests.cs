@@ -18,7 +18,6 @@ namespace GoCode.UnitTests.Application.Common.Validators
                 new CreateQuestionDto
                 {
                     Content = "Question1",
-                    XP = 2,
                     Answers = new List<CreateAnswearDto>
                     {
                         new CreateAnswearDto {IsCorrect = true, Content = "Yes" },
@@ -31,7 +30,6 @@ namespace GoCode.UnitTests.Application.Common.Validators
                 new CreateQuestionDto
                 {
                     Content = "Question2",
-                    XP = 3,
                     Answers = new List<CreateAnswearDto>
                     {
                         new CreateAnswearDto {IsCorrect = true, Content = "No" },
@@ -67,7 +65,7 @@ namespace GoCode.UnitTests.Application.Common.Validators
         [InlineData(0)]
         [InlineData(2001)]
         [InlineData(2500)]
-        public void Validate_GivenQuestion_WhenContentIsInvalid_ShouldReturnErrror(int charCount)
+        public void Validate_GivenCreateQuestionDto_WhenContentIsInvalid_ShouldReturnErrrorForContent(int charCount)
         {
             //Arrange
             var createQuestionDto = GetCreateQuestionDtoFixture();
@@ -81,25 +79,8 @@ namespace GoCode.UnitTests.Application.Common.Validators
         }
 
         [Theory]
-        [InlineData(0)]
-        [InlineData(-5)]
-        [InlineData(-20)]
-        public void Validate_GivenQuestion_WhenXPPointAreLessThanOrEqualToZero_ShouldReturnErrror(int XP)
-        {
-            //Arrange
-            var createQuestionDto = GetCreateQuestionDtoFixture();
-            createQuestionDto.XP = XP;
-
-            //Act
-            var result = _sut.TestValidate(createQuestionDto);
-
-            //Assert
-            result.ShouldHaveValidationErrorFor(x => x.XP);
-        }
-
-        [Theory]
         [CorrectQuestion]
-        public void Validate_GivenQuestion_WhenAnswersAreEmpty_ShouldReturnError(CreateQuestionDto createQuestionDto)
+        public void Validate_GivenCreateQuestionDto_WhenAnswersAreEmpty_ShouldReturnErrorForAnswers(CreateQuestionDto createQuestionDto)
         {
             //Arrange
             createQuestionDto.Answers = new List<CreateAnswearDto>();
@@ -114,7 +95,7 @@ namespace GoCode.UnitTests.Application.Common.Validators
 
         [Theory]
         [CorrectQuestion]
-        public void Validate_GivenQuestion_WhenAnswersAreDuplicated_ShouldReturnError(CreateQuestionDto createQuestionDto)
+        public void Validate_GivenCreateQuestionDto_WhenAnswersContentsAreDuplicated_ShouldReturnError(CreateQuestionDto createQuestionDto)
         {
             //Arrange
             createQuestionDto.Answers = new List<CreateAnswearDto>
@@ -141,7 +122,7 @@ namespace GoCode.UnitTests.Application.Common.Validators
 
         [Theory]
         [CorrectQuestion]
-        public void Validate_GivenQuestion_WhenThereIsNoCorrectAnswer_ShouldReturnError(CreateQuestionDto createQuestionDto)
+        public void Validate_GivenCreateQuestionDto_WhenThereIsNoCorrectAnswer_ShouldReturnErrorForAnswers(CreateQuestionDto createQuestionDto)
         {
             //Arrange
             createQuestionDto.Answers = new List<CreateAnswearDto>
@@ -168,7 +149,7 @@ namespace GoCode.UnitTests.Application.Common.Validators
 
         [Theory]
         [CorrectQuestion]
-        public void Validate_GivenQuestion_WhenThereIsAreMultipleCorrectAnswers_ShouldReturnError(CreateQuestionDto createQuestionDto)
+        public void Validate_GivenCreateQuestionDto_WhenThereIsAreMultipleCorrectAnswers_ShouldReturnErrorForAnswers(CreateQuestionDto createQuestionDto)
         {
             //Arrange
             createQuestionDto.Answers = new List<CreateAnswearDto>
@@ -195,9 +176,8 @@ namespace GoCode.UnitTests.Application.Common.Validators
 
         private CreateQuestionDto GetCreateQuestionDtoFixture()
         {
-            var fixture = new Fixture();
-            var cutomizedFixture = fixture.Customize(new CorrectQuestionCustomization());
-            return cutomizedFixture.Create<CreateQuestionDto>();
+            var fixture = new Fixture().Customize(new CorrectQuestionCustomization());
+            return fixture.Create<CreateQuestionDto>();
         }
     }
 }

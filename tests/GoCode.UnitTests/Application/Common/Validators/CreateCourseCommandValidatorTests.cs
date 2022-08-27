@@ -20,17 +20,17 @@ namespace GoCode.UnitTests.Application.Common.Validators
                 {
                     Name = "Course 1",
                     Description = "Description",
+                    XP = 5,
+                    PassPercentTreshold = 50,
                     Questions = new List<CreateQuestionDto>
                     {
                         new CreateQuestionDto
                         {
                             Content = "Question1",
-                            XP = 5
                         },
                         new CreateQuestionDto
                         {
                             Content = "Question2",
-                            XP = 5
                         }
                     }
                 }
@@ -50,7 +50,7 @@ namespace GoCode.UnitTests.Application.Common.Validators
 
         [Theory]
         [MemberData(nameof(GetValidCourses))]
-        public void Validate_GivenCorrectAnswear_ShouldNotReturnErrrors(CreateCourseCommand createCourseCommand)
+        public void Validate_GivenCreateCourseCommand_ShouldNotReturnErrrors(CreateCourseCommand createCourseCommand)
         {
             //Act
             var result = _sut.TestValidate(createCourseCommand);
@@ -63,7 +63,7 @@ namespace GoCode.UnitTests.Application.Common.Validators
         [InlineData(0)]
         [InlineData(1001)]
         [InlineData(2000)]
-        public void Validate_GivenCreateCourseCommand_WhenNameHasIncorrectLength_ShouldReturnErrror(int charCount)
+        public void Validate_GivenCreateCourseCommand_WhenNameHasIncorrectLength_ShouldReturnErrrorForName(int charCount)
         {
             //Arrange
             var command = GetCreateCourseCommandFixture();
@@ -80,7 +80,7 @@ namespace GoCode.UnitTests.Application.Common.Validators
         [InlineData(0)]
         [InlineData(2001)]
         [InlineData(3000)]
-        public void Validate_GivenCreateCourseCommand_WhenDescriptionHasIncorrectLength_ShouldReturnErrror(int charCount)
+        public void Validate_GivenCreateCourseCommand_WhenDescriptionHasIncorrectLength_ShouldReturnErrrorForDescription(int charCount)
         {
             //Arrange
             var command = GetCreateCourseCommandFixture();
@@ -94,6 +94,41 @@ namespace GoCode.UnitTests.Application.Common.Validators
         }
 
         [Theory]
+        [InlineData(0)]
+        [InlineData(-5)]
+        [InlineData(-200)]
+        public void Validate_GivenCreateCourseCommand_WhenXPPointAreLessThanOrEqualToZero_ShouldReturnErrrorForXP(int XP)
+        {
+            //Arrange
+            var createQuestionDto = GetCreateCourseCommandFixture();
+            createQuestionDto.XP = XP;
+
+            //Act
+            var result = _sut.TestValidate(createQuestionDto);
+
+            //Assert
+            result.ShouldHaveValidationErrorFor(x => x.XP);
+        }
+
+        [Theory]
+        [InlineData(-500)]
+        [InlineData(-1)]
+        [InlineData(101)]
+        [InlineData(500)]
+        public void Validate_GivenCreateCourseCommand_WhenPassPercentTresholdIsNotBetweenZeroAndOneHundred_ShouldReturnErrrorForXP(int treshold)
+        {
+            //Arrange
+            var createQuestionDto = GetCreateCourseCommandFixture();
+            createQuestionDto.PassPercentTreshold = treshold;
+
+            //Act
+            var result = _sut.TestValidate(createQuestionDto);
+
+            //Assert
+            result.ShouldHaveValidationErrorFor(x => x.PassPercentTreshold);
+        }
+
+        [Theory]
         [CorrectCourseCommand]
         public void Validate_GivenCreateCourseCommand_WhenQuestionsAreDuplicated_ShouldReturnErrror(CreateCourseCommand createCourseCommand)
         {
@@ -103,12 +138,10 @@ namespace GoCode.UnitTests.Application.Common.Validators
                 new CreateQuestionDto
                 {
                     Content = "Question1",
-                    XP = 5
                 },
                 new CreateQuestionDto
                 {
                     Content = "Question1",
-                    XP = 5
                 }
             };
 
@@ -122,9 +155,8 @@ namespace GoCode.UnitTests.Application.Common.Validators
 
         private CreateCourseCommand GetCreateCourseCommandFixture()
         {
-            var fixture = new Fixture();
-            var customizedFixture = fixture.Customize(new CorrectCourseCommandCustomization());
-            return customizedFixture.Create<CreateCourseCommand>();
+            var fixture = new Fixture().Customize(new CorrectCourseCommandCustomization());
+            return fixture.Create<CreateCourseCommand>();
         }
     }
 }

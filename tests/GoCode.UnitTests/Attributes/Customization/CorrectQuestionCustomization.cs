@@ -8,7 +8,6 @@ namespace GoCode.UnitTests.Attributes.Customization
         public void Customize(IFixture fixture)
         {
             fixture.Customize<CreateQuestionDto>(transform => transform
-                .With(x => x.XP, 5)
                 .With(x => x.Answers, new List<CreateAnswearDto>
                 {
                     new CreateAnswearDto

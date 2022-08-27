@@ -1,5 +1,4 @@
-﻿using GoCode.Application.Common.BaseResponse;
-using GoCode.Application.Common.Contracts.DataAccess;
+﻿using GoCode.Application.Common.Contracts.DataAccess;
 using GoCode.Application.Courses.Commands;
 using GoCode.Application.Courses.Handlers;
 using GoCode.Domain.Entities;

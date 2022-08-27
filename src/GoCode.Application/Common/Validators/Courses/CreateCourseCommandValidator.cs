@@ -18,6 +18,13 @@ namespace GoCode.Application.Common.Validators.Courses
                 .NotEmpty()
                 .MaximumLength(2000);
 
+            RuleFor(x => x.XP)
+                .GreaterThan(0);
+
+            RuleFor(x => x.PassPercentTreshold)
+                .GreaterThanOrEqualTo(0)
+                .LessThanOrEqualTo(100);
+
             RuleFor(x => x.Questions)
                 .NotEmpty()
                 .ForEach(q => q.SetValidator(createQuestionValidator));
