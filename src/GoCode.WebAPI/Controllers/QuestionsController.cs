@@ -17,7 +17,7 @@ namespace GoCode.WebAPI.Controllers
         {
             var command = _mapper.Map<CreateQuestionCommand>(request);
             var response = await _medaitor.Send(command);
-            return StatusCode((int)response.HttpStatusCode, response);
+            return GetStatusCode(response);
         }
 
         [HttpDelete("{id}")]
@@ -25,7 +25,7 @@ namespace GoCode.WebAPI.Controllers
         {
             var command = new DeleteQuestionCommand() { Id = id };
             var response = await _medaitor.Send(command);
-            return StatusCode((int)response.HttpStatusCode, response);
+            return GetStatusCode(response);
         }
 
         [HttpPut("{id}")]
@@ -34,7 +34,7 @@ namespace GoCode.WebAPI.Controllers
             var command = _mapper.Map<UpdateQuestionCommand>(request);
             command.Id = id;
             var response = await _medaitor.Send(command);
-            return StatusCode((int)response.HttpStatusCode, response);
+            return GetStatusCode(response);
         }
     }
 }

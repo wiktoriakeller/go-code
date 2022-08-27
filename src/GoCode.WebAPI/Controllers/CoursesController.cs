@@ -18,7 +18,7 @@ namespace GoCode.WebAPI.Controllers
         {
             var query = new GetAllCoursesQuery();
             var response = await _medaitor.Send(query);
-            return StatusCode((int)response.HttpStatusCode, response);
+            return GetStatusCode(response);
         }
 
         [HttpGet("user")]
@@ -26,7 +26,7 @@ namespace GoCode.WebAPI.Controllers
         {
             var query = new GetUserCoursesQuery();
             var response = await _medaitor.Send(query);
-            return StatusCode((int)response.HttpStatusCode, response);
+            return GetStatusCode(response);
         }
 
         [HttpPost]
@@ -38,7 +38,7 @@ namespace GoCode.WebAPI.Controllers
 
             if (!response.Succeeded)
             {
-                return StatusCode((int)response.HttpStatusCode, response);
+                return GetStatusCode(response);
             }
 
             return Created($"api/v1/courses/{response.Data?.Id}", response);
@@ -49,7 +49,7 @@ namespace GoCode.WebAPI.Controllers
         {
             var command = new SignUpForCourseCommand() { Id = id };
             var response = await _medaitor.Send(command);
-            return StatusCode((int)response.HttpStatusCode, response);
+            return GetStatusCode(response);
         }
 
         [HttpDelete("{id}")]
@@ -58,7 +58,7 @@ namespace GoCode.WebAPI.Controllers
         {
             var command = new DeleteCourseCommand() { Id = id };
             var response = await _medaitor.Send(command);
-            return StatusCode((int)response.HttpStatusCode, response);
+            return GetStatusCode(response);
         }
     }
 }

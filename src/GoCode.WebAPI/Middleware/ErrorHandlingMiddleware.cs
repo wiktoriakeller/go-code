@@ -1,5 +1,4 @@
-﻿using GoCode.Application.Common.BaseResponse;
-using System.Net;
+﻿using System.Net;
 using System.Text.Json;
 
 namespace GoCode.WebAPI.Middleware

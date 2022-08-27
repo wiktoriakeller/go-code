@@ -11,5 +11,7 @@
             _medaitor = mediator;
             _mapper = mapper;
         }
+
+        public IActionResult GetStatusCode(IResponse response) => StatusCode((int)response.HttpStatusCode, response);
     }
 }

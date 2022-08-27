@@ -1,6 +1,5 @@
 ﻿using GoCode.Application.Common.Contracts.Identity;
 using Microsoft.AspNetCore.Authentication;
-using System.Text.Json;
 
 namespace GoCode.WebAPI.Middleware
 {
