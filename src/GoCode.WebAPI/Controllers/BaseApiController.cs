@@ -12,6 +12,6 @@
             _mapper = mapper;
         }
 
-        public IActionResult GetStatusCode(IResponse response) => StatusCode((int)response.HttpStatusCode, response);
+        protected IActionResult GetStatusCode(IResponse response) => StatusCode((int)response.HttpStatusCode, response);
     }
 }
