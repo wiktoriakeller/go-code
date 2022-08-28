@@ -24,8 +24,8 @@ jobs:
           with:
             dotnet-version: 6.0.x
         - name: Restore dependencies
-          run: dotnet restore GoCode.sln
+          run: dotnet restore ./src/api/GoCode.sln
         - name: Build
-          run: dotnet build GoCode.sln --configuration Release --no-restore
+          run: dotnet build ./src/api/GoCode.sln --configuration Release --no-restore
         - name: Run unit tests
           run: dotnet test ./tests/GoCode.UnitTests/GoCode.UnitTests.csproj --verbosity normal

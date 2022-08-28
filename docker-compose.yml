@@ -21,7 +21,8 @@ services:
         
     api:
         container_name: go-code-api
-        build: ./src/
+        build:
+            context: ./src/api/
         environment:
             - "ConnectionStrings:DefaultConnection=${CONNECTION_STRING?err}"
             - "Authentication:JwtOptions:Key=${JWT_KEY?err}"
