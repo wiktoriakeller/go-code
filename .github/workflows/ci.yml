@@ -45,6 +45,7 @@ jobs:
         - name: Build and push API image
           uses: docker/build-push-action@v3
           with:
+              context: ./src/api/
               file: ./src/api/Dockerfile
               builder: ${{ steps.buildx.outputs.name }}
               push: true
