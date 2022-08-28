@@ -23,11 +23,11 @@ namespace GoCode.Application.Courses.Handlers
         public async Task<Response<UpdateCourseResponse>> Handle(UpdateCourseCommand request, CancellationToken cancellationToken)
         {
             var course = await _coursesRepository.FirstOrDefaultWithAllAsync(x => x.Id == request.Id);
-            course.Name = request.Name;
-            course.Description = request.Description;
-            course.XP = request.XP;
-            course.PassPercentTreshold = request.PassPercentTreshold;
-            course.Questions = _mapper.Map<ICollection<Question>>(request.Questions);
+            course.Name = request.Course.Name;
+            course.Description = request.Course.Description;
+            course.XP = request.Course.XP;
+            course.PassPercentTreshold = request.Course.PassPercentTreshold;
+            course.Questions = _mapper.Map<ICollection<Question>>(request.Course.Questions);
 
             var updatedCourse = await _coursesRepository.UpdateAsync(course);
             var response = _mapper.Map<UpdateCourseResponse>(updatedCourse);

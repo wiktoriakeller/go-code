@@ -3,7 +3,7 @@
 namespace GoCode.UnitTests.Attributes.Customization
 {
     [ExcludeFromCodeCoverage]
-    public class CorrectQuestionCustomization : ICustomization
+    public class CorrectCreateQuestionDtoCustomization : ICustomization
     {
         public void Customize(IFixture fixture)
         {

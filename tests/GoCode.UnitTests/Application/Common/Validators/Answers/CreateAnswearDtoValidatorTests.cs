@@ -57,7 +57,7 @@ namespace GoCode.UnitTests.Application.Common.Validators.Answers
 
         [Theory]
         [MemberData(nameof(GetValidAnswers))]
-        public void Validate_GivenCorrectAnswear_ShouldNotReturnErrrors(CreateAnswearDto createAnswearDto)
+        public void Validate_GivenCreateAnswearDto_ShouldNotReturnErrrors(CreateAnswearDto createAnswearDto)
         {
             //Act
             var result = _sut.TestValidate(createAnswearDto);
@@ -68,7 +68,7 @@ namespace GoCode.UnitTests.Application.Common.Validators.Answers
 
         [Theory]
         [MemberData(nameof(GetInvalidAnswers))]
-        public void Validate_GivenInCorrectAnswear_ShouldReturnErrrors(CreateAnswearDto createAnswearDto)
+        public void Validate_GivenCreateAnswearDto_WhenContentLengthIsInvalid_ShouldReturnErrrorForContent(CreateAnswearDto createAnswearDto)
         {
             //Act
             var result = _sut.TestValidate(createAnswearDto);

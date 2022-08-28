@@ -5,19 +5,18 @@ using GoCode.Application.Common.Constants;
 using GoCode.Application.Common.Contracts.DataAccess;
 using GoCode.Application.Common.Dtos;
 using GoCode.Application.Common.Validators.Courses;
-using GoCode.Application.Courses.Commands;
 using GoCode.UnitTests.Attributes.Customization;
 
 namespace GoCode.UnitTests.Application.Common.Validators.Courses
 {
     [ExcludeFromCodeCoverage]
-    public class CreateCourseCommandValidatorTests
+    public class CreateCourseDtoValidatorTests
     {
-        private static IEnumerable<object[]> GetValidCourses()
+        private static IEnumerable<object[]> GetValidCourseDtos()
         {
             yield return new object[]
             {
-                new CreateCourseCommand
+                new CreateCourseDto
                 {
                     Name = "Course 1",
                     Description = "Description",
@@ -38,22 +37,22 @@ namespace GoCode.UnitTests.Application.Common.Validators.Courses
             };
         }
 
-        private readonly IValidator<CreateCourseCommand> _sut;
+        private readonly IValidator<CreateCourseDto> _sut;
         private readonly Mock<IValidator<CreateQuestionDto>> _questionValidatorMock;
         private readonly Mock<ICoursesRepository> _coursesRepositoryMock;
 
-        public CreateCourseCommandValidatorTests()
+        public CreateCourseDtoValidatorTests()
         {
             _questionValidatorMock = new();
             _coursesRepositoryMock = new();
             _questionValidatorMock.Setup(x => x.Validate(It.IsAny<CreateQuestionDto>()))
                 .Returns(new ValidationResult());
-            _sut = new CreateCourseCommandValidator(_questionValidatorMock.Object, _coursesRepositoryMock.Object);
+            _sut = new CreateCourseDtoValidator(_questionValidatorMock.Object, _coursesRepositoryMock.Object);
         }
 
         [Theory]
-        [MemberData(nameof(GetValidCourses))]
-        public void Validate_GivenCreateCourseCommand_ShouldNotReturnErrrors(CreateCourseCommand createCourseCommand)
+        [MemberData(nameof(GetValidCourseDtos))]
+        public void Validate_GivenCreateCourseDto_ShouldNotReturnErrrors(CreateCourseDto createCourseCommand)
         {
             //Act
             var result = _sut.TestValidate(createCourseCommand);
@@ -66,14 +65,14 @@ namespace GoCode.UnitTests.Application.Common.Validators.Courses
         [InlineData(0)]
         [InlineData(1001)]
         [InlineData(2000)]
-        public void Validate_GivenCreateCourseCommand_WhenNameHasIncorrectLength_ShouldReturnErrrorForName(int charCount)
+        public void Validate_GivenCreateCourseDto_WhenNameHasIncorrectLength_ShouldReturnErrrorForName(int charCount)
         {
             //Arrange
-            var command = GetCreateCourseCommandFixture();
-            command.Name = new string('a', charCount);
+            var dto = GetCreateCourseDtoFixture();
+            dto.Name = new string('a', charCount);
 
             //Act
-            var result = _sut.TestValidate(command);
+            var result = _sut.TestValidate(dto);
 
             //Assert
             result.ShouldHaveValidationErrorFor(x => x.Name);
@@ -83,14 +82,14 @@ namespace GoCode.UnitTests.Application.Common.Validators.Courses
         [InlineData(0)]
         [InlineData(2001)]
         [InlineData(3000)]
-        public void Validate_GivenCreateCourseCommand_WhenDescriptionHasIncorrectLength_ShouldReturnErrrorForDescription(int charCount)
+        public void Validate_GivenCreateCourseDto_WhenDescriptionHasIncorrectLength_ShouldReturnErrrorForDescription(int charCount)
         {
             //Arrange
-            var command = GetCreateCourseCommandFixture();
-            command.Description = new string('a', charCount);
+            var dto = GetCreateCourseDtoFixture();
+            dto.Description = new string('a', charCount);
 
             //Act
-            var result = _sut.TestValidate(command);
+            var result = _sut.TestValidate(dto);
 
             //Assert
             result.ShouldHaveValidationErrorFor(x => x.Description);
@@ -100,14 +99,14 @@ namespace GoCode.UnitTests.Application.Common.Validators.Courses
         [InlineData(0)]
         [InlineData(-5)]
         [InlineData(-200)]
-        public void Validate_GivenCreateCourseCommand_WhenXPPointAreLessThanOrEqualToZero_ShouldReturnErrrorForXP(int XP)
+        public void Validate_GivenCreateCourseDto_WhenXPPointAreLessThanOrEqualToZero_ShouldReturnErrrorForXP(int XP)
         {
             //Arrange
-            var createQuestionDto = GetCreateCourseCommandFixture();
-            createQuestionDto.XP = XP;
+            var dto = GetCreateCourseDtoFixture();
+            dto.XP = XP;
 
             //Act
-            var result = _sut.TestValidate(createQuestionDto);
+            var result = _sut.TestValidate(dto);
 
             //Assert
             result.ShouldHaveValidationErrorFor(x => x.XP);
@@ -118,25 +117,25 @@ namespace GoCode.UnitTests.Application.Common.Validators.Courses
         [InlineData(-1)]
         [InlineData(101)]
         [InlineData(500)]
-        public void Validate_GivenCreateCourseCommand_WhenPassPercentTresholdIsNotBetweenZeroAndOneHundred_ShouldReturnErrrorForXP(int treshold)
+        public void Validate_GivenCreateCourseDto_WhenPassPercentTresholdIsNotBetweenZeroAndOneHundred_ShouldReturnErrrorForXP(int treshold)
         {
             //Arrange
-            var createQuestionDto = GetCreateCourseCommandFixture();
-            createQuestionDto.PassPercentTreshold = treshold;
+            var dto = GetCreateCourseDtoFixture();
+            dto.PassPercentTreshold = treshold;
 
             //Act
-            var result = _sut.TestValidate(createQuestionDto);
+            var result = _sut.TestValidate(dto);
 
             //Assert
             result.ShouldHaveValidationErrorFor(x => x.PassPercentTreshold);
         }
 
         [Theory]
-        [CorrectCourseCommand]
-        public void Validate_GivenCreateCourseCommand_WhenQuestionsAreDuplicated_ShouldReturnErrror(CreateCourseCommand createCourseCommand)
+        [CorrectCreateCourseDto]
+        public void Validate_GivenCreateCourseCommand_WhenQuestionsAreDuplicated_ShouldReturnErrror(CreateCourseDto dto)
         {
             //Arrange
-            createCourseCommand.Questions = new List<CreateQuestionDto>
+            dto.Questions = new List<CreateQuestionDto>
             {
                 new CreateQuestionDto
                 {
@@ -149,17 +148,17 @@ namespace GoCode.UnitTests.Application.Common.Validators.Courses
             };
 
             //Act
-            var result = _sut.TestValidate(createCourseCommand);
+            var result = _sut.TestValidate(dto);
 
             //Assert
             result.ShouldHaveAnyValidationError()
                 .WithErrorMessage(ErrorMessages.Question.QuestionsMustBeUnique);
         }
 
-        private CreateCourseCommand GetCreateCourseCommandFixture()
+        private CreateCourseDto GetCreateCourseDtoFixture()
         {
-            var fixture = new Fixture().Customize(new CorrectCourseCommandCustomization());
-            return fixture.Create<CreateCourseCommand>();
+            var fixture = new Fixture().Customize(new CorrectCreateCourseDtoCustomization());
+            return fixture.Create<CreateCourseDto>();
         }
     }
 }

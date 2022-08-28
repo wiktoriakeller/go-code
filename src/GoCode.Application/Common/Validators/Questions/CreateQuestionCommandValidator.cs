@@ -9,7 +9,8 @@ namespace GoCode.Application.Common.Validators.Questions
 {
     public class CreateQuestionCommandValidator : AbstractValidator<CreateQuestionCommand>
     {
-        public CreateQuestionCommandValidator(IValidator<CreateQuestionDto> questionDtoValidator,
+        public CreateQuestionCommandValidator(
+            IValidator<CreateQuestionDto> questionDtoValidator,
             ICoursesRepository coursesRepository)
         {
             RuleFor(x => x)

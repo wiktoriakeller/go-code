@@ -9,7 +9,9 @@ namespace GoCode.Application.Common.Validators.Questions
 {
     public class UpdateQuestionCommandValidator : AbstractValidator<UpdateQuestionCommand>
     {
-        public UpdateQuestionCommandValidator(ICoursesRepository coursesRepository, IQuestionsRepository questionsRepository,
+        public UpdateQuestionCommandValidator(
+            ICoursesRepository coursesRepository,
+            IQuestionsRepository questionsRepository,
             IValidator<CreateQuestionDto> questionDtoValidator)
         {
             RuleFor(x => x)

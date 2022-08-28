@@ -22,7 +22,7 @@ namespace GoCode.Application.Courses.Handlers
 
         public async Task<Response<CreateCourseResponse>> Handle(CreateCourseCommand request, CancellationToken cancellationToken)
         {
-            var courseToAdd = _mapper.Map<Course>(request);
+            var courseToAdd = _mapper.Map<Course>(request.Course);
             var course = await _coursesRepository.AddAsync(courseToAdd);
             var response = _mapper.Map<CreateCourseResponse>(course);
             return ResponseResult.Created(response);
