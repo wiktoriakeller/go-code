@@ -6,8 +6,8 @@ networks:
 
 services:
     db-sql:
+        container_name: mssql-db
         image: mcr.microsoft.com/mssql/server:2022-latest
-        container_name: db-sql
         environment:
             ACCEPT_EULA: "Y"
             SA_PASSWORD: ${SA_PASSWORD?err}
@@ -20,9 +20,9 @@ services:
             - db-data:/var/opt/mssql/data
         
     api:
+        container_name: go-code-api
         build: ./src/
         environment:
-            - "ASPNETCORE_ENVIRONMENT=Development"
             - "ConnectionStrings:DefaultConnection=${CONNECTION_STRING?err}"
             - "Authentication:JwtOptions:Key=${JWT_KEY?err}"
             - "Admin:Email=${ADMIN_EMAIL?err}"
