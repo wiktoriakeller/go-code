@@ -10,25 +10,28 @@ services:
         container_name: db-sql
         environment:
             ACCEPT_EULA: "Y"
-            SA_PASSWORD: ${SA_PASSWORD}
+            SA_PASSWORD: ${SA_PASSWORD?err}
+        user: root
         ports:
             - "1433:1433"
         networks:
             - localdev
+        volumes:
+            - db-data:/var/opt/mssql/data
+        
     api:
         build: ./src/
         environment:
             - "ASPNETCORE_ENVIRONMENT=Development"
             - "ConnectionStrings:DefaultConnection=${CONNECTION_STRING?err}"
             - "Authentication:JwtOptions:Key=${JWT_KEY?err}"
-            - "Authentication:JwtOptions:Issuer=http://localhost:5000/"
-            - "Authentication:JwtOptions:Audience=http://localhost:5000/"
+            - "Admin:Email=${ADMIN_EMAIL?err}"
+            - "Admin:Username=${ADMIN_USERNAME?err}"
+            - "Admin:Password=${ADMIN_PASSWORD?err}"
         restart: always
-        ports:
-            - "5000:80"
-            - "5001:443"
         depends_on:
             - db-sql
         networks:
             - localdev
-                    
+volumes:
+    db-data:
