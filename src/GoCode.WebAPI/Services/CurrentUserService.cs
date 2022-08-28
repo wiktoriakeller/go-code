@@ -1,5 +1,5 @@
-﻿using GoCode.Application.Contracts.Identity;
-using GoCode.Application.Identity.Dto;
+﻿using GoCode.Application.Common.Contracts.Identity;
+using GoCode.Domain.Interfaces;
 
 namespace GoCode.WebAPI.Services
 {
@@ -12,9 +12,9 @@ namespace GoCode.WebAPI.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public UserDto? User => GetCurrentUser();
+        public IUser? User => GetCurrentUser();
 
-        private UserDto? GetCurrentUser()
+        private IUser? GetCurrentUser()
         {
             if (_httpContextAccessor.HttpContext is null)
             {
@@ -23,7 +23,7 @@ namespace GoCode.WebAPI.Services
 
             if (_httpContextAccessor.HttpContext.Items.ContainsKey("User"))
             {
-                return _httpContextAccessor.HttpContext?.Items["User"] as UserDto;
+                return _httpContextAccessor.HttpContext?.Items["User"] as IUser;
             }
 
             return null;

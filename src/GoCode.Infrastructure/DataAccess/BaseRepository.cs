@@ -1,18 +1,20 @@
-﻿using GoCode.Application.Contracts.DataAccess;
+﻿using GoCode.Application.Common.Contracts.DataAccess;
 using GoCode.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace GoCode.Infrastructure.DataAccess
 {
-    public class BaseRepositoryAsync<TEntity> : IRepository<TEntity> where TEntity : class
+    public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         protected readonly ApplicationDbContext _dbContext;
 
-        public BaseRepositoryAsync(ApplicationDbContext dbContext)
+        public BaseRepository(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
+
+        public async ValueTask<TEntity?> GetByIdAsync<TId>(TId id) => await _dbContext.Set<TEntity>().FindAsync(id);
 
         public IEnumerable<TEntity> GetAll() => _dbContext.Set<TEntity>();
 
@@ -21,6 +23,11 @@ namespace GoCode.Infrastructure.DataAccess
 
         public async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate) =>
             await _dbContext.Set<TEntity>().FirstOrDefaultAsync(predicate);
+
+        public async Task<TEntity?> FirstOrDefaultAsyncWith<TProperty>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, TProperty>> include) =>
+            await _dbContext.Set<TEntity>()
+            .Include(include)
+            .FirstOrDefaultAsync(predicate);
 
         public async Task<TEntity?> SignleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate) =>
             await _dbContext.Set<TEntity>().SingleOrDefaultAsync(predicate);

@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using GoCode.Application.BaseResponse;
-using GoCode.Application.Constants;
-using GoCode.Application.Contracts.DataAccess;
-using GoCode.Application.Contracts.Identity;
+using GoCode.Application.Common.BaseResponse;
+using GoCode.Application.Common.Constants;
+using GoCode.Application.Common.Contracts.DataAccess;
+using GoCode.Application.Common.Contracts.Identity;
 using GoCode.Application.Identity.Commands;
-using GoCode.Application.Identity.Dto;
 using GoCode.Application.Identity.Responses;
+using GoCode.Domain.Interfaces;
 using GoCode.Infrastructure.Identity.Entities;
 using GoCode.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -18,13 +18,13 @@ namespace GoCode.Infrastructure.Identity
 {
     public class IdentityService : IIdentityService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly IJwtService _jwtService;
         private readonly IRepository<RefreshToken> _refreshTokenRepository;
         private readonly IMapper _mapper;
         private readonly JwtOptions _jwtOptions;
 
-        public IdentityService(UserManager<ApplicationUser> userManager,
+        public IdentityService(UserManager<User> userManager,
             IJwtService jwtService,
             IRepository<RefreshToken> refreshTokenRepository,
             IMapper mapper,
@@ -37,9 +37,21 @@ namespace GoCode.Infrastructure.Identity
             _jwtOptions = jwtOptions.Value;
         }
 
-        public async Task<Response<UserDto>> GetUserFromTokenAsync(string? token)
+        public async Task<Response<IUser>> GetUserByEmail(string email)
         {
-            var result = IsJwtTokenValid<UserDto>(token);
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                return ResponseResult.NotFound<IUser>(ErrorMessages.Identity.UserNotFound);
+            }
+
+            return ResponseResult.Ok<IUser>(user);
+        }
+
+        public async Task<Response<IUser>> GetUserFromTokenAsync(string? token)
+        {
+            var result = IsJwtTokenValid<IUser>(token);
 
             if (!result.response.Succeeded)
             {
@@ -50,21 +62,18 @@ namespace GoCode.Infrastructure.Identity
 
             if (user == null)
             {
-                return ResponseResult.NotFound<UserDto>(ErrorMessages.Identity.UserNotFound);
+                return ResponseResult.NotFound<IUser>(ErrorMessages.Identity.UserNotFound);
             }
 
-            var userDto = _mapper.Map<UserDto>(user);
-            return ResponseResult.Ok(userDto);
+            return ResponseResult.Ok<IUser>(user);
         }
 
         public async Task<Response<CreateUserResponse>> CreateUserAsync(CreateUserCommand createUserCommand)
         {
-            var newUser = new ApplicationUser
+            var newUser = new User
             {
                 Email = createUserCommand.Email,
-                UserName = createUserCommand.Email,
-                FirstName = createUserCommand.FirstName,
-                LastName = createUserCommand.LastName
+                UserName = createUserCommand.UserName ?? createUserCommand.Email
             };
 
             var result = await _userManager.CreateAsync(newUser, createUserCommand.Password);
@@ -95,7 +104,7 @@ namespace GoCode.Infrastructure.Identity
                 return ResponseResult.ValidationError<AuthenticateUserResponse>(ErrorMessages.Identity.IncorrectCredentials);
             }
 
-            var (jwtToken, jti) = _jwtService.CreateJwtToken(user);
+            var (jwtToken, jti) = await _jwtService.CreateJwtToken(user);
             var storedRefresh = await _refreshTokenRepository.FirstOrDefaultAsync(t => t.UserId == user.Id);
             var refreshToken = await CreateRefreshToken(jti, user, storedRefresh);
 
@@ -135,7 +144,7 @@ namespace GoCode.Infrastructure.Identity
             }
 
             var user = await _userManager.FindByIdAsync(result.userId);
-            var (jwtToken, newJti) = _jwtService.CreateJwtToken(user);
+            var (jwtToken, newJti) = await _jwtService.CreateJwtToken(user);
             var refreshToken = await CreateRefreshToken(newJti, user, storedToken);
 
             var response = new RefreshTokenResponse
@@ -172,7 +181,7 @@ namespace GoCode.Infrastructure.Identity
             return (ResponseResult.Ok<T>(), userId, jti);
         }
 
-        private async Task<string> CreateRefreshToken(string jti, ApplicationUser user, RefreshToken? storedRefresh = null)
+        private async Task<string> CreateRefreshToken(string jti, User user, RefreshToken? storedRefresh = null)
         {
             if (storedRefresh != null)
             {

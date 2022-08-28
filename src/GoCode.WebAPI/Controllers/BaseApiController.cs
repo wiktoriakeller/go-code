@@ -1,8 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
-
-namespace GoCode.WebAPI.Controllers
+﻿namespace GoCode.WebAPI.Controllers
 {
     [ApiController]
     public class BaseApiController : ControllerBase
@@ -15,5 +11,7 @@ namespace GoCode.WebAPI.Controllers
             _medaitor = mediator;
             _mapper = mapper;
         }
+
+        protected IActionResult GetStatusCode(IResponse response) => StatusCode((int)response.HttpStatusCode, response);
     }
 }

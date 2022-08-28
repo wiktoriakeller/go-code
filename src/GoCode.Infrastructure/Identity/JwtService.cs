@@ -1,5 +1,6 @@
 ﻿using GoCode.Infrastructure.Identity.Entities;
 using GoCode.Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -12,17 +13,20 @@ namespace GoCode.Infrastructure.Identity
     {
         private readonly JwtOptions _jwtOptions;
         private readonly TokenValidationParameters _tokenValidationParameters;
+        private readonly UserManager<User> _userManager;
 
         public JwtService(IOptions<JwtOptions> jwtOptions,
-            TokenValidationParameters tokenValidationParameters)
+            TokenValidationParameters tokenValidationParameters,
+            UserManager<User> userManager)
         {
             _jwtOptions = jwtOptions.Value;
             _tokenValidationParameters = tokenValidationParameters;
+            _userManager = userManager;
         }
 
-        public (string jwtToken, string jti) CreateJwtToken(ApplicationUser user)
+        public async Task<(string jwtToken, string jti)> CreateJwtToken(User user)
         {
-            var (claims, jti) = GetJwtTokenClaims(user);
+            var (claims, jti) = await GetJwtTokenClaims(user);
 
             var key = Encoding.UTF8.GetBytes(_jwtOptions.Key);
             var signingCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);
@@ -63,7 +67,7 @@ namespace GoCode.Infrastructure.Identity
             (validatedToken is JwtSecurityToken jwtSecurityToken) &&
             jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase);
 
-        private (IEnumerable<Claim> claims, string jti) GetJwtTokenClaims(ApplicationUser user)
+        private async Task<(IEnumerable<Claim> claims, string jti)> GetJwtTokenClaims(User user)
         {
             var jti = Guid.NewGuid().ToString();
             var claims = new List<Claim>()
@@ -73,6 +77,16 @@ namespace GoCode.Infrastructure.Identity
                 new Claim(JwtRegisteredClaimNames.Aud, _jwtOptions.Audience),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             };
+
+            var userClaims = await _userManager.GetClaimsAsync(user);
+            claims.AddRange(userClaims);
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            foreach (var role in userRoles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             return (claims, jti);
         }

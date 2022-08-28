@@ -1,8 +1,5 @@
-﻿using AutoMapper;
-using GoCode.Application.Identity.Commands;
+﻿using GoCode.Application.Identity.Commands;
 using GoCode.Application.Identity.Requests;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
 
 namespace GoCode.WebAPI.Controllers
 {
@@ -21,10 +18,10 @@ namespace GoCode.WebAPI.Controllers
 
             if (!response.Succeeded)
             {
-                return StatusCode((int)response.HttpStatusCode, response);
+                return GetStatusCode(response);
             }
 
-            return Created($"api/v1/identity/{response.Data?.Id}", null);
+            return Created($"api/v1/identity/{response.Data?.Id}", response);
         }
 
         [HttpPost("login")]
@@ -32,7 +29,7 @@ namespace GoCode.WebAPI.Controllers
         {
             var command = _mapper.Map<AuthenticateUserCommand>(request);
             var response = await _medaitor.Send(command);
-            return StatusCode((int)response.HttpStatusCode, response);
+            return GetStatusCode(response);
         }
 
         [HttpPost("refresh")]
@@ -40,7 +37,7 @@ namespace GoCode.WebAPI.Controllers
         {
             var command = _mapper.Map<RefreshTokenCommand>(request);
             var response = await _medaitor.Send(command);
-            return StatusCode((int)response.HttpStatusCode, response);
+            return GetStatusCode(response);
         }
     }
 }

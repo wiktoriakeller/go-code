@@ -1,5 +1,5 @@
-﻿using GoCode.Application.Contracts.DataAccess;
-using GoCode.Application.Contracts.Identity;
+﻿using GoCode.Application.Common.Contracts.DataAccess;
+using GoCode.Application.Common.Contracts.Identity;
 using GoCode.Infrastructure.DataAccess;
 using GoCode.Infrastructure.Identity;
 using GoCode.Infrastructure.Identity.Entities;
@@ -20,18 +20,19 @@ namespace GoCode.Infrastructure.Extensions
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
             //Service registrattion
-            services.AddScoped<IIdentityService, IdentityService>();
-            services.AddSingleton<IJwtService, JwtService>();
-            services.AddScoped<IRepository<RefreshToken>, BaseRepositoryAsync<RefreshToken>>();
-
-            //Register db
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly(typeof(ConfigureServicesExtension).Assembly.FullName)));
 
+            services.AddScoped<ApplicationDbSeeder>();
+            services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped<IJwtService, JwtService>();
+
+            RegisterRepositories(services);
+
             //Register identity and jwt
-            services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+            services.AddIdentity<User, Role>(options =>
             {
                 options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = true;
@@ -72,8 +73,18 @@ namespace GoCode.Infrastructure.Extensions
             services.AddSingleton(tokenValidationParameters);
 
             services.Configure<JwtOptions>(configuration.GetSection("Authentication:JwtOptions"));
+            services.Configure<AdminCredentials>(configuration.GetSection("Admin"));
 
             return services;
+        }
+
+        private static void RegisterRepositories(IServiceCollection services)
+        {
+            services.AddScoped<IRepository<RefreshToken>, BaseRepository<RefreshToken>>();
+            services.AddScoped<ICoursesRepository, CoursesRepository>();
+            services.AddScoped<IQuestionsRepository, QuestionsRepository>();
+            services.AddScoped<IAnswersRepository, AnswersRepository>();
+            services.AddScoped<IUserCoursesRepository, UserCoursesRepository>();
         }
     }
 }

@@ -1,9 +1,7 @@
-using GoCode.Application.Extensions;
+using GoCode.Application.Common.Extensions;
 using GoCode.Infrastructure.Extensions;
-using GoCode.Infrastructure.Persistence;
 using GoCode.WebAPI.Extensions;
 using GoCode.WebAPI.Middleware;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,16 +15,9 @@ builder.Services.AddSwaggerDoc();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
+app.ApplyMigrations();
 
-    var context = services.GetRequiredService<ApplicationDbContext>();
-    if (context.Database.GetPendingMigrations().Any())
-    {
-        context.Database.Migrate();
-    }
-}
+await app.SeedDatabase();
 
 app.UseSwagger();
 

@@ -1,9 +1,9 @@
-﻿using GoCode.Application.Courses.Dto;
+﻿using GoCode.Application.Common.Dtos;
 
 namespace GoCode.Application.Courses.Responses
 {
-    public class GetUserCoursesResponse
+    public record GetUserCoursesResponse
     {
-        public ICollection<CourseDto> Courses { get; init; }
+        public IEnumerable<CourseDto> Courses { get; init; }
     }
 }
