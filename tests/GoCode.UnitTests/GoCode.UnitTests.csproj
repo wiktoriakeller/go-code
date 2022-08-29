@@ -27,8 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\GoCode.Application\GoCode.Application.csproj" />
-    <ProjectReference Include="..\..\src\GoCode.Infrastructure\GoCode.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\api\GoCode.Application\GoCode.Application.csproj" />
+    <ProjectReference Include="..\..\src\api\GoCode.Domain\GoCode.Domain.csproj" />
+    <ProjectReference Include="..\..\src\api\GoCode.Infrastructure\GoCode.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
