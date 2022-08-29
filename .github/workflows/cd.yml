@@ -23,5 +23,5 @@ jobs:
       with:
         app-name: 'gocodeapi'
         slot-name: 'test'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_77ea27c148554aab91dd9d338153b710 }}
+        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
         images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_20def9506deb4de5aee3621336ae71f1 }}/wiktoriakeller/gocode:${{ github.sha }}'
