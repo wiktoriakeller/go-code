@@ -2,7 +2,8 @@
 
 ## Setup
 To run the application create an .env file with necessary variables.
-Next run following commands:
+
+Next run the following command:
 ```
 docker compose up --build
 ```
