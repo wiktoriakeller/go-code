@@ -56,20 +56,7 @@ namespace GoCode.Application.Form.Handlers
                     return ResponseResult.NotFound<EvaluateFormResponse>(string.Format(ErrorMessages.NotFound, "Question"));
                 }
 
-                var question = questionsDictionary[response.QuestionId];
-                var correctAnswear = question.Answers.First(x => x.IsCorrect);
-                var responseResult = new FormAnswearResponseDto
-                {
-                    QuestionId = question.Id,
-                    IsCorrect = false
-                };
-
-                if (correctAnswear.Id == response.AnswerId)
-                {
-                    correctAnswers++;
-                    responseResult.IsCorrect = true;
-                }
-
+                var responseResult = GetAnswearResult(questionsDictionary, response, ref correctAnswers);
                 results.Add(responseResult);
             }
 
@@ -94,6 +81,28 @@ namespace GoCode.Application.Form.Handlers
             };
 
             return ResponseResult.Ok(evaluationResponse);
+        }
+
+        private FormAnswearResponseDto GetAnswearResult(
+            IDictionary<int, Question> questionsDictionary,
+            FormAnswearDto response,
+            ref int correctAnswers)
+        {
+            var question = questionsDictionary[response.QuestionId];
+            var correctAnswear = question.Answers.First(x => x.IsCorrect);
+            var responseResult = new FormAnswearResponseDto
+            {
+                QuestionId = question.Id,
+                IsCorrect = false
+            };
+
+            if (correctAnswear.Id == response.AnswerId)
+            {
+                correctAnswers++;
+                responseResult.IsCorrect = true;
+            }
+
+            return responseResult;
         }
     }
 }
