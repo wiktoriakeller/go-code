@@ -33,8 +33,7 @@ namespace GoCode.Application.Common.PipelineBehaviors
                     return (TResponse)Activator.CreateInstance(typeof(TResponse), notFound.ErrorMessage,
                         ResponseError.NotFound, HttpStatusCode.NotFound, default);
                 }
-
-                if (errors.Any())
+                else if (errors.Any())
                 {
                     var messages = errors.Select(x => x.ErrorMessage);
                     return (TResponse)Activator.CreateInstance(typeof(TResponse), messages,
