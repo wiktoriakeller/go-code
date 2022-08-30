@@ -5,7 +5,8 @@ namespace GoCode.Application.Common.Validators.Extensions
 {
     public static class UserValidationExtension
     {
-        public static IRuleBuilderOptions<T, string> EmailIsPresent<T>(this IRuleBuilder<T, string> ruleBuilder, bool isPresent,
+        public static IRuleBuilderOptions<T, string> EmailIsPresent<T>(
+            this IRuleBuilder<T, string> ruleBuilder, bool isPresent,
             IIdentityService identityService)
         {
             return ruleBuilder.MustAsync(async (rootObject, email, context) =>

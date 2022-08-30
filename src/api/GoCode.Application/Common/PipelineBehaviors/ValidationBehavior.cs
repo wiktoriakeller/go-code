@@ -25,12 +25,18 @@ namespace GoCode.Application.Common.PipelineBehaviors
                 var results = await Task.WhenAll(validationTasks);
                 var errors = results
                     .SelectMany(x => x.Errors)
-                    .Where(x => x != null)
-                    .Select(x => x.ErrorMessage);
+                    .Where(x => x != null);
 
-                if (errors.Any())
+                var notFound = errors.FirstOrDefault(x => x.ErrorCode == ResponseError.NotFound.ToString());
+                if (notFound is not null)
                 {
-                    return (TResponse)Activator.CreateInstance(typeof(TResponse), errors,
+                    return (TResponse)Activator.CreateInstance(typeof(TResponse), notFound.ErrorMessage,
+                        ResponseError.NotFound, HttpStatusCode.NotFound, default);
+                }
+                else if (errors.Any())
+                {
+                    var messages = errors.Select(x => x.ErrorMessage);
+                    return (TResponse)Activator.CreateInstance(typeof(TResponse), messages,
                        ResponseError.ValidationError, HttpStatusCode.BadRequest, default);
                 }
             }

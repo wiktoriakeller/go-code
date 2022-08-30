@@ -6,7 +6,7 @@
 
         public static class Identity
         {
-            public const string UnauthorizedUser = "User is unauthorized";
+            public const string UnauthorizedUser = "User is unauthorized to access that resource";
             public const string UserNotFound = "User not found";
             public const string InvalidToken = "Token is invalid";
             public const string IncorrectCredentials = "Incorrect credentials";
@@ -28,6 +28,12 @@
         public static class Course
         {
             public const string NameMustBeUnique = "Courses name should be unique";
+        }
+
+        public static class Form
+        {
+            public const string FormDoesNotHaveAllQuestions = "Send form does not contain all questions from the course";
+            public const string UserIsNotSignedToThisCourse = "User hasn't signed up for this course";
         }
     }
 }

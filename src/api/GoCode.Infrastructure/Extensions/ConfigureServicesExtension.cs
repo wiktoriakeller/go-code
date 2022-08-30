@@ -24,8 +24,9 @@ namespace GoCode.Infrastructure.Extensions
                 options.UseSqlServer(
                     configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly(typeof(ConfigureServicesExtension).Assembly.FullName)));
-
             services.AddScoped<ApplicationDbSeeder>();
+
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IJwtService, JwtService>();
 
@@ -71,10 +72,8 @@ namespace GoCode.Infrastructure.Extensions
 
             //Options bindings
             services.AddSingleton(tokenValidationParameters);
-
             services.Configure<JwtOptions>(configuration.GetSection("Authentication:JwtOptions"));
             services.Configure<AdminCredentials>(configuration.GetSection("Admin"));
-
             return services;
         }
 

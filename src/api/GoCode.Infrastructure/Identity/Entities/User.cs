@@ -7,7 +7,7 @@ namespace GoCode.Infrastructure.Identity.Entities
     public class User : IdentityUser, IUser
     {
         public int TotalXP { get; set; }
-        public int Level { get; set; }
+        public int Level { get; set; } = 1;
         public ICollection<UserCourse> UserCourses { get; set; }
         public RefreshToken RefreshToken { get; set; }
     }

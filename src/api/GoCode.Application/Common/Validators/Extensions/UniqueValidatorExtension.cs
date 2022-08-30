@@ -12,20 +12,19 @@ namespace GoCode.Application.Common.Validators.Extensions
                 var set = new HashSet<string>();
                 foreach (var text in data)
                 {
-                    if (!set.Contains(text))
-                    {
-                        set.Add(text);
-                    }
-                    else
+                    if (set.Contains(text))
                     {
                         return false;
                     }
+
+                    set.Add(text);
                 }
                 return true;
             });
         }
 
-        public static IRuleBuilderOptions<T, TRequest> PropertyMustBeUnique<T, TRequest, TEntity>(this IRuleBuilder<T, TRequest> ruleBuilder,
+        public static IRuleBuilderOptions<T, TRequest> PropertyMustBeUnique<T, TRequest, TEntity>(
+            this IRuleBuilder<T, TRequest> ruleBuilder,
             bool checkId,
             string propertyName,
             IRepository<TEntity> repository)
