@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using GoCode.Application.Common.BaseResponse;
 using GoCode.Application.Common.Constants;
 using GoCode.Application.Common.Contracts.DataAccess;
 
@@ -19,7 +20,8 @@ namespace GoCode.Application.Common.Validators.Extensions
 
                 return false;
             })
-            .WithMessage(string.Format(ErrorMessages.NotFound, "Entity"));
+            .WithMessage(string.Format(ErrorMessages.NotFound, "Entity"))
+            .WithErrorCode(ResponseError.NotFound.ToString());
         }
     }
 }

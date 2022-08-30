@@ -29,8 +29,8 @@ namespace GoCode.Application.Form.Handlers
         public async Task<Response<EvaluateFormResponse>> Handle(EvaluateFormCommand request, CancellationToken cancellationToken)
         {
             var questionsDictionary = new Dictionary<int, Question>();
-
             var course = await _coursesRepository.FirstOrDefaultWithAllAsync(x => x.Id == request.CourseId);
+
             if (course == null)
             {
                 return ResponseResult.NotFound<EvaluateFormResponse>(string.Format(ErrorMessages.NotFound, "Course"));
@@ -38,6 +38,7 @@ namespace GoCode.Application.Form.Handlers
 
             var currentUserId = _currentUser.User.Id;
             var userCourse = course.UserCourses.FirstOrDefault(x => x.UserId == currentUserId);
+
             if (userCourse == null)
             {
                 return ResponseResult.ValidationError<EvaluateFormResponse>(ErrorMessages.Form.UserIsNotSignedToThisCourse);
@@ -46,6 +47,7 @@ namespace GoCode.Application.Form.Handlers
             foreach (var question in course.Questions)
             {
                 var requestQuestion = request.FormAnswers.FirstOrDefault(x => x.QuestionId == question.Id);
+
                 if (requestQuestion == null)
                 {
                     return ResponseResult.ValidationError<EvaluateFormResponse>(ErrorMessages.Form.FormDoesNotHaveAllQuestions);
