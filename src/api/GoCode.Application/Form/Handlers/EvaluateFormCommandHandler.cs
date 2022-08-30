@@ -31,18 +31,8 @@ namespace GoCode.Application.Form.Handlers
             var questionsDictionary = new Dictionary<int, Question>();
             var course = await _coursesRepository.FirstOrDefaultWithAllAsync(x => x.Id == request.CourseId);
 
-            if (course == null)
-            {
-                return ResponseResult.NotFound<EvaluateFormResponse>(string.Format(ErrorMessages.NotFound, "Course"));
-            }
-
             var currentUserId = _currentUser.User.Id;
             var userCourse = course.UserCourses.FirstOrDefault(x => x.UserId == currentUserId);
-
-            if (userCourse == null)
-            {
-                return ResponseResult.ValidationError<EvaluateFormResponse>(ErrorMessages.Form.UserIsNotSignedToThisCourse);
-            }
 
             foreach (var question in course.Questions)
             {

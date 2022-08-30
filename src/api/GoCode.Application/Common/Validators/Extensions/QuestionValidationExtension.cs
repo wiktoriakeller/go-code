@@ -7,7 +7,8 @@ namespace GoCode.Application.Common.Validators.Extensions
 {
     public static class QuestionValidationExtension
     {
-        public static IRuleBuilderOptions<T, CreateQuestionCommand> CreateQuestionCommandContentMustBeUnique<T>(this IRuleBuilder<T, CreateQuestionCommand> ruleBuilder,
+        public static IRuleBuilderOptions<T, CreateQuestionCommand> CreateQuestionCommandContentMustBeUnique<T>(
+            this IRuleBuilder<T, CreateQuestionCommand> ruleBuilder,
             ICoursesRepository coursesRepository)
         {
             return ruleBuilder.MustAsync(async (rootObject, command, context) =>
@@ -17,7 +18,8 @@ namespace GoCode.Application.Common.Validators.Extensions
             .WithMessage(ErrorMessages.Question.QuestionsMustBeUnique);
         }
 
-        public static IRuleBuilderOptions<T, UpdateQuestionCommand> UpdateQuestionCommandContentMustBeUnique<T>(this IRuleBuilder<T, UpdateQuestionCommand> ruleBuilder,
+        public static IRuleBuilderOptions<T, UpdateQuestionCommand> UpdateQuestionCommandContentMustBeUnique<T>(
+            this IRuleBuilder<T, UpdateQuestionCommand> ruleBuilder,
             ICoursesRepository coursesRepository, IQuestionsRepository questionsRepository)
         {
             return ruleBuilder.MustAsync(async (rootObject, command, context) =>
