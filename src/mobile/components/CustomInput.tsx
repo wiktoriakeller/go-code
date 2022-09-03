@@ -1,45 +1,39 @@
-import { View, TextInput, StyleSheet } from 'react-native'
+import { View, TextInput, StyleSheet, TextInputProps } from "react-native"
+import colors from "../styles/colors"
 
-interface ICustomInputProps {
-    text: string;
-    placeholder: string;
-    secureText: boolean;
-    onChangeText: (text: string) => void;
+interface ICustomInputProps extends TextInputProps {
 }
 
 const CustomInput = (props: ICustomInputProps) => {
-    return (
-        <View style={styles.container}>
-            <TextInput
-                value={props.text}
-                onChangeText={props.onChangeText}
-                style={styles.input}
-                placeholder={props.placeholder}
-                secureTextEntry={props.secureText}    
-            />
-        </View>
-    )
+  return (
+    <View style={styles.container}>
+      <TextInput
+        {...props}
+        style={styles.input}
+      />
+    </View>
+  )
 }
 
-const styles = StyleSheet.create({ 
-    container: {
-        backgroundColor: 'white',
-        width: '88%',
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.white,
+    width: "88%",
 
-        borderColor: '#e8e8e8',
-        borderWidth: 1,
-        borderRadius: 5,
+    borderColor: colors.lightGray,
+    borderWidth: 1,
+    borderRadius: 5,
 
-        paddingHorizontal: 12,
-        marginVertical: 8,
-        height: 50,
-        textAlign: 'center'
-    },
-    input: {
-        flex: 1,
-        justifyContent: 'flex-start',
-        fontSize: 16
-    }
+    paddingHorizontal: 12,
+    marginVertical: 8,
+    height: 50,
+    textAlign: "center"
+  },
+  input: {
+    flex: 1,
+    justifyContent: "flex-start",
+    fontSize: 16
+  }
 });
 
 export { ICustomInputProps, CustomInput };
