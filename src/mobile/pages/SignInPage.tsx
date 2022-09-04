@@ -3,8 +3,10 @@ import React, { useState } from "react"
 import { ICustomInputProps, CustomInput } from "../components/CustomInput";
 import { IButtonProps, CustomButton } from "../components/CustomButton";
 import colors from "../styles/colors";
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-const SignInScreen = () => {
+const SignInPage = ({ navigation  }) => {
   const [email, setEmail] = useState("");
   const emailInput = {
     text: email,
@@ -50,10 +52,10 @@ const SignInScreen = () => {
     },
     textStyle: {
       color: colors.grayText,
-      fontWeight: 'normal'
+      fontWeight: "normal"
     },
     onPress: (event: GestureResponderEvent) => {
-      console.warn("Forgot password");
+      navigation.navigate("Forgot password");
     }  
   };
 
@@ -75,6 +77,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
+    backgroundColor: colors.background
   },
   logoText: {
     marginTop: "25%",
@@ -87,4 +90,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default SignInScreen;
+export default SignInPage;
