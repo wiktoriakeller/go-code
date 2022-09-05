@@ -51,7 +51,7 @@ const SignInPage = ({ navigation  }) => {
       backgroundColor: colors.tertiary
     },
     textStyle: {
-      color: colors.grayText,
+      color: colors.grey,
       fontWeight: "normal"
     },
     onPress: (event: GestureResponderEvent) => {
@@ -61,13 +61,18 @@ const SignInPage = ({ navigation  }) => {
 
   return (
     <View style={styles.root}>
-      <Text style={styles.logoText}>Go Code</Text>
-      <CustomInput {...emailInput} />
-      <CustomInput {...passwordInput} />
-      <View style={{ marginBottom: 20 }}/>
-      <CustomButton {...loginButton} />
-      <CustomButton {...signInGoogleButton} />
-      <CustomButton {...forgotPasswordButton} />
+      <View style={styles.textContainer}>
+        <Text style={styles.titleText}>Login</Text>
+        <Text style={styles.subText}>Enter your details to login</Text>
+      </View>
+      <View style={styles.inputContainer}>
+        <CustomInput {...emailInput} />
+        <CustomInput {...passwordInput} />
+        <View style={{ marginBottom: 10 }}/>
+        <CustomButton {...loginButton} />
+        <CustomButton {...signInGoogleButton} />
+        <CustomButton {...forgotPasswordButton} />
+      </View>
     </View>
   )
 }
@@ -75,18 +80,27 @@ const SignInPage = ({ navigation  }) => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-start",
     backgroundColor: colors.background
   },
-  logoText: {
-    marginTop: "25%",
-    marginBottom: "15%",
-    color: colors.primary,
-    fontFamily: "sans-serif",
-    fontSize: 48,
-    fontWeight: "bold",
-    fontStyle: "italic"
+  textContainer: {
+    marginLeft: 25,
+    marginTop: '4%',
+    marginBottom: '6%'
+  },
+  inputContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "flex-start",
+  },
+  titleText: {
+    color: colors.black,
+    fontSize: 40,
+    fontWeight: "bold"
+  },
+  subText: {
+    color: colors.grey,
+    fontSize: 18,
+    marginVertical: 10
   }
 });
 
