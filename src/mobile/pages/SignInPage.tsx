@@ -1,25 +1,45 @@
 import { View, Text, StyleSheet, GestureResponderEvent } from "react-native"
 import React, { useState } from "react"
-import { ICustomInputProps, CustomInput } from "../components/CustomInput";
+import { ICustomInputProps, IValidationError, CustomInputForm, ValidationFunc } from "../components/CustomInputForm";
 import { IButtonProps, CustomButton } from "../components/CustomButton";
 import colors from "../styles/colors";
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { validateLength } from "./validators";
 
 const SignInPage = ({ navigation  }) => {
   const [email, setEmail] = useState("");
-  const emailInput = {
-    text: email,
-    placeholder: "Email",
-    secureText: false,
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
+  const emailValidators = [
+    (value: string) => validateLength(value, 1, 20, "Email must be between 1 and 20 characters")
+  ];
+
+  const emailInput: ICustomInputProps = {
+    value: email,
+    secureTextEntry: false,
+    placeholder: "Enter your email address",
+    label: "Email",
+    iconName: "email-outline",
+    validators: emailValidators,
+    error: {
+      message: emailErrorMessage,
+      setMessage: setEmailErrorMessage
+    },
     onChangeText: (value: string) => setEmail(value)
   };
 
   const [password, setPassword] = useState("");
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+  const passwordValidators: ValidationFunc[] = [];
+
   const passwordInput: ICustomInputProps = {
     value: password,
-    placeholder: "Password",
     secureTextEntry: true,
+    placeholder: "Enter your password",
+    label: "Password",
+    validators: passwordValidators,
+    error: {
+      message: passwordErrorMessage,
+      setMessage: setPasswordErrorMessage
+    },
     onChangeText: (value: string) => setPassword(value)
   };
 
@@ -66,8 +86,8 @@ const SignInPage = ({ navigation  }) => {
         <Text style={styles.subText}>Enter your details to login</Text>
       </View>
       <View style={styles.inputContainer}>
-        <CustomInput {...emailInput} />
-        <CustomInput {...passwordInput} />
+        <CustomInputForm {...emailInput} />
+        <CustomInputForm {...passwordInput} />
         <View style={{ marginBottom: 10 }}/>
         <CustomButton {...loginButton} />
         <CustomButton {...signInGoogleButton} />
@@ -82,15 +102,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background
   },
-  textContainer: {
-    marginLeft: 25,
-    marginTop: '4%',
-    marginBottom: '6%'
-  },
   inputContainer: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "flex-start",
+    justifyContent: "flex-start"
+  },
+  textContainer: {
+    marginLeft: "6%",
+    marginBottom: 10
   },
   titleText: {
     color: colors.black,

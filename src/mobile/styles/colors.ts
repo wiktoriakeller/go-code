@@ -9,7 +9,8 @@ const colors = {
   black: "black",
   lightOrange: "#fae9ea",
   orange: "#dd4d44",
-  light: '#f3f4fb'
+  light: '#f3f4fb',
+  red: 'red'
 } 
 
 export default colors;
