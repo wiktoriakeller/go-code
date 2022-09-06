@@ -19,24 +19,24 @@ type ValidationFunc = (value: string) => [boolean, string];
 
 const CustomInputForm = (props: ICustomInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
+  const [firstTimeFocused, setFirstTimeFocused] = useState(false);
 
   useEffect(() => {
-    console.warn(props.value);
     if(props.validators !== null) {
       for(const validator of props.validators) {
         const result = validator(props.value);
-        console.warn(result);
         if(!result[0]) {
           props.error.setMessage(result[1]);
-          break;
+          return;
         }
       }
     }
-  }, 
-  [props.value])
+    
+    props.error.setMessage("");
+  }, [props.value])
 
   const getBorderColor = (): string => {
-    if(props.error.message.length > 0 && isFocused) {
+    if(props.error.message.length > 0) {
       return colors.red;
     }
     else if(isFocused) {
@@ -49,43 +49,47 @@ const CustomInputForm = (props: ICustomInputProps) => {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{props.label}</Text>
-      <View style={[styles.inputContainer, 
+      <View>
+        <View style={[styles.inputContainer, 
           {
             borderColor: getBorderColor()
           }]}>
 
-        { props.iconName !== null
-          ? <Icon style={styles.icon} name={props.iconName}/>
-          : <View/>
-        }
-        
-        <TextInput
-          {...props}
+          { props.iconName !== null
+            ? <Icon style={styles.icon} name={props.iconName}/>
+            : <View/>
+          }
           
-          onFocus={(e) => {
-            if(props.onFocus) {
-              props.onFocus(e);
-            }
+          <TextInput
+            {...props}
             
-            setIsFocused(true);
-          }}
+            onFocus={(e) => {
+              if(props.onFocus) {
+                props.onFocus(e);
+              }
+              
+              if(!firstTimeFocused) {
+                setFirstTimeFocused(true);
+              }
 
-          onBlur={(e) => {
-            if(props.onBlur) {
-              props.onBlur(e);
-            }
+              setIsFocused(true);
+            }}
 
-            setIsFocused(false);
-          }}
+            onBlur={(e) => {
+              if(props.onBlur) {
+                props.onBlur(e);
+              }
+              setIsFocused(false);
+            }}
 
-          style={styles.input}
-        />
+            style={styles.input}
+          />
+        </View>
+          { props.error.message.length > 0
+            ? <Text style={styles.errorMessage}>{props.error.message}</Text>
+            : <View/> 
+          }
       </View>
-      
-      { props.error.message.length > 0
-        ? <Text style={styles.errorMessage}>{props.error.message}</Text>
-        : <View/> 
-      }
     </View>
   )
 }
@@ -93,6 +97,7 @@ const CustomInputForm = (props: ICustomInputProps) => {
 const styles = StyleSheet.create({
   container: {
     width: "88%",
+    marginBottom: 8
   },
   inputContainer: {
     flex: 0,
@@ -105,7 +110,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
-    marginVertical: 6,
     height: 50,
 
     borderColor: colors.lightGrey,
@@ -116,9 +120,9 @@ const styles = StyleSheet.create({
     color: colors.primary
   },
   label: {
-    marginVertical: 5,
+    marginBottom: 3,
     fontSize: 14,
-    color: colors.grey
+    color: colors.black
   },
   input: {
     color: colors.black,
@@ -128,7 +132,7 @@ const styles = StyleSheet.create({
   errorMessage: {
     color: colors.red,
     fontSize: 14,
-    marginTop: 4
+    marginBottom: 2
   }
 });
 
