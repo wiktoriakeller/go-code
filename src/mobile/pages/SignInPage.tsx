@@ -3,13 +3,14 @@ import React, { useState } from "react"
 import { ICustomInputProps, IValidationError, CustomInputForm, ValidationFunc } from "../components/CustomInputForm";
 import { IButtonProps, CustomButton } from "../components/CustomButton";
 import colors from "../styles/colors";
-import { validateLength } from "./validators";
+import { emailRegex, passwordRegex, validateLength, validateRegex } from "./validators";
 
 const SignInPage = ({ navigation  }) => {
   const [email, setEmail] = useState("");
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const emailValidators = [
-    (value: string) => validateLength(value, 1, 20, "Email must be between 1 and 20 characters")
+    (value: string) => validateLength(value, 2, 20, "Email must be between 2 and 20 characters"),
+    (value: string) => validateRegex(value, emailRegex, "Value must be an email")
   ];
 
   const emailInput: ICustomInputProps = {
@@ -28,13 +29,17 @@ const SignInPage = ({ navigation  }) => {
 
   const [password, setPassword] = useState("");
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
-  const passwordValidators: ValidationFunc[] = [];
+  const passwordValidators: ValidationFunc[] = [
+    (value: string) => validateLength(value, 6, 20, "Password must be between 6 and 20 characters"),
+    (value: string) => validateRegex(value, passwordRegex, "Password must include uppercase and lowercase letters, a number and a special character")
+  ];
 
   const passwordInput: ICustomInputProps = {
     value: password,
     secureTextEntry: true,
     placeholder: "Enter your password",
     label: "Password",
+    iconName: 'lock-outline',
     validators: passwordValidators,
     error: {
       message: passwordErrorMessage,
@@ -119,7 +124,8 @@ const styles = StyleSheet.create({
   subText: {
     color: colors.grey,
     fontSize: 18,
-    marginVertical: 10
+    marginTop: 4,
+    marginBottom: 5
   }
 });
 

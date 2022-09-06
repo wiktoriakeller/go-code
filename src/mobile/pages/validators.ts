@@ -1,3 +1,6 @@
+const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{6,20}$/;
+
 const validateLength = (value: string, minLength: number, maxLength: number, errorMessage: string): [boolean, string] => {
     if(value.length >= minLength && value.length <= maxLength) {
         return [true, ""];
@@ -6,4 +9,12 @@ const validateLength = (value: string, minLength: number, maxLength: number, err
     return [false, errorMessage];
 }
 
-export { validateLength };
+const validateRegex = (value: string, regex: RegExp, errorMessage: string): [boolean, string] => {
+    if(regex.test(value)) {
+        return [true, ""];
+    }
+
+    return [false, errorMessage];
+}
+
+export { validateLength, validateRegex, emailRegex, passwordRegex };

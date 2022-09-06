@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   input: {
     color: colors.black,
     fontSize: 16,
-    paddingHorizontal: 4
+    paddingHorizontal: 6
   },
   errorMessage: {
     color: colors.red,
