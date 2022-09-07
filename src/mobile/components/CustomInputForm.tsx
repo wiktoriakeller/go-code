@@ -3,11 +3,13 @@ import React, { useState, useEffect } from "react";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import colors from "../styles/colors";
 
-interface ICustomInputProps extends TextInputProps {
+interface IInputProps extends TextInputProps {
   label: string;
   validators: ValidationFunc[];
   error: IValidationError;
-  iconName?: string;
+  startIconName?: string;
+  endIconName?: string;
+  onPressEndIcon?: () => void;
 }
 
 interface IValidationError {
@@ -17,9 +19,11 @@ interface IValidationError {
 
 type ValidationFunc = (value: string) => [boolean, string];
 
-const CustomInputForm = (props: ICustomInputProps) => {
+const CustomInputForm = (props: IInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
   const [firstTimeFocused, setFirstTimeFocused] = useState(false);
+  const startIconName = props.startIconName ?? "";
+  const endIconName = props.endIconName ?? "";
 
   useEffect(() => {
     if(props.validators !== null) {
@@ -56,8 +60,11 @@ const CustomInputForm = (props: ICustomInputProps) => {
             borderColor: getBorderColor()
           }]}>
 
-          { props.iconName !== null
-            ? <Icon style={styles.icon} name={props.iconName ?? ""}/>
+          { startIconName.length > 0
+            ? <Icon 
+                style={styles.startIcon} 
+                name={startIconName}
+              />
             : <View/>
           }
           
@@ -85,6 +92,19 @@ const CustomInputForm = (props: ICustomInputProps) => {
 
             style={styles.input}
           />
+
+          { endIconName.length > 0
+            ? <Icon 
+                style={styles.endIcon} 
+                name={endIconName}
+                onPress={() => {
+                  if(props.onPressEndIcon) {
+                    props.onPressEndIcon();
+                  }
+                }}
+              />
+            : <View/>
+          }
         </View>
           { props.error.message.length > 0 && firstTimeFocused
             ? <Text style={styles.errorMessage}>{props.error.message}</Text>
@@ -110,15 +130,20 @@ const styles = StyleSheet.create({
 
     borderWidth: 1,
     borderRadius: 5,
-    paddingHorizontal: 10,
     height: 50,
 
     borderColor: colors.lightGrey,
     backgroundColor: colors.light
   },
-  icon: {
+  startIcon: {
     fontSize: 19,
-    color: colors.primary
+    color: colors.primary,
+    paddingLeft: 10
+  },
+  endIcon: {
+    fontSize: 19,
+    color: colors.primary,
+    marginLeft: "-18%",
   },
   label: {
     marginBottom: 3,
@@ -128,7 +153,8 @@ const styles = StyleSheet.create({
   input: {
     color: colors.black,
     fontSize: 16,
-    paddingHorizontal: 6
+    paddingHorizontal: 6,
+    width: "100%"
   },
   errorMessage: {
     color: colors.red,
@@ -137,4 +163,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export { ICustomInputProps, IValidationError, ValidationFunc, CustomInputForm };
+export { IInputProps, IValidationError, ValidationFunc, CustomInputForm };

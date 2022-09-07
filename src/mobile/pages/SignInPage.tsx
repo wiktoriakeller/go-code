@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, GestureResponderEvent } from "react-native"
 import React, { useState } from "react"
-import { ICustomInputProps, CustomInputForm, ValidationFunc } from "../components/CustomInputForm";
+import { IInputProps, CustomInputForm, ValidationFunc } from "../components/CustomInputForm";
 import { IButtonProps, CustomButton } from "../components/CustomButton";
 import { emailRegex, passwordRegex, validateLength, validateRegex } from "./validators";
 import { LoginNavigation } from "../navigation/navigationTypes";
@@ -14,12 +14,12 @@ const SignInPage = ({ navigation }: LoginNavigation) => {
     (value: string) => validateRegex(value, emailRegex, "Value must be an email")
   ];
 
-  const emailInput: ICustomInputProps = {
+  const emailInput: IInputProps = {
     value: email,
     secureTextEntry: false,
     placeholder: "Enter your email address",
     label: "Email",
-    iconName: "email-outline",
+    startIconName: "email-outline",
     validators: emailValidators,
     error: {
       message: emailErrorMessage,
@@ -30,23 +30,38 @@ const SignInPage = ({ navigation }: LoginNavigation) => {
 
   const [password, setPassword] = useState("");
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+  const [hidePassword, setHidePassword] = useState(true);
+  const [endIconName, setEndIconName] = useState("eye-off-outline");
+  const [secureTextEntry, setSecureTextEntry] = useState(true);
   const passwordValidators: ValidationFunc[] = [
     (value: string) => validateLength(value, 6, 20, "Password must be between 6 and 20 characters"),
     (value: string) => validateRegex(value, passwordRegex, "Password must include uppercase and lowercase letters, a number and a special character")
   ];
 
-  const passwordInput: ICustomInputProps = {
+  const passwordInput: IInputProps = {
     value: password,
-    secureTextEntry: true,
+    secureTextEntry: secureTextEntry,
     placeholder: "Enter your password",
     label: "Password",
-    iconName: 'lock-outline',
+    startIconName: "lock-outline",
+    endIconName: endIconName,
     validators: passwordValidators,
     error: {
       message: passwordErrorMessage,
       setMessage: setPasswordErrorMessage
     },
-    onChangeText: (value: string) => setPassword(value)
+    onChangeText: (value: string) => setPassword(value),
+    onPressEndIcon: () => {
+      setHidePassword(!hidePassword);
+      if(hidePassword) {
+        setEndIconName("eye-off-outline");
+        setSecureTextEntry(true);
+      }
+      else {
+        setEndIconName("eye-outline");
+        setSecureTextEntry(false);
+      }
+    }
   };
 
   const loginButton: IButtonProps = {
