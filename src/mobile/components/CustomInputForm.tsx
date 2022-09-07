@@ -37,7 +37,7 @@ const CustomInputForm = (props: ICustomInputProps) => {
   }, [props.value])
 
   const getBorderColor = (): string => {
-    if(props.error.message.length > 0) {
+    if(props.error.message.length > 0 && firstTimeFocused) {
       return colors.red;
     }
     else if(isFocused) {
@@ -86,7 +86,7 @@ const CustomInputForm = (props: ICustomInputProps) => {
             style={styles.input}
           />
         </View>
-          { props.error.message.length > 0
+          { props.error.message.length > 0 && firstTimeFocused
             ? <Text style={styles.errorMessage}>{props.error.message}</Text>
             : <View/> 
           }
