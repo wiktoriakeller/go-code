@@ -1,17 +1,37 @@
 import { Pressable, Text, StyleSheet, GestureResponderEvent, StyleProp, ViewStyle } from "react-native"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import colors from "../styles/colors"
 
 interface IButtonProps {
   text: string;
+  isDisabled: boolean;
+  onPress: (event: GestureResponderEvent) => void;
   containerStyle?: any;
   textStyle?: any;
-  onPress: (event: GestureResponderEvent) => void;
 }
 
 const CustomButton = (props: IButtonProps) => {
+  const pressableStandardStyles = [styles.container, props.containerStyle ?? {}];
+  const [pressableStyles, setPressableStyles] = useState(pressableStandardStyles);
+
+  useEffect(() => {
+    if(props.isDisabled) {
+      setPressableStyles([...pressableStandardStyles, styles.disabledButton]);
+    }
+    else {
+      setPressableStyles(pressableStandardStyles);
+    }
+  }, [props.isDisabled]);
+
   return (
-    <Pressable onPress={props.onPress} style={[styles.container, props.containerStyle ?? {}]}>
+    <Pressable 
+      onPress={(event: GestureResponderEvent) => {
+        if(!props.isDisabled){
+          props.onPress(event);
+        }
+      }} 
+      style={pressableStyles}
+      >
       <Text style={[styles.text, props.textStyle ?? {}]}>{props.text}</Text>
     </Pressable>
   )
@@ -32,6 +52,9 @@ const styles = StyleSheet.create({
     fontFamily: "sans-serif",
     fontWeight: "bold",
     fontSize: 18
+  },
+  disabledButton: {
+    backgroundColor: colors.grey
   }
 });
 

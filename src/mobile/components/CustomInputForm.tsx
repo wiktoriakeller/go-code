@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
   endIcon: {
     fontSize: 19,
     color: colors.primary,
-    marginLeft: "-18%",
+    marginLeft: "-8%",
   },
   label: {
     marginBottom: 3,
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     color: colors.black,
     fontSize: 16,
     paddingHorizontal: 6,
-    width: "100%"
+    width: "90%"
   },
   errorMessage: {
     color: colors.red,

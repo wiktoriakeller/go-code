@@ -17,4 +17,20 @@ const validateRegex = (value: string, regex: RegExp, errorMessage: string): [boo
     return [false, errorMessage];
 }
 
-export { validateLength, validateRegex, emailRegex, passwordRegex };
+const validateMinLength = <Type extends { length: number }>(data: Type, minVal: number, errorMessage: string): [boolean, string] => {
+    if(data.length >= minVal) {
+        return [true, ""];
+    }
+
+    return [false, errorMessage];
+}
+
+const validateMaxLength = <Type extends { length: number }>(data: Type, maxValue: number, errorMessage: string): [boolean, string] => {
+    if(data.length <= maxValue) {
+        return [true, ""];
+    }
+
+    return [false, errorMessage];
+}
+
+export { validateLength, validateRegex, validateMinLength, validateMaxLength, emailRegex, passwordRegex };

@@ -1,8 +1,8 @@
 import { View, Text, StyleSheet, GestureResponderEvent } from "react-native"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { IInputProps, CustomInputForm, ValidationFunc } from "../components/CustomInputForm";
 import { IButtonProps, CustomButton } from "../components/CustomButton";
-import { emailRegex, passwordRegex, validateLength, validateRegex } from "./validators";
+import { emailRegex, validateMinLength, validateRegex } from "./validators";
 import { LoginNavigation } from "../navigation/navigationTypes";
 import colors from "../styles/colors";
 
@@ -10,7 +10,7 @@ const SignInPage = ({ navigation }: LoginNavigation) => {
   const [email, setEmail] = useState("");
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const emailValidators = [
-    (value: string) => validateLength(value, 2, 20, "Email must be between 2 and 20 characters"),
+    (value: string) => validateMinLength(value, 1, "Email cannot be empty"),
     (value: string) => validateRegex(value, emailRegex, "Value must be an email")
   ];
 
@@ -34,8 +34,7 @@ const SignInPage = ({ navigation }: LoginNavigation) => {
   const [endIconName, setEndIconName] = useState("eye-off-outline");
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const passwordValidators: ValidationFunc[] = [
-    (value: string) => validateLength(value, 6, 20, "Password must be between 6 and 20 characters"),
-    (value: string) => validateRegex(value, passwordRegex, "Password must include uppercase and lowercase letters, a number and a special character")
+    (value: string) => validateMinLength(value, 1, "Password cannot be empty")
   ];
 
   const passwordInput: IInputProps = {
@@ -64,12 +63,23 @@ const SignInPage = ({ navigation }: LoginNavigation) => {
     }
   };
 
+  const [disabledLoginButton, setDisabledLoginButton] = useState(false);
   const loginButton: IButtonProps = {
     text: "Sign in",
+    isDisabled: disabledLoginButton,
     onPress: (event: GestureResponderEvent) => {
       console.warn("Sign in");
     }
   };
+
+  useEffect(() => {
+    if(emailErrorMessage.length > 0 || passwordErrorMessage.length > 0) {
+      setDisabledLoginButton(true);
+    }
+    else {
+      setDisabledLoginButton(false);
+    }
+  }, [emailErrorMessage, passwordErrorMessage]);
 
   const signInGoogleButton: IButtonProps = {
     text: "Sign in with Google",
@@ -80,23 +90,25 @@ const SignInPage = ({ navigation }: LoginNavigation) => {
     textStyle: {
       color: colors.orange,
     },
+    isDisabled: false,
     onPress: (event: GestureResponderEvent) => {
       console.warn("Sign in Google");
     }  
   };
 
   const forgotPasswordButton: IButtonProps = {
-    text: "Forgot password?",
+    text: "Don't have an account? Register",
     containerStyle: {
       color: colors.tertiary,
       backgroundColor: colors.tertiary
     },
     textStyle: {
-      color: colors.grey,
+      color: colors.black,
       fontWeight: "normal"
     },
+    isDisabled: false,
     onPress: (event: GestureResponderEvent) => {
-      navigation.navigate("ForgotPassword");
+      navigation.navigate("Register");
     }  
   };
 
