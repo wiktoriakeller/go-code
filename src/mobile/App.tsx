@@ -3,9 +3,10 @@ import RegisterPage from "./pages/RegisterPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { RootStackParamList } from "./navigation/navigationTypes";
 
 export default function App() {
-  const Stack = createNativeStackNavigator();
+  const Stack = createNativeStackNavigator<RootStackParamList>();
 
   return (
     <NavigationContainer>
@@ -19,7 +20,7 @@ export default function App() {
           component={RegisterPage} 
         />
         <Stack.Screen 
-          name="Forgot password" 
+          name="ForgotPassword" 
           component={ForgotPasswordPage} 
           options={{ title: "Reset password"}}
         />

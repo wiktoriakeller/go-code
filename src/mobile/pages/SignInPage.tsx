@@ -1,11 +1,12 @@
 import { View, Text, StyleSheet, GestureResponderEvent } from "react-native"
 import React, { useState } from "react"
-import { ICustomInputProps, IValidationError, CustomInputForm, ValidationFunc } from "../components/CustomInputForm";
+import { ICustomInputProps, CustomInputForm, ValidationFunc } from "../components/CustomInputForm";
 import { IButtonProps, CustomButton } from "../components/CustomButton";
-import colors from "../styles/colors";
 import { emailRegex, passwordRegex, validateLength, validateRegex } from "./validators";
+import { LoginNavigation } from "../navigation/navigationTypes";
+import colors from "../styles/colors";
 
-const SignInPage = ({ navigation  }) => {
+const SignInPage = ({ navigation }: LoginNavigation) => {
   const [email, setEmail] = useState("");
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const emailValidators = [
@@ -80,7 +81,7 @@ const SignInPage = ({ navigation  }) => {
       fontWeight: "normal"
     },
     onPress: (event: GestureResponderEvent) => {
-      navigation.navigate("Forgot password");
+      navigation.navigate("ForgotPassword");
     }  
   };
 

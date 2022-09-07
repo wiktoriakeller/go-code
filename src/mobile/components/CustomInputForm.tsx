@@ -24,7 +24,8 @@ const CustomInputForm = (props: ICustomInputProps) => {
   useEffect(() => {
     if(props.validators !== null) {
       for(const validator of props.validators) {
-        const result = validator(props.value);
+        const valueToCheck = props.value ?? "";
+        const result = validator(valueToCheck);
         if(!result[0]) {
           props.error.setMessage(result[1]);
           return;
@@ -56,7 +57,7 @@ const CustomInputForm = (props: ICustomInputProps) => {
           }]}>
 
           { props.iconName !== null
-            ? <Icon style={styles.icon} name={props.iconName}/>
+            ? <Icon style={styles.icon} name={props.iconName ?? ""}/>
             : <View/>
           }
           
