@@ -5,9 +5,9 @@ import { CustomInputForm, IInputProps, ValidationFunc } from '../components/Cust
 import { mainFormStyle } from './styles/commonStyles';
 import { CustomButton, IButtonProps } from '../components/CustomButton';
 import colors from '../styles/colors';
-import { RegisterNavigation } from '../navigation/navigationTypes';
+import { SignUpNavigation } from '../navigation/navigationTypes';
 
-const RegisterPage = ({ navigation }: RegisterNavigation) => {
+const SignUpPage = ({ navigation }: SignUpNavigation) => {
   const [email, setEmail] = useState("");
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const emailValidators = [
@@ -183,4 +183,4 @@ const RegisterPage = ({ navigation }: RegisterNavigation) => {
   )
 }
 
-export default RegisterPage
+export default SignUpPage;

@@ -3,11 +3,11 @@ import React, { useEffect, useState } from "react"
 import { IInputProps, CustomInputForm, ValidationFunc } from "../components/CustomInputForm";
 import { IButtonProps, CustomButton } from "../components/CustomButton";
 import { emailRegex, validateMinLength, validateRegex } from "./validators";
-import { LoginNavigation } from "../navigation/navigationTypes";
+import { SignInNavigation } from "../navigation/navigationTypes";
 import { mainFormStyle } from "./styles/commonStyles";
 import colors from "../styles/colors";
 
-const SignInPage = ({ navigation }: LoginNavigation) => {
+const SignInPage = ({ navigation }: SignInNavigation) => {
   const [email, setEmail] = useState("");
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const emailValidators = [
@@ -99,7 +99,7 @@ const SignInPage = ({ navigation }: LoginNavigation) => {
     }  
   };
 
-  const forgotPasswordButton: IButtonProps = {
+  const signUpButton: IButtonProps = {
     text: "Don't have an account? Sign up!",
     containerStyle: {
       color: colors.tertiary,
@@ -111,7 +111,7 @@ const SignInPage = ({ navigation }: LoginNavigation) => {
     },
     isDisabled: false,
     onPress: (event: GestureResponderEvent) => {
-      navigation.navigate("Register");
+      navigation.navigate("SignUp");
     }  
   };
 
@@ -127,7 +127,7 @@ const SignInPage = ({ navigation }: LoginNavigation) => {
         <View style={{ marginBottom: 10 }}/>
         <CustomButton {...loginButton} />
         <CustomButton {...signInGoogleButton} />
-        <CustomButton {...forgotPasswordButton} />
+        <CustomButton {...signUpButton} />
       </View>
     </View>
   )
