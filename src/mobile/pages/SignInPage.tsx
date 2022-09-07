@@ -1,9 +1,10 @@
-import { View, Text, StyleSheet, GestureResponderEvent } from "react-native"
+import { View, Text, GestureResponderEvent } from "react-native"
 import React, { useEffect, useState } from "react"
 import { IInputProps, CustomInputForm, ValidationFunc } from "../components/CustomInputForm";
 import { IButtonProps, CustomButton } from "../components/CustomButton";
 import { emailRegex, validateMinLength, validateRegex } from "./validators";
 import { LoginNavigation } from "../navigation/navigationTypes";
+import { mainFormStyle } from "./styles/commonStyles";
 import colors from "../styles/colors";
 
 const SignInPage = ({ navigation }: LoginNavigation) => {
@@ -21,6 +22,7 @@ const SignInPage = ({ navigation }: LoginNavigation) => {
     label: "Email",
     startIconName: "email-outline",
     validators: emailValidators,
+    autoComplete: "email",
     error: {
       message: emailErrorMessage,
       setMessage: setEmailErrorMessage
@@ -45,6 +47,7 @@ const SignInPage = ({ navigation }: LoginNavigation) => {
     startIconName: "lock-outline",
     endIconName: endIconName,
     validators: passwordValidators,
+    autoComplete: "password",
     error: {
       message: passwordErrorMessage,
       setMessage: setPasswordErrorMessage
@@ -113,12 +116,12 @@ const SignInPage = ({ navigation }: LoginNavigation) => {
   };
 
   return (
-    <View style={styles.root}>
-      <View style={styles.textContainer}>
-        <Text style={styles.titleText}>Login</Text>
-        <Text style={styles.subText}>Enter your details to login</Text>
+    <View style={mainFormStyle.root}>
+      <View style={mainFormStyle.textContainer}>
+        <Text style={mainFormStyle.titleText}>Login</Text>
+        <Text style={mainFormStyle.subText}>Enter your details to login</Text>
       </View>
-      <View style={styles.inputContainer}>
+      <View style={mainFormStyle.inputContainer}>
         <CustomInputForm {...emailInput} />
         <CustomInputForm {...passwordInput} />
         <View style={{ marginBottom: 10 }}/>
@@ -129,32 +132,5 @@ const SignInPage = ({ navigation }: LoginNavigation) => {
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: colors.background
-  },
-  inputContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-start"
-  },
-  textContainer: {
-    marginLeft: "6%",
-    marginBottom: 10
-  },
-  titleText: {
-    color: colors.black,
-    fontSize: 40,
-    fontWeight: "bold"
-  },
-  subText: {
-    color: colors.grey,
-    fontSize: 18,
-    marginTop: 4,
-    marginBottom: 5
-  }
-});
 
 export default SignInPage;
