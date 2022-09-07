@@ -4,8 +4,10 @@ import { emailRegex, passwordRegex, validateLength, validateRegex } from './vali
 import { CustomInputForm, IInputProps, ValidationFunc } from '../components/CustomInputForm';
 import { mainFormStyle } from './styles/commonStyles';
 import { CustomButton, IButtonProps } from '../components/CustomButton';
+import colors from '../styles/colors';
+import { RegisterNavigation } from '../navigation/navigationTypes';
 
-const RegisterPage = () => {
+const RegisterPage = ({ navigation }: RegisterNavigation) => {
   const [email, setEmail] = useState("");
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const emailValidators = [
@@ -146,6 +148,22 @@ const RegisterPage = () => {
     setDisabledSignUpButton(false);
   }, errorMessages);
 
+  const goBackButton: IButtonProps = {
+    text: "Already have an account? Sign in!",
+    containerStyle: {
+      color: colors.tertiary,
+      backgroundColor: colors.tertiary
+    },
+    textStyle: {
+      color: colors.black,
+      fontWeight: "normal"
+    },
+    isDisabled: false,
+    onPress: (event: GestureResponderEvent) => {
+      navigation.goBack();
+    }  
+  };
+
   return (
     <View style={mainFormStyle.root}>
       <View style={mainFormStyle.textContainer}>
@@ -159,6 +177,7 @@ const RegisterPage = () => {
         <CustomInputForm {...confirmPasswordInput} />
         <View style={{ marginBottom: 10 }}/>
         <CustomButton {...signUpButton} />
+        <CustomButton {...goBackButton} />
       </View>
     </View>
   )

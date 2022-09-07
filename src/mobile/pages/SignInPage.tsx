@@ -100,7 +100,7 @@ const SignInPage = ({ navigation }: LoginNavigation) => {
   };
 
   const forgotPasswordButton: IButtonProps = {
-    text: "Don't have an account? Register",
+    text: "Don't have an account? Sign up!",
     containerStyle: {
       color: colors.tertiary,
       backgroundColor: colors.tertiary
