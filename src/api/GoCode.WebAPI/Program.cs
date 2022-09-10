@@ -14,6 +14,8 @@ builder.Services.ConfigureCors();
 
 var app = builder.Build();
 
+app.UseCors("mobile");
+
 app.ApplyMigrations();
 
 await app.SeedDatabase();
@@ -22,9 +24,7 @@ app.UseSwagger();
 
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
-
-app.UseCors();
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 

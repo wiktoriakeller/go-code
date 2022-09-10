@@ -131,7 +131,7 @@ const SignUpPage = ({ navigation }: SignUpNavigation) => {
   const signUpButton: IButtonProps = {
     text: "Sign up",
     isDisabled: disabledSignUpButton,
-    onPress: (event: GestureResponderEvent) => {
+    onPress: async (event: GestureResponderEvent) => {
       console.warn("Sign up");
     }
   };
@@ -159,7 +159,7 @@ const SignUpPage = ({ navigation }: SignUpNavigation) => {
       fontWeight: "normal"
     },
     isDisabled: false,
-    onPress: (event: GestureResponderEvent) => {
+    onPress: async (event: GestureResponderEvent) => {
       navigation.goBack();
     }  
   };
@@ -167,7 +167,7 @@ const SignUpPage = ({ navigation }: SignUpNavigation) => {
   return (
     <View style={mainFormStyle.root}>
       <View style={mainFormStyle.textContainer}>
-        <Text style={mainFormStyle.titleText}>Register</Text>
+        <Text style={mainFormStyle.titleText}>Sign Up</Text>
         <Text style={mainFormStyle.subText}>Create new account here</Text>
       </View>
       <View style={mainFormStyle.inputContainer}>

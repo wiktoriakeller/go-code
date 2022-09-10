@@ -18,9 +18,9 @@ namespace GoCode.Application.Common.BaseResponse
 
         public static Response<T> NotFound<T>(string error) => new(error, ResponseError.NotFound, HttpStatusCode.BadRequest);
 
-        public static Response<T> AuthorizationFail<T>(IEnumerable<string> errors) => new(errors, ResponseError.AuthorizationFail, HttpStatusCode.Unauthorized);
+        public static Response<T> Unauthorized<T>(IEnumerable<string> errors) => new(errors, ResponseError.AuthorizationFail, HttpStatusCode.Unauthorized);
 
-        public static Response<T> AuthorizationFail<T>(string error) => new(error, ResponseError.AuthorizationFail, HttpStatusCode.Unauthorized);
+        public static Response<T> Unauthorized<T>(string error) => new(error, ResponseError.AuthorizationFail, HttpStatusCode.Unauthorized);
 
         public static Response<T> ValidationError<T>(IEnumerable<string> errors) => new(errors, ResponseError.ValidationError, HttpStatusCode.BadRequest);
 

@@ -6,13 +6,13 @@ import { emailRegex, validateMinLength, validateRegex } from "./validators";
 import { SignInNavigation } from "../navigation/navigationTypes";
 import { mainFormStyle } from "./styles/commonStyles";
 import colors from "../styles/colors";
+import { signIn } from "../hooks/api/identity/signIn";
 
 const SignInPage = ({ navigation }: SignInNavigation) => {
   const [email, setEmail] = useState("");
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const emailValidators = [
     (value: string) => validateMinLength(value, 1, "Email cannot be empty"),
-    (value: string) => validateRegex(value, emailRegex, "Value must be an email")
   ];
 
   const emailInput: IInputProps = {
@@ -70,7 +70,7 @@ const SignInPage = ({ navigation }: SignInNavigation) => {
   const loginButton: IButtonProps = {
     text: "Sign in",
     isDisabled: disabledLoginButton,
-    onPress: (event: GestureResponderEvent) => {
+    onPress: async (event: GestureResponderEvent) => {
       console.warn("Sign in");
     }
   };
@@ -94,8 +94,11 @@ const SignInPage = ({ navigation }: SignInNavigation) => {
       color: colors.orange,
     },
     isDisabled: false,
-    onPress: (event: GestureResponderEvent) => {
-      console.warn("Sign in Google");
+    onPress: async (event: GestureResponderEvent) => {
+      const res = await signIn({
+        email: email,
+        password: password
+      });
     }  
   };
 
@@ -110,15 +113,16 @@ const SignInPage = ({ navigation }: SignInNavigation) => {
       fontWeight: "normal"
     },
     isDisabled: false,
-    onPress: (event: GestureResponderEvent) => {
+    onPress: async (event: GestureResponderEvent) => {
       navigation.navigate("SignUp");
+
     }  
   };
 
   return (
     <View style={mainFormStyle.root}>
       <View style={mainFormStyle.textContainer}>
-        <Text style={mainFormStyle.titleText}>Login</Text>
+        <Text style={mainFormStyle.titleText}>Sign In</Text>
         <Text style={mainFormStyle.subText}>Enter your details to login</Text>
       </View>
       <View style={mainFormStyle.inputContainer}>

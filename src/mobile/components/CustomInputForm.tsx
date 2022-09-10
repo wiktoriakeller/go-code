@@ -1,4 +1,4 @@
-import { View, TextInput, Text, StyleSheet, TextInputProps, NativeSyntheticEvent, TextInputFocusEventData } from "react-native";
+import { View, TextInput, Text, StyleSheet, TextInputProps } from "react-native";
 import React, { useState, useEffect } from "react";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import colors from "../styles/colors";

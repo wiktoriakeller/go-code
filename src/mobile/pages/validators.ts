@@ -33,4 +33,11 @@ const validateMaxLength = <Type extends { length: number }>(data: Type, maxValue
     return [false, errorMessage];
 }
 
-export { validateLength, validateRegex, validateMinLength, validateMaxLength, emailRegex, passwordRegex };
+export { 
+    validateLength, 
+    validateRegex, 
+    validateMinLength, 
+    validateMaxLength, 
+    emailRegex, 
+    passwordRegex 
+};

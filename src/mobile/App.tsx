@@ -12,11 +12,13 @@ export default function App() {
       <Stack.Navigator initialRouteName="SignIn">
         <Stack.Screen 
           name="SignIn" 
-          component={SignInPage} 
+          component={SignInPage}
+          options={{ title: "Sign In"}}
         />
         <Stack.Screen 
           name="SignUp" 
           component={SignUpPage} 
+          options={{ title: "Sign Up"}}
         />
       </Stack.Navigator>
     </NavigationContainer>

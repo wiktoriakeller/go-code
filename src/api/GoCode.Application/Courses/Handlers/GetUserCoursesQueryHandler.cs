@@ -31,7 +31,7 @@ namespace GoCode.Application.Courses.Handlers
 
             if (currentUser is null)
             {
-                return ResponseResult.AuthorizationFail<GetUserCoursesResponse>(ErrorMessages.Identity.UnauthorizedUser);
+                return ResponseResult.Unauthorized<GetUserCoursesResponse>(ErrorMessages.Identity.UnauthorizedUser);
             }
 
             var courses = _coursesRepository.GetCoursesWithAll(x => x.UserCourses.Any(uc => uc.UserId == currentUser.Id));

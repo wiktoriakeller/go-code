@@ -1,11 +1,11 @@
-import { Pressable, Text, StyleSheet, GestureResponderEvent, StyleProp, ViewStyle } from "react-native"
+import { Pressable, Text, StyleSheet, GestureResponderEvent } from "react-native"
 import React, { useEffect, useState } from "react"
 import colors from "../styles/colors"
 
 interface IButtonProps {
   text: string;
   isDisabled: boolean;
-  onPress: (event: GestureResponderEvent) => void;
+  onPress: (event: GestureResponderEvent) => Promise<void>;
   containerStyle?: any;
   textStyle?: any;
 }
@@ -25,9 +25,9 @@ const CustomButton = (props: IButtonProps) => {
 
   return (
     <Pressable 
-      onPress={(event: GestureResponderEvent) => {
+      onPress={async (event: GestureResponderEvent) => {
         if(!props.isDisabled){
-          props.onPress(event);
+          await props.onPress(event);
         }
       }} 
       style={pressableStyles}

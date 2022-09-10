@@ -30,7 +30,7 @@ namespace GoCode.Application.Courses.Handlers
 
             if (currentUser is null)
             {
-                return ResponseResult.AuthorizationFail<SignUpForCourseResponse>(ErrorMessages.Identity.UnauthorizedUser);
+                return ResponseResult.Unauthorized<SignUpForCourseResponse>(ErrorMessages.Identity.UnauthorizedUser);
             }
 
             var selectedCourse = await _courseRepository.FirstOrDefaultWithAllAsync(x => x.Id == request.Id);
