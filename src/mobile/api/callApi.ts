@@ -1,4 +1,5 @@
 import axios, { AxiosError } from "axios";
+import { getData } from "./storage";
 import {  
   StatusCodes, 
   ApiRequest,
@@ -6,12 +7,16 @@ import {
 } from "./common";
 
 const requestInterceptor = axios.interceptors.request.use(
-  (config) => {
-    //const jwt = localStorage.getItem("jwt");
+  async (config) => {
+    const jwt = await getData("jwt");
 
-    //if(jwt) {
-    //  config.headers.Authorization = `${jwt}`;
-    ///}
+    if(!config.headers) {
+      config.headers = {}
+    }
+
+    if(jwt) {
+      config.headers.Authorization = `${jwt}`;
+    }
 
     return config;
   },

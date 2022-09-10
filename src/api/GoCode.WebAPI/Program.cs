@@ -14,7 +14,7 @@ builder.Services.ConfigureCors();
 
 var app = builder.Build();
 
-app.UseCors("mobile");
+app.UseCors();
 
 app.ApplyMigrations();
 

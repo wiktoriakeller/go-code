@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Cors;
 namespace GoCode.WebAPI.Controllers
 {
     [Route("api/v1/identity")]
+    [EnableCors("mobile")]
     public class IdentityController : BaseApiController
     {
         public IdentityController(IMediator mediator, IMapper mapper) : base(mediator, mapper)

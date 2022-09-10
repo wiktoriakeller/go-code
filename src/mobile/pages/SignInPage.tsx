@@ -6,7 +6,7 @@ import { emailRegex, validateMinLength, validateRegex } from "./validators";
 import { SignInNavigation } from "../navigation/navigationTypes";
 import { mainFormStyle } from "./styles/commonStyles";
 import colors from "../styles/colors";
-import { signIn } from "../hooks/api/identity/signIn";
+import { signIn } from "../api/identity/signIn";
 
 const SignInPage = ({ navigation }: SignInNavigation) => {
   const [email, setEmail] = useState("");
