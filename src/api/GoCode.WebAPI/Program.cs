@@ -10,6 +10,7 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerDoc();
+builder.Services.ConfigureCors();
 
 var app = builder.Build();
 
@@ -23,14 +24,16 @@ app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
+app.UseCors();
+
 app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.UseMiddleware<IdentityMiddleware>();
+app.UseIdentityMiddleware();
+
+app.UseErrorHandlingMiddleware();
 
 app.MapControllers();
-
-app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.Run();

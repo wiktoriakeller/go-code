@@ -29,4 +29,10 @@ namespace GoCode.WebAPI.Middleware
             await _next(context);
         }
     }
+
+    public static class IdentityMiddlewareExtension
+    {
+        public static IApplicationBuilder UseIdentityMiddleware(this IApplicationBuilder builder) =>
+            builder.UseMiddleware<IdentityMiddleware>();
+    }
 }
