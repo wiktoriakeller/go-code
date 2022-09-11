@@ -132,15 +132,14 @@ namespace GoCode.Infrastructure.Identity
 
             if (storedTokens.Count != 1)
             {
-                return ResponseResult.ValidationError<RefreshTokenResponse>(ErrorMessages.Identity.InvalidToken);
+                return ResponseResult.Unauthorized<RefreshTokenResponse>(ErrorMessages.Identity.InvalidToken);
             }
 
             var storedToken = storedTokens.First();
 
-            if (storedToken.ExpiryDate >= DateTime.UtcNow ||
-                storedToken.JwtId != result.jti)
+            if (storedToken.ExpiryDate >= DateTime.UtcNow || storedToken.JwtId != result.jti)
             {
-                return ResponseResult.ValidationError<RefreshTokenResponse>(ErrorMessages.Identity.InvalidToken);
+                return ResponseResult.Unauthorized<RefreshTokenResponse>(ErrorMessages.Identity.InvalidToken);
             }
 
             var user = await _userManager.FindByIdAsync(result.userId);
@@ -160,14 +159,14 @@ namespace GoCode.Infrastructure.Identity
         {
             if (token is null)
             {
-                return (ResponseResult.ValidationError<T>(ErrorMessages.Identity.InvalidToken), null, null);
+                return (ResponseResult.Unauthorized<T>(ErrorMessages.Identity.InvalidToken), null, null);
             }
 
             var validatedJwt = _jwtService.GetPrincipalFromJwtToken(token);
 
             if (validatedJwt == null)
             {
-                return (ResponseResult.ValidationError<T>(ErrorMessages.Identity.InvalidToken), null, null);
+                return (ResponseResult.Unauthorized<T>(ErrorMessages.Identity.InvalidToken), null, null);
             }
 
             var jti = validatedJwt.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti)?.Value;
@@ -175,7 +174,7 @@ namespace GoCode.Infrastructure.Identity
 
             if (jti == null || userId == null)
             {
-                return (ResponseResult.ValidationError<T>(ErrorMessages.Identity.InvalidToken), null, null);
+                return (ResponseResult.Unauthorized<T>(ErrorMessages.Identity.InvalidToken), null, null);
             }
 
             return (ResponseResult.Ok<T>(), userId, jti);

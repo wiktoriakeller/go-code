@@ -1,5 +1,6 @@
 ﻿using GoCode.Application.Common.Contracts.Identity;
 using Microsoft.AspNetCore.Authentication;
+using System.Text.Json;
 
 namespace GoCode.WebAPI.Middleware
 {
@@ -23,10 +24,27 @@ namespace GoCode.WebAPI.Middleware
                 if (response.Succeeded)
                 {
                     context.Items["User"] = response.Data;
+                    await _next(context);
+                }
+                else
+                {
+                    var contextResponse = context.Response;
+                    contextResponse.ContentType = "application/json";
+                    contextResponse.StatusCode = (int)response.HttpStatusCode;
+                    var result = JsonSerializer.Serialize(response);
+                    await contextResponse.WriteAsync(result);
                 }
             }
-
-            await _next(context);
+            else
+            {
+                await _next(context);
+            }
         }
+    }
+
+    public static class IdentityMiddlewareExtension
+    {
+        public static IApplicationBuilder UseIdentityMiddleware(this IApplicationBuilder builder) =>
+            builder.UseMiddleware<IdentityMiddleware>();
     }
 }

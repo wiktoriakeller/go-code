@@ -2,6 +2,7 @@
 using GoCode.Application.Courses.Queries;
 using GoCode.Application.Courses.Requests;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 
 namespace GoCode.WebAPI.Controllers
 {
@@ -14,6 +15,7 @@ namespace GoCode.WebAPI.Controllers
         }
 
         [HttpGet]
+        [EnableCors("mobile")]
         public async Task<IActionResult> GetAllCourses()
         {
             var query = new GetAllCoursesQuery();
@@ -22,10 +24,20 @@ namespace GoCode.WebAPI.Controllers
         }
 
         [HttpGet("user")]
+        [EnableCors("mobile")]
         public async Task<IActionResult> GetUserCourses()
         {
             var query = new GetUserCoursesQuery();
             var response = await _medaitor.Send(query);
+            return GetStatusCode(response);
+        }
+
+        [HttpPatch("signup/{id}")]
+        [EnableCors("mobile")]
+        public async Task<IActionResult> SignUpForACourse([FromRoute] int id)
+        {
+            var command = new SignUpForCourseCommand() { Id = id };
+            var response = await _medaitor.Send(command);
             return GetStatusCode(response);
         }
 
@@ -42,14 +54,6 @@ namespace GoCode.WebAPI.Controllers
             }
 
             return Created($"api/v1/courses/{response.Data?.Id}", response);
-        }
-
-        [HttpPatch("signup/{id}")]
-        public async Task<IActionResult> SignUpForACourse([FromRoute] int id)
-        {
-            var command = new SignUpForCourseCommand() { Id = id };
-            var response = await _medaitor.Send(command);
-            return GetStatusCode(response);
         }
 
         [HttpPut("{id}")]

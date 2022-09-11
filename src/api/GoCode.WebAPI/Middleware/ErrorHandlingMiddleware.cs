@@ -30,4 +30,10 @@ namespace GoCode.WebAPI.Middleware
             }
         }
     }
+
+    public static class ErrorHandlingMiddlewareExtension
+    {
+        public static IApplicationBuilder UseErrorHandlingMiddleware(this IApplicationBuilder builder) =>
+            builder.UseMiddleware<ErrorHandlingMiddleware>();
+    }
 }

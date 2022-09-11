@@ -1,11 +1,13 @@
 ﻿using GoCode.Application.Form.Commands;
 using GoCode.Application.Form.Requests;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 
 namespace GoCode.WebAPI.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("api/v1/form")]
+    [EnableCors("mobile")]
     public class FormController : BaseApiController
     {
         public FormController(IMediator mediator, IMapper mapper) : base(mediator, mapper)
