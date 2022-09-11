@@ -1,4 +1,4 @@
-import { View, Text, GestureResponderEvent } from "react-native"
+import { View, Text } from "react-native"
 import React, { useEffect, useState } from "react"
 import { IInputProps, CustomInputForm } from "../components/CustomInputForm";
 import { IButtonProps, CustomButton } from "../components/CustomButton";
@@ -6,10 +6,15 @@ import { validateMinLength, ValidationFunc } from "../validation/validators";
 import { SignInNavigation } from "../navigation/common";
 import { mainFormStyle } from "./styles/formStyles";
 import colors from "../styles/colors";
-import { signIn } from "../api/identity/signIn";
+import { signIn, SignInResponse } from "../api/identity/signIn";
 import { useHidePassword } from "../hooks/useHidePassword";
+import { ApiResponse } from "../api/common";
+import { Messages } from "../components/Messages";
 
 export const SignInPage = ({ navigation }: SignInNavigation) => {
+  const [loading, setLoading] = useState(false);
+  const [apiErrorMessages, setApiErrorMessages] = useState([] as string[]);
+
   const [email, setEmail] = useState("");
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const emailValidators = [
@@ -59,8 +64,17 @@ export const SignInPage = ({ navigation }: SignInNavigation) => {
   const loginButton: IButtonProps = {
     text: "Sign in",
     isDisabled: disabledLoginButton,
-    onPress: async (event: GestureResponderEvent) => {
-      console.warn("Sign in");
+    onPress: () => {
+      setLoading(true);
+      setApiErrorMessages([]);
+
+      signIn({
+        email: email,
+        password: password
+      })
+      .then(() => navigation.navigate("Home"))
+      .catch((error: ApiResponse<SignInResponse>) => setApiErrorMessages(error.errors))
+      .finally(() => setLoading(false))
     }
   };
 
@@ -83,12 +97,7 @@ export const SignInPage = ({ navigation }: SignInNavigation) => {
       color: colors.orange,
     },
     isDisabled: false,
-    onPress: async (event: GestureResponderEvent) => {
-      const res = await signIn({
-        email: email,
-        password: password
-      });
-    }  
+    onPress: () => console.log("Sign in google")
   };
 
   const signUpButton: IButtonProps = {
@@ -102,11 +111,15 @@ export const SignInPage = ({ navigation }: SignInNavigation) => {
       fontWeight: "normal"
     },
     isDisabled: false,
-    onPress: async () => navigation.navigate("SignUp")
+    onPress: () => navigation.navigate("SignUp")
   };
 
   return (
     <View style={mainFormStyle.root}>
+      { apiErrorMessages.length > 0 
+        ? <Messages messages={apiErrorMessages} isError={true}/>
+        : <View/>
+      }
       <View style={mainFormStyle.textContainer}>
         <Text style={mainFormStyle.titleText}>Sign In</Text>
         <Text style={mainFormStyle.subText}>Enter your details to login</Text>

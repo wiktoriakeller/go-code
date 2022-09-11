@@ -5,7 +5,7 @@ import colors from "../styles/colors"
 interface IButtonProps {
   text: string;
   isDisabled: boolean;
-  onPress: (event: GestureResponderEvent) => Promise<void>;
+  onPress: (event: GestureResponderEvent) => void;
   containerStyle?: any;
   textStyle?: any;
 }
@@ -25,9 +25,9 @@ const CustomButton = (props: IButtonProps) => {
 
   return (
     <Pressable 
-      onPress={async (event: GestureResponderEvent) => {
+      onPress={(event: GestureResponderEvent) => {
         if(!props.isDisabled){
-          await props.onPress(event);
+          props.onPress(event);
         }
       }} 
       style={pressableStyles}

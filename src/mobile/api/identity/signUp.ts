@@ -23,7 +23,12 @@ async function signIn(params: SignUpRequest): Promise<ApiResponse<SignUpResponse
   };
 
   const response = await callApi<SignUpRequest, SignUpResponse>(request);
-  return response;
+  
+  if(response.succeeded) {
+    return response;
+  }
+
+  throw response;
 }
 
 export { signIn, SignUpRequest, SignUpResponse };

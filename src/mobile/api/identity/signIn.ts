@@ -30,8 +30,10 @@ async function signIn(params: SignInRequest): Promise<ApiResponse<SignInResponse
   if(response.succeeded && response.data) {
     await storeData(tokenKey, response.data.token);
     await storeData(refreshTokenKey, response.data.refreshToken);
+    return response;
   }
-  return response;
+
+  throw response;
 }
 
 export { signIn, SignInRequest, SignInResponse };

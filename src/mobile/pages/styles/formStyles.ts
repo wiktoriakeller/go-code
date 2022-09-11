@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import colors from "../../styles/colors";
 
-const mainFormStyle = StyleSheet.create({
+export const mainFormStyle = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: colors.background
@@ -27,5 +27,3 @@ const mainFormStyle = StyleSheet.create({
     marginBottom: 5
   }
 });
-
-export { mainFormStyle };

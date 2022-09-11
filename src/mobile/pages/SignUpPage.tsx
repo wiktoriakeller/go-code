@@ -1,4 +1,4 @@
-import { View, Text, GestureResponderEvent } from "react-native"
+import { View, Text } from "react-native"
 import React, { useEffect, useState } from "react"
 import { emailRegex, passwordRegex, validateLength, validateRegex, ValidationFunc } from "../validation/validators";
 import { CustomInputForm, IInputProps } from "../components/CustomInputForm";
@@ -108,9 +108,7 @@ export const SignUpPage = ({ navigation }: SignUpNavigation) => {
   const signUpButton: IButtonProps = {
     text: "Sign up",
     isDisabled: disabledSignUpButton,
-    onPress: async (event: GestureResponderEvent) => {
-      console.warn("Sign up");
-    }
+    onPress: () => console.log("Sign up")
   };
 
   const errorMessages = [emailErrorMessage, usernameErrorMessage, passwordErrorMessage, confirmPasswordErrorMessage];
@@ -136,7 +134,7 @@ export const SignUpPage = ({ navigation }: SignUpNavigation) => {
       fontWeight: "normal"
     },
     isDisabled: false,
-    onPress: async () => navigation.goBack()
+    onPress: () => navigation.goBack()
   };
 
   return (
