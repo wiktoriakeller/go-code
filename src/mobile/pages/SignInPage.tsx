@@ -74,6 +74,7 @@ export const SignInPage = ({ navigation }: SignInNavigation) => {
     onPress: () => {
       setLoading(true);
       setApiErrorMessages([]);
+      setDisabledLoginButton(true);
 
       signIn({
         email: email,
@@ -81,7 +82,10 @@ export const SignInPage = ({ navigation }: SignInNavigation) => {
       })
       .then(() => navigation.navigate("Home"))
       .catch((error: ApiResponse<SignInResponse>) => setApiErrorMessages(error.errors))
-      .finally(() => setLoading(false))
+      .finally(() => {
+        setLoading(false);
+        setDisabledLoginButton(false);
+      })
     }
   };
 
