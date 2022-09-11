@@ -10,6 +10,7 @@ import { signIn, SignInResponse } from "../api/identity/signIn";
 import { useHidePassword } from "../hooks/useHidePassword";
 import { ApiResponse } from "../api/common";
 import { Messages } from "../components/Messages";
+import Spinner from "react-native-loading-spinner-overlay";
 
 export const SignInPage = ({ navigation }: SignInNavigation) => {
   const [loading, setLoading] = useState(false);
@@ -33,7 +34,10 @@ export const SignInPage = ({ navigation }: SignInNavigation) => {
       message: emailErrorMessage,
       setMessage: setEmailErrorMessage
     },
-    onChangeText: (value: string) => setEmail(value)
+    onChangeText: (value: string) => {
+      setEmail(value);
+      setApiErrorMessages([]);
+    }
   };
 
   const [password, setPassword] = useState("");
@@ -56,7 +60,10 @@ export const SignInPage = ({ navigation }: SignInNavigation) => {
       message: passwordErrorMessage,
       setMessage: setPasswordErrorMessage
     },
-    onChangeText: (value: string) => setPassword(value),
+    onChangeText: (value: string) => {
+      setPassword(value);
+      setApiErrorMessages([]);
+    },
     onPressEndIcon: () => hidePassowrd.hide()
   };
 
@@ -116,6 +123,10 @@ export const SignInPage = ({ navigation }: SignInNavigation) => {
 
   return (
     <View style={mainFormStyle.root}>
+      <Spinner
+        visible={loading}
+        textContent={""}
+      />
       { apiErrorMessages.length > 0 
         ? <Messages messages={apiErrorMessages} isError={true}/>
         : <View/>
