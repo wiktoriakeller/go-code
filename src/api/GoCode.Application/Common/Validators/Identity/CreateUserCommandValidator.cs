@@ -17,9 +17,13 @@ namespace GoCode.Application.Common.Validators.Identity
                 .WithMessage(ErrorMessages.Identity.UserExists);
 
             RuleFor(x => x.Password)
-                .NotEmpty()
                 .MinimumLength(6)
                 .MaximumLength(20);
+
+            RuleFor(x => x.UserName)
+                .MinimumLength(2)
+                .MaximumLength(20)
+                .When(x => x.UserName?.Length > 0);
         }
     }
 }

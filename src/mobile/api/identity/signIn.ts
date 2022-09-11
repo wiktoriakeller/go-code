@@ -1,10 +1,11 @@
 import { callApi } from "../callApi";
 import { storeData } from "../storage";
 import { 
-  baseUrl,
   identityPaths, 
   ApiRequest, 
   ApiResponse, 
+  tokenKey,
+  refreshTokenKey
 } from "../common";
 
 interface SignInResponse {
@@ -19,7 +20,7 @@ interface SignInRequest {
 
 async function signIn(params: SignInRequest): Promise<ApiResponse<SignInResponse>> {
   const request: ApiRequest<SignInRequest> = {
-    url: baseUrl + identityPaths.login,
+    url: identityPaths.signIn,
     method: "POST",
     data: params,
   };
@@ -27,10 +28,9 @@ async function signIn(params: SignInRequest): Promise<ApiResponse<SignInResponse
   const response = await callApi<SignInRequest, SignInResponse>(request);
 
   if(response.succeeded && response.data) {
-    await storeData("jwt", response.data.token);
-    await storeData("refresh", response.data.refreshToken);
+    await storeData(tokenKey, response.data.token);
+    await storeData(refreshTokenKey, response.data.refreshToken);
   }
-
   return response;
 }
 

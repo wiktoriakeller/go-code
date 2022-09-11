@@ -1,14 +1,15 @@
 import { View, Text, GestureResponderEvent } from "react-native"
 import React, { useEffect, useState } from "react"
-import { IInputProps, CustomInputForm, ValidationFunc } from "../components/CustomInputForm";
+import { IInputProps, CustomInputForm } from "../components/CustomInputForm";
 import { IButtonProps, CustomButton } from "../components/CustomButton";
-import { emailRegex, validateMinLength, validateRegex } from "./validators";
-import { SignInNavigation } from "../navigation/navigationTypes";
-import { mainFormStyle } from "./styles/commonStyles";
+import { validateMinLength, ValidationFunc } from "../validation/validators";
+import { SignInNavigation } from "../navigation/common";
+import { mainFormStyle } from "./styles/formStyles";
 import colors from "../styles/colors";
 import { signIn } from "../api/identity/signIn";
+import { useHidePassword } from "../hooks/useHidePassword";
 
-const SignInPage = ({ navigation }: SignInNavigation) => {
+export const SignInPage = ({ navigation }: SignInNavigation) => {
   const [email, setEmail] = useState("");
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const emailValidators = [
@@ -32,20 +33,18 @@ const SignInPage = ({ navigation }: SignInNavigation) => {
 
   const [password, setPassword] = useState("");
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
-  const [hidePassword, setHidePassword] = useState(true);
-  const [endIconName, setEndIconName] = useState("eye-off-outline");
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const passwordValidators: ValidationFunc[] = [
+  const hidePassowrd = useHidePassword();
+  const passwordValidators: ValidationFunc<string>[] = [
     (value: string) => validateMinLength(value, 1, "Password cannot be empty")
   ];
 
   const passwordInput: IInputProps = {
     value: password,
-    secureTextEntry: secureTextEntry,
+    secureTextEntry: hidePassowrd.secureTextEntry,
     placeholder: "Enter your password",
     label: "Password",
     startIconName: "lock-outline",
-    endIconName: endIconName,
+    endIconName: hidePassowrd.endIconName,
     validators: passwordValidators,
     autoComplete: "password",
     error: {
@@ -53,17 +52,7 @@ const SignInPage = ({ navigation }: SignInNavigation) => {
       setMessage: setPasswordErrorMessage
     },
     onChangeText: (value: string) => setPassword(value),
-    onPressEndIcon: () => {
-      setHidePassword(!hidePassword);
-      if(hidePassword) {
-        setEndIconName("eye-off-outline");
-        setSecureTextEntry(true);
-      }
-      else {
-        setEndIconName("eye-outline");
-        setSecureTextEntry(false);
-      }
-    }
+    onPressEndIcon: () => hidePassowrd.hide()
   };
 
   const [disabledLoginButton, setDisabledLoginButton] = useState(false);
@@ -113,10 +102,7 @@ const SignInPage = ({ navigation }: SignInNavigation) => {
       fontWeight: "normal"
     },
     isDisabled: false,
-    onPress: async (event: GestureResponderEvent) => {
-      navigation.navigate("SignUp");
-
-    }  
+    onPress: async () => navigation.navigate("SignUp")
   };
 
   return (
@@ -136,5 +122,3 @@ const SignInPage = ({ navigation }: SignInNavigation) => {
     </View>
   )
 }
-
-export default SignInPage;

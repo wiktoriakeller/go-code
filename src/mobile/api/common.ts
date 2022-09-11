@@ -1,8 +1,8 @@
 const baseUrl = "http://192.168.1.74:5219/api/v1/";
   
 const identityPaths = {
-  register: "identity/register",
-  login: "identity/login",
+  signUp: "identity/register",
+  signIn: "identity/login",
   refreshToken: "identity/refresh"
 }
 
@@ -40,12 +40,17 @@ interface ResponseError {
   name: string;
 }
 
+const tokenKey = "jwt";
+const refreshTokenKey = "refresh";
+
 export { 
-  baseUrl, 
+  baseUrl,
   identityPaths, 
   coursesPaths, 
   StatusCodes, 
-  ApiRequest, 
-  ApiResponse, 
-  ResponseError 
+  ApiRequest,
+  ApiResponse,
+  ResponseError,
+  tokenKey,
+  refreshTokenKey
 }

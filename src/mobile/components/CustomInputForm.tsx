@@ -2,22 +2,16 @@ import { View, TextInput, Text, StyleSheet, TextInputProps } from "react-native"
 import React, { useState, useEffect } from "react";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import colors from "../styles/colors";
+import { ValidationFunc, IValidationError } from "../validation/validators";
 
 interface IInputProps extends TextInputProps {
   label: string;
-  validators: ValidationFunc[];
+  validators: ValidationFunc<string>[];
   error: IValidationError;
   startIconName?: string;
   endIconName?: string;
   onPressEndIcon?: () => void;
 }
-
-interface IValidationError {
-  message: string;
-  setMessage: React.Dispatch<React.SetStateAction<string>>;
-}
-
-type ValidationFunc = (value: string) => [boolean, string];
 
 const CustomInputForm = (props: IInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -44,7 +38,8 @@ const CustomInputForm = (props: IInputProps) => {
     if(props.error.message.length > 0 && firstTimeFocused) {
       return colors.red;
     }
-    else if(isFocused) {
+    
+    if(isFocused) {
       return colors.primary;
     }
 
@@ -163,4 +158,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export { IInputProps, IValidationError, ValidationFunc, CustomInputForm };
+export { IInputProps, CustomInputForm };

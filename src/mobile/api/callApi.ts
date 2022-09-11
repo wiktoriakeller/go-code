@@ -1,20 +1,20 @@
-import axios, { AxiosError } from "axios";
+import axios, { Axios, AxiosError } from "axios";
 import { getData } from "./storage";
 import {  
+  baseUrl,
   StatusCodes, 
   ApiRequest,
-  ApiResponse
+  ApiResponse,
+  tokenKey
 } from "./common";
+
+axios.defaults.baseURL = baseUrl;
 
 const requestInterceptor = axios.interceptors.request.use(
   async (config) => {
-    const jwt = await getData("jwt");
+    const jwt = await getData(tokenKey);
 
-    if(!config.headers) {
-      config.headers = {}
-    }
-
-    if(jwt) {
+    if(jwt && config.headers) {
       config.headers.Authorization = `${jwt}`;
     }
 
@@ -45,11 +45,26 @@ async function callApi<TRequest, TResponse> (params: ApiRequest<TRequest>): Prom
     const { data } = await axios.request(params);
     response = data;
   }
-  catch(error){
-    const err = error as AxiosError;
-    response = err.response?.data as ApiResponse<TResponse>;
+  catch(error) {
+    if(axios.isAxiosError(error)) {
+      const err = error as AxiosError;
+      response = err.response?.data as ApiResponse<TResponse>;
+    }
+    else {
+      response = {
+        data: undefined,
+        errors: ["Something went wrong..."],
+        responseError: {
+          id: 6,
+          name: "Unknown"
+        },
+        httpStatusCode: 500,
+        succeeded: false
+      }
+    }
   }
-
+  
+  console.log(response);
   return response;
 }
 

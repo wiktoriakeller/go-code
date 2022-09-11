@@ -1,13 +1,14 @@
-import { View, Text, GestureResponderEvent } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { emailRegex, passwordRegex, validateLength, validateRegex } from './validators';
-import { CustomInputForm, IInputProps, ValidationFunc } from '../components/CustomInputForm';
-import { mainFormStyle } from './styles/commonStyles';
-import { CustomButton, IButtonProps } from '../components/CustomButton';
-import colors from '../styles/colors';
-import { SignUpNavigation } from '../navigation/navigationTypes';
+import { View, Text, GestureResponderEvent } from "react-native"
+import React, { useEffect, useState } from "react"
+import { emailRegex, passwordRegex, validateLength, validateRegex, ValidationFunc } from "../validation/validators";
+import { CustomInputForm, IInputProps } from "../components/CustomInputForm";
+import { mainFormStyle } from "./styles/formStyles";
+import { CustomButton, IButtonProps } from "../components/CustomButton";
+import colors from "../styles/colors";
+import { SignUpNavigation } from "../navigation/common";
+import { useHidePassword } from "../hooks/useHidePassword";
 
-const SignUpPage = ({ navigation }: SignUpNavigation) => {
+export const SignUpPage = ({ navigation }: SignUpNavigation) => {
   const [email, setEmail] = useState("");
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const emailValidators = [
@@ -51,21 +52,19 @@ const SignUpPage = ({ navigation }: SignUpNavigation) => {
 
   const [password, setPassword] = useState("");
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
-  const [hidePassword, setHidePassword] = useState(true);
-  const [endIconName, setEndIconName] = useState("eye-off-outline");
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const passwordValidators: ValidationFunc[] = [
+  const hidePassword = useHidePassword();
+  const passwordValidators: ValidationFunc<string>[] = [
     (value: string) => validateLength(value, 6, 20, "Password must be between 6 and 20 characters"),
     (value: string) => validateRegex(value, passwordRegex, "Password must include uppercase and lowercase letters, a number and a special character")
   ];
 
   const passwordInput: IInputProps = {
     value: password,
-    secureTextEntry: secureTextEntry,
+    secureTextEntry: hidePassword.secureTextEntry,
     placeholder: "Enter your password",
     label: "Password",
     startIconName: "lock-outline",
-    endIconName: endIconName,
+    endIconName: hidePassword.endIconName,
     validators: passwordValidators,
     autoComplete: "password",
     error: {
@@ -73,25 +72,13 @@ const SignUpPage = ({ navigation }: SignUpNavigation) => {
       setMessage: setPasswordErrorMessage
     },
     onChangeText: (value: string) => setPassword(value),
-    onPressEndIcon: () => {
-      setHidePassword(!hidePassword);
-      if(hidePassword) {
-        setEndIconName("eye-off-outline");
-        setSecureTextEntry(true);
-      }
-      else {
-        setEndIconName("eye-outline");
-        setSecureTextEntry(false);
-      }
-    }
+    onPressEndIcon: () => hidePassword.hide()
   };
 
   const [confirmPassword, setConfirmPassword] = useState("");
   const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] = useState("");
-  const [hideConfirmPassword, setHideConfirmPassword] = useState(true);
-  const [endIconNameConfirm, setEndIconNameConfirm] = useState("eye-off-outline");
-  const [secureTextEntryConfirm, setSecureTextEntryConfirm] = useState(true);
-  const confirmPasswordValidators: ValidationFunc[] = [
+  const hideConfirmPassword = useHidePassword();
+  const confirmPasswordValidators: ValidationFunc<string>[] = [
     (value: string): [boolean, string] => {
       if(value === password) {
         return [true, ""];
@@ -103,28 +90,18 @@ const SignUpPage = ({ navigation }: SignUpNavigation) => {
 
   const confirmPasswordInput: IInputProps = {
     value: confirmPassword,
-    secureTextEntry: secureTextEntryConfirm,
+    secureTextEntry: hideConfirmPassword.secureTextEntry,
     placeholder: "Confirm your password",
     label: "Confirm password",
     startIconName: "lock-outline",
-    endIconName: endIconNameConfirm,
+    endIconName: hideConfirmPassword.endIconName,
     validators: confirmPasswordValidators,
     error: {
       message: confirmPasswordErrorMessage,
       setMessage: setConfirmPasswordErrorMessage
     },
     onChangeText: (value: string) => setConfirmPassword(value),
-    onPressEndIcon: () => {
-      setHideConfirmPassword(!hideConfirmPassword);
-      if(hideConfirmPassword) {
-        setEndIconNameConfirm("eye-off-outline");
-        setSecureTextEntryConfirm(true);
-      }
-      else {
-        setEndIconNameConfirm("eye-outline");
-        setSecureTextEntryConfirm(false);
-      }
-    }
+    onPressEndIcon: () => hideConfirmPassword.hide()
   };
 
   const [disabledSignUpButton, setDisabledSignUpButton] = useState(false);
@@ -148,7 +125,7 @@ const SignUpPage = ({ navigation }: SignUpNavigation) => {
     setDisabledSignUpButton(false);
   }, errorMessages);
 
-  const goBackButton: IButtonProps = {
+  const returnButton: IButtonProps = {
     text: "Already have an account? Sign in!",
     containerStyle: {
       color: colors.tertiary,
@@ -159,9 +136,7 @@ const SignUpPage = ({ navigation }: SignUpNavigation) => {
       fontWeight: "normal"
     },
     isDisabled: false,
-    onPress: async (event: GestureResponderEvent) => {
-      navigation.goBack();
-    }  
+    onPress: async () => navigation.goBack()
   };
 
   return (
@@ -177,10 +152,8 @@ const SignUpPage = ({ navigation }: SignUpNavigation) => {
         <CustomInputForm {...confirmPasswordInput} />
         <View style={{ marginBottom: 10 }}/>
         <CustomButton {...signUpButton} />
-        <CustomButton {...goBackButton} />
+        <CustomButton {...returnButton} />
       </View>
     </View>
   )
 }
-
-export default SignUpPage;
