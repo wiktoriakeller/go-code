@@ -15,7 +15,7 @@ interface SignUpRequest {
   username: string;
 }
 
-async function signIn(params: SignUpRequest): Promise<ApiResponse<SignUpResponse>> {
+async function signUp(params: SignUpRequest): Promise<ApiResponse<SignUpResponse>> {
   const request: ApiRequest<SignUpRequest> = {
     url: identityPaths.signUp,
     method: "POST",
@@ -31,4 +31,4 @@ async function signIn(params: SignUpRequest): Promise<ApiResponse<SignUpResponse
   throw response;
 }
 
-export { signIn, SignUpRequest, SignUpResponse };
+export { signUp, SignUpRequest, SignUpResponse };

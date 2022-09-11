@@ -1,14 +1,28 @@
 import { View, Text } from "react-native"
 import React, { useEffect, useState } from "react"
-import { emailRegex, passwordRegex, validateLength, validateRegex, ValidationFunc } from "../validation/validators";
+import { 
+  emailRegex, 
+  passwordRegex, 
+  validateEquality, 
+  validateLength, 
+  validateRegex, 
+  ValidationFunc 
+} from "../validation/validators";
 import { CustomInputForm, IInputProps } from "../components/CustomInputForm";
 import { mainFormStyle } from "./styles/formStyles";
 import { CustomButton, IButtonProps } from "../components/CustomButton";
 import colors from "../styles/colors";
 import { SignUpNavigation } from "../navigation/common";
 import { useHidePassword } from "../hooks/useHidePassword";
+import { signUp, SignUpRequest } from "../api/identity/signUp";
+import { ApiResponse } from "../api/common";
+import Spinner from "react-native-loading-spinner-overlay/lib";
+import { Messages } from "../components/Messages";
 
 export const SignUpPage = ({ navigation }: SignUpNavigation) => {
+  const [loading, setLoading] = useState(false);
+  const [apiErrorMessages, setApiErrorMessages] = useState([] as string[]);
+
   const [email, setEmail] = useState("");
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const emailValidators = [
@@ -27,13 +41,16 @@ export const SignUpPage = ({ navigation }: SignUpNavigation) => {
       message: emailErrorMessage,
       setMessage: setEmailErrorMessage
     },
-    onChangeText: (value: string) => setEmail(value)
+    onChangeText: (value: string) => { 
+      setEmail(value)
+      setApiErrorMessages([]);
+    }
   };
 
   const [username, setUsername] = useState("");
   const [usernameErrorMessage, setUsernameErrorMessage] = useState("");
   const usernameValidators = [
-    (value: string) => validateLength(value, 2, 20, "Username must be between 2 and 20 characters"),
+    (value: string) => validateLength(value, 2, 20, "Username must be between 2 and 20 characters")
   ];
 
   const usernameInput: IInputProps = {
@@ -47,7 +64,10 @@ export const SignUpPage = ({ navigation }: SignUpNavigation) => {
       message: usernameErrorMessage,
       setMessage: setUsernameErrorMessage
     },
-    onChangeText: (value: string) => setUsername(value)
+    onChangeText: (value: string) => {
+      setUsername(value)
+      setApiErrorMessages([]);
+    }
   };
 
   const [password, setPassword] = useState("");
@@ -71,7 +91,10 @@ export const SignUpPage = ({ navigation }: SignUpNavigation) => {
       message: passwordErrorMessage,
       setMessage: setPasswordErrorMessage
     },
-    onChangeText: (value: string) => setPassword(value),
+    onChangeText: (value: string) => { 
+      setPassword(value)
+      setApiErrorMessages([]);
+    },
     onPressEndIcon: () => hidePassword.hide()
   };
 
@@ -79,13 +102,7 @@ export const SignUpPage = ({ navigation }: SignUpNavigation) => {
   const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] = useState("");
   const hideConfirmPassword = useHidePassword();
   const confirmPasswordValidators: ValidationFunc<string>[] = [
-    (value: string): [boolean, string] => {
-      if(value === password) {
-        return [true, ""];
-      }
-
-      return [false, "Password and confirm password should be equal"];
-    }
+    (value: string): [boolean, string] => validateEquality(value, password, "Password and confirm password should be equal")
   ];
 
   const confirmPasswordInput: IInputProps = {
@@ -100,7 +117,10 @@ export const SignUpPage = ({ navigation }: SignUpNavigation) => {
       message: confirmPasswordErrorMessage,
       setMessage: setConfirmPasswordErrorMessage
     },
-    onChangeText: (value: string) => setConfirmPassword(value),
+    onChangeText: (value: string) => { 
+      setConfirmPassword(value)
+      setApiErrorMessages([]);
+    },
     onPressEndIcon: () => hideConfirmPassword.hide()
   };
 
@@ -108,7 +128,23 @@ export const SignUpPage = ({ navigation }: SignUpNavigation) => {
   const signUpButton: IButtonProps = {
     text: "Sign up",
     isDisabled: disabledSignUpButton,
-    onPress: () => console.log("Sign up")
+    onPress: () => {
+      setLoading(true);
+      setApiErrorMessages([]);
+      setDisabledSignUpButton(true);
+
+      signUp({
+        email: email,
+        username: username,
+        password: password
+      })
+      .then(() => navigation.goBack())
+      .catch((error: ApiResponse<SignUpRequest>) => setApiErrorMessages(error.errors))
+      .finally(() => {
+        setLoading(false);
+        setDisabledSignUpButton(false);
+      })
+    }
   };
 
   const errorMessages = [emailErrorMessage, usernameErrorMessage, passwordErrorMessage, confirmPasswordErrorMessage];
@@ -139,6 +175,14 @@ export const SignUpPage = ({ navigation }: SignUpNavigation) => {
 
   return (
     <View style={mainFormStyle.root}>
+      <Spinner
+        visible={loading}
+        textContent={""}
+      />
+      { apiErrorMessages.length > 0 
+        ? <Messages messages={apiErrorMessages} isError={true}/>
+        : <View/>
+      }
       <View style={mainFormStyle.textContainer}>
         <Text style={mainFormStyle.titleText}>Sign Up</Text>
         <Text style={mainFormStyle.subText}>Create new account here</Text>

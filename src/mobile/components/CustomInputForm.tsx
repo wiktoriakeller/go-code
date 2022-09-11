@@ -20,19 +20,17 @@ const CustomInputForm = (props: IInputProps) => {
   const endIconName = props.endIconName ?? "";
 
   useEffect(() => {
-    if(props.validators !== null) {
-      for(const validator of props.validators) {
-        const valueToCheck = props.value ?? "";
-        const result = validator(valueToCheck);
-        if(!result[0]) {
-          props.error.setMessage(result[1]);
-          return;
-        }
+    for(const validator of props.validators) {
+      const valueToCheck = props.value ?? "";
+      const result = validator(valueToCheck);
+      if(!result[0]) {
+        props.error.setMessage(result[1]);
+        return;
       }
     }
     
     props.error.setMessage("");
-  }, [props.value])
+  }, [props.value]);
 
   const getBorderColor = (): string => {
     if(props.error.message.length > 0 && firstTimeFocused) {

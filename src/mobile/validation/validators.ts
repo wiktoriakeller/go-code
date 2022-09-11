@@ -40,11 +40,20 @@ const validateMaxLength = <Type extends { length: number }>(data: Type, maxValue
   return [false, errorMessage];
 }
 
+const validateEquality = (first: string, second: string, errorMessage: string): [boolean, string] => {
+  if(first === second) {
+    return [true, ""];
+  }
+
+  return [false, errorMessage];
+}
+
 export { 
   validateLength, 
   validateRegex, 
   validateMinLength, 
   validateMaxLength, 
+  validateEquality,
   emailRegex, 
   passwordRegex,
   ValidationFunc,
