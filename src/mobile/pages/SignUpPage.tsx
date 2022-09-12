@@ -36,10 +36,13 @@ export const SignUpPage = ({ navigation }: SignUpNavigation) => {
     placeholder: "Enter your email address",
     label: "Email",
     startIconName: "email-outline",
-    validators: emailValidators,
-    error: {
-      message: emailErrorMessage,
-      setMessage: setEmailErrorMessage
+    validation: {
+      value: email,
+      validators: emailValidators,
+      error: {
+        message: emailErrorMessage,
+        setMessage: setEmailErrorMessage
+      }
     },
     onChangeText: (value: string) => { 
       setEmail(value)
@@ -59,11 +62,14 @@ export const SignUpPage = ({ navigation }: SignUpNavigation) => {
     placeholder: "Enter your username",
     label: "Username",
     startIconName: "pen",
-    validators: usernameValidators,
-    error: {
-      message: usernameErrorMessage,
-      setMessage: setUsernameErrorMessage
-    },
+    validation: {
+      value: username,
+      validators: usernameValidators,
+      error: {
+        message: usernameErrorMessage,
+        setMessage: setUsernameErrorMessage
+      },
+    },    
     onChangeText: (value: string) => {
       setUsername(value)
       setApiErrorMessages([]);
@@ -85,12 +91,15 @@ export const SignUpPage = ({ navigation }: SignUpNavigation) => {
     label: "Password",
     startIconName: "lock-outline",
     endIconName: hidePassword.endIconName,
-    validators: passwordValidators,
+    validation: {
+      value: password,
+      validators: passwordValidators,
+      error: {
+        message: passwordErrorMessage,
+        setMessage: setPasswordErrorMessage
+      },
+    },     
     autoComplete: "password",
-    error: {
-      message: passwordErrorMessage,
-      setMessage: setPasswordErrorMessage
-    },
     onChangeText: (value: string) => { 
       setPassword(value)
       setApiErrorMessages([]);
@@ -112,10 +121,14 @@ export const SignUpPage = ({ navigation }: SignUpNavigation) => {
     label: "Confirm password",
     startIconName: "lock-outline",
     endIconName: hideConfirmPassword.endIconName,
-    validators: confirmPasswordValidators,
-    error: {
-      message: confirmPasswordErrorMessage,
-      setMessage: setConfirmPasswordErrorMessage
+    validation: {
+      value: confirmPassword,
+      validators: confirmPasswordValidators,
+      changingValues: [password, confirmPassword],
+      error: {
+        message: confirmPasswordErrorMessage,
+        setMessage: setConfirmPasswordErrorMessage
+      },
     },
     onChangeText: (value: string) => { 
       setConfirmPassword(value)
