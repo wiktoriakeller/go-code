@@ -28,12 +28,15 @@ export const SignInPage = ({ navigation }: SignInNavigation) => {
     placeholder: "Enter your email address",
     label: "Email",
     startIconName: "email-outline",
-    validators: emailValidators,
+    validation: {
+      value: email,
+      validators: emailValidators,
+      error: {
+        message: emailErrorMessage,
+        setMessage: setEmailErrorMessage
+      },
+    },    
     autoComplete: "email",
-    error: {
-      message: emailErrorMessage,
-      setMessage: setEmailErrorMessage
-    },
     onChangeText: (value: string) => {
       setEmail(value);
       setApiErrorMessages([]);
@@ -54,12 +57,15 @@ export const SignInPage = ({ navigation }: SignInNavigation) => {
     label: "Password",
     startIconName: "lock-outline",
     endIconName: hidePassowrd.endIconName,
-    validators: passwordValidators,
+    validation: {
+      value: password,
+      validators: passwordValidators,
+      error: {
+        message: passwordErrorMessage,
+        setMessage: setPasswordErrorMessage
+      },
+    },     
     autoComplete: "password",
-    error: {
-      message: passwordErrorMessage,
-      setMessage: setPasswordErrorMessage
-    },
     onChangeText: (value: string) => {
       setPassword(value);
       setApiErrorMessages([]);
