@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react"
 import { IInputProps, CustomInputForm } from "../components/CustomInputForm";
 import { IButtonProps, CustomButton } from "../components/CustomButton";
 import { validateMinLength, ValidationFunc } from "../validation/validators";
-import { SignInNavigation } from "../navigation/common";
+import { SignInNavigation } from "../navigation/stackNavigation";
 import { mainFormStyle } from "./styles/formStyles";
 import colors from "../styles/colors";
 import { signIn, SignInResponse } from "../api/identity/signIn";
