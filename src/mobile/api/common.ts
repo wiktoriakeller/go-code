@@ -20,22 +20,22 @@ enum StatusCodes {
   InternalServerError = 500
 }
 
-interface ApiRequest<T> {
+interface IApiRequest<T> {
   url: string;
   method: string;
   data?: T;
   headers?: any;
 }
 
-interface ApiResponse<T> {
+interface IApiResponse<T> {
   data?: T;
   errors: string[];
-  responseError: ResponseError;
+  responseError: IResponseError;
   httpStatusCode: number;
   succeeded: boolean;
 }
 
-interface ResponseError {
+interface IResponseError {
   id: number;
   name: string;
 }
@@ -48,9 +48,9 @@ export {
   identityPaths, 
   coursesPaths, 
   StatusCodes, 
-  ApiRequest,
-  ApiResponse,
-  ResponseError,
+  IApiRequest,
+  IApiResponse,
+  IResponseError,
   tokenKey,
   refreshTokenKey
 }

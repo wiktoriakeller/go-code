@@ -1,28 +1,28 @@
 import { callApi } from "../callApi";
 import { 
   identityPaths, 
-  ApiRequest, 
-  ApiResponse, 
+  IApiRequest, 
+  IApiResponse, 
 } from "../common";
 
-interface SignUpResponse {
+interface ISignUpResponse {
   id: string;
 }
 
-interface SignUpRequest {
+interface ISignUpRequest {
   email: string;
   password: string;
   username: string;
 }
 
-async function signUp(params: SignUpRequest): Promise<ApiResponse<SignUpResponse>> {
-  const request: ApiRequest<SignUpRequest> = {
+async function signUp(params: ISignUpRequest): Promise<IApiResponse<ISignUpResponse>> {
+  const request: IApiRequest<ISignUpRequest> = {
     url: identityPaths.signUp,
     method: "POST",
-    data: params,
+    data: params
   };
 
-  const response = await callApi<SignUpRequest, SignUpResponse>(request);
+  const response = await callApi<ISignUpRequest, ISignUpResponse>(request);
   
   if(response.succeeded) {
     return response;
@@ -31,4 +31,4 @@ async function signUp(params: SignUpRequest): Promise<ApiResponse<SignUpResponse
   throw response;
 }
 
-export { signUp, SignUpRequest, SignUpResponse };
+export { signUp, ISignUpRequest, ISignUpResponse };

@@ -1,22 +1,23 @@
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import React from "react";
 import { TagItem } from "./TagItem";
+import { ICourse } from "../../api/courses/getAllCourses";
 
-export const CourseListItem = () => {
+export const CourseListItem = (props: ICourse) => {
   return (
     <ScrollView style={styles.root}>
       <View style={styles.mainInfo}>
-        <Text style={styles.title}>Course name</Text>
+        <Text style={styles.title}>{props.name}</Text>
         <View style={styles.secondaryInfo}>
           <TagItem
-            text="35 XP"
+            text={`XP ${props.xp}`}
           />
           <TagItem
-            text="Treshold: 70%"
+            text={`Treshold: ${props.passPercentTreshold}`}
           />
         </View>
       </View>
-      <Text>Short description</Text>
+      <Text>{props.description}</Text>
     </ScrollView >
   )
 }
