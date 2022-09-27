@@ -12,7 +12,7 @@ import { CustomInputForm, IInputProps } from "../components/CustomInputForm";
 import { mainFormStyle } from "./styles/formStyles";
 import { CustomButton, IButtonProps } from "../components/CustomButton";
 import colors from "../styles/colors";
-import { SignUpNavigation } from "../navigation/common";
+import { SignUpNavigation } from "../navigation/stackNavigation";
 import { useHidePassword } from "../hooks/useHidePassword";
 import { signUp, SignUpRequest } from "../api/identity/signUp";
 import { ApiResponse } from "../api/common";

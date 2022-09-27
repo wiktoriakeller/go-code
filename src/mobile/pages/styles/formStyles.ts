@@ -16,6 +16,7 @@ export const mainFormStyle = StyleSheet.create({
     marginBottom: 10
   },
   titleText: {
+    marginTop: 10,
     color: colors.black,
     fontSize: 40,
     fontWeight: "bold"
@@ -24,6 +25,6 @@ export const mainFormStyle = StyleSheet.create({
     color: colors.grey,
     fontSize: 18,
     marginTop: 4,
-    marginBottom: 5
+    marginBottom: 10
   }
 });

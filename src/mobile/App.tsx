@@ -1,16 +1,40 @@
+import 'react-native-gesture-handler';
 import { SignInPage } from "./pages/SignInPage";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { RootStackParamList } from "./navigation/common";
+import { RootStackParamList } from "./navigation/stackNavigation";
 import { SignUpPage } from "./pages/SignUpPage";
-import HomePage from "./pages/HomePage";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { RootDrawerParamList } from "./navigation/drawerNavigation";
+import UserCourses from "./pages/UserCourses";
+import AllCourses from "./pages/AllCourses";
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
+const Drawer = createDrawerNavigator<RootDrawerParamList>();
+
+const HomePage = () => {
+  return (
+    <Drawer.Navigator 
+      initialRouteName="UserCourses">
+      <Drawer.Screen 
+        name="UserCourses"
+        component={UserCourses}
+        options={{ title: "My courses"}}
+      />
+      <Drawer.Screen 
+        name="AllCourses"
+        component={AllCourses}
+        options={{ title: "All courses"}}
+      />
+    </Drawer.Navigator>
+  )
+}
 
 export default function App() {
-  const Stack = createNativeStackNavigator<RootStackParamList>();
-
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="SignIn">
+      <Stack.Navigator 
+        initialRouteName="SignIn">
         <Stack.Screen 
           name="SignIn" 
           component={SignInPage}
@@ -24,7 +48,7 @@ export default function App() {
         <Stack.Screen 
           name="Home" 
           component={HomePage} 
-          options={{ title: "Home"}}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
