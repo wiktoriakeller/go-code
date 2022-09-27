@@ -6,8 +6,8 @@ import { RootStackParamList } from "./navigation/stackNavigation";
 import { SignUpPage } from "./pages/SignUpPage";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { RootDrawerParamList } from "./navigation/drawerNavigation";
-import UserCourses from "./pages/UserCourses";
-import AllCourses from "./pages/AllCourses";
+import { UserCourses } from "./pages/UserCourses";
+import { AllCourses } from "./pages/AllCourses";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Drawer = createDrawerNavigator<RootDrawerParamList>();

@@ -1,12 +1,18 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { View } from "react-native"
+import React from "react"
+import { CourseListItem } from "../components/courses/CourseListItem"
 
-const AllCourses = () => {
+export const AllCourses = () => {
   return (
     <View>
-      <Text>AllCourses</Text>
+      <CourseListItem/>
+      <CourseListItem/>
+      <CourseListItem/>
+      <CourseListItem/>
+      <CourseListItem/>
+      <CourseListItem/>
+      <CourseListItem/>
+      <CourseListItem/>
     </View>
   )
 }
-
-export default AllCourses
