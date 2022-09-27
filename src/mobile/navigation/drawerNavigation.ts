@@ -1,8 +1,8 @@
 import { DrawerScreenProps } from "@react-navigation/drawer";
 
 type RootDrawerParamList = {
-    UserCourses: undefined;
-    AllCourses: undefined;
+  UserCourses: undefined;
+  AllCourses: undefined;
 };
 
 type HomeDrawerNavigation = DrawerScreenProps<RootDrawerParamList, "UserCourses">;
