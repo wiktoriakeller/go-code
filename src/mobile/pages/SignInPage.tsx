@@ -6,15 +6,15 @@ import { validateMinLength, ValidationFunc } from "../validation/validators";
 import { SignInNavigation } from "../navigation/stackNavigation";
 import { mainFormStyle } from "./styles/formStyles";
 import colors from "../styles/colors";
-import { signIn, SignInResponse } from "../api/identity/signIn";
+import { signIn, ISignInResponse } from "../api/identity/signIn";
 import { useHidePassword } from "../hooks/useHidePassword";
-import { ApiResponse } from "../api/common";
+import { IApiResponse } from "../api/common";
 import { Messages } from "../components/Messages";
 import Spinner from "react-native-loading-spinner-overlay";
 
 export const SignInPage = ({ navigation }: SignInNavigation) => {
   const [loading, setLoading] = useState(false);
-  const [apiErrorMessages, setApiErrorMessages] = useState([] as string[]);
+  const [apiErrorMessages, setApiErrorMessages] = useState<string[]>([]);
 
   const [email, setEmail] = useState("");
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
@@ -87,7 +87,7 @@ export const SignInPage = ({ navigation }: SignInNavigation) => {
         password: password
       })
       .then(() => navigation.navigate("Home"))
-      .catch((error: ApiResponse<SignInResponse>) => setApiErrorMessages(error.errors))
+      .catch((error: IApiResponse<ISignInResponse>) => setApiErrorMessages(error.errors))
       .finally(() => {
         setLoading(false);
         setDisabledLoginButton(false);

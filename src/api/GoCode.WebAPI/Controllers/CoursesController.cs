@@ -2,7 +2,6 @@
 using GoCode.Application.Courses.Queries;
 using GoCode.Application.Courses.Requests;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
 
 namespace GoCode.WebAPI.Controllers
 {
@@ -15,16 +14,14 @@ namespace GoCode.WebAPI.Controllers
         }
 
         [HttpGet]
-        [EnableCors("mobile")]
-        public async Task<IActionResult> GetAllCourses()
+        public async Task<IActionResult> GetAllCoursesInfo()
         {
-            var query = new GetAllCoursesQuery();
+            var query = new GetAllCoursesInfoQuery();
             var response = await _medaitor.Send(query);
             return GetStatusCode(response);
         }
 
         [HttpGet("user")]
-        [EnableCors("mobile")]
         public async Task<IActionResult> GetUserCourses()
         {
             var query = new GetUserCoursesQuery();
@@ -33,7 +30,6 @@ namespace GoCode.WebAPI.Controllers
         }
 
         [HttpPatch("signup/{id}")]
-        [EnableCors("mobile")]
         public async Task<IActionResult> SignUpForACourse([FromRoute] int id)
         {
             var command = new SignUpForCourseCommand() { Id = id };

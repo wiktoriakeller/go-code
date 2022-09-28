@@ -3,7 +3,7 @@ using GoCode.Application.Courses.Responses;
 
 namespace GoCode.Application.Courses.Queries
 {
-    public class GetAllCoursesQuery : IRequestWrapper<GetAllCoursesResponse>
+    public class GetAllCoursesInfoQuery : IRequestWrapper<GetAllCoursesInfoResponse>
     {
     }
 }

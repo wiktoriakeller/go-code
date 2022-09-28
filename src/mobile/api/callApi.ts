@@ -3,8 +3,8 @@ import { getData } from "./storage";
 import {  
   baseUrl,
   StatusCodes, 
-  ApiRequest,
-  ApiResponse,
+  IApiRequest,
+  IApiResponse,
   tokenKey
 } from "./common";
 
@@ -13,9 +13,8 @@ axios.defaults.baseURL = baseUrl;
 const requestInterceptor = axios.interceptors.request.use(
   async (config) => {
     const jwt = await getData(tokenKey);
-
     if(jwt && config.headers) {
-      config.headers.Authorization = `${jwt}`;
+      config.headers.Authorization = `bearer ${jwt}`;
     }
 
     return config;
@@ -38,8 +37,8 @@ const responseInterceptor = axios.interceptors.response.use(
   }
 )
 
-async function callApi<TRequest, TResponse> (params: ApiRequest<TRequest>): Promise<ApiResponse<TResponse>> {
-  let response: ApiResponse<TResponse>;
+async function callApi<TRequest, TResponse> (params: IApiRequest<TRequest>): Promise<IApiResponse<TResponse>> {
+  let response: IApiResponse<TResponse>;
 
   try {
     const { data } = await axios.request(params);
@@ -48,7 +47,7 @@ async function callApi<TRequest, TResponse> (params: ApiRequest<TRequest>): Prom
   catch(error) {
     if(axios.isAxiosError(error)) {
       const err = error as AxiosError;
-      response = err.response?.data as ApiResponse<TResponse>;
+      response = err.response?.data as IApiResponse<TResponse>;
     }
     else {
       response = {

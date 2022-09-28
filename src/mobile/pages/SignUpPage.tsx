@@ -14,8 +14,8 @@ import { CustomButton, IButtonProps } from "../components/CustomButton";
 import colors from "../styles/colors";
 import { SignUpNavigation } from "../navigation/stackNavigation";
 import { useHidePassword } from "../hooks/useHidePassword";
-import { signUp, SignUpRequest } from "../api/identity/signUp";
-import { ApiResponse } from "../api/common";
+import { signUp, ISignUpRequest } from "../api/identity/signUp";
+import { IApiResponse } from "../api/common";
 import Spinner from "react-native-loading-spinner-overlay/lib";
 import { Messages } from "../components/Messages";
 
@@ -152,7 +152,7 @@ export const SignUpPage = ({ navigation }: SignUpNavigation) => {
         password: password
       })
       .then(() => navigation.goBack())
-      .catch((error: ApiResponse<SignUpRequest>) => setApiErrorMessages(error.errors))
+      .catch((error: IApiResponse<ISignUpRequest>) => setApiErrorMessages(error.errors))
       .finally(() => {
         setLoading(false);
         setDisabledSignUpButton(false);

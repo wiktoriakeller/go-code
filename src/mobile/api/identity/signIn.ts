@@ -2,30 +2,30 @@ import { callApi } from "../callApi";
 import { storeData } from "../storage";
 import { 
   identityPaths, 
-  ApiRequest, 
-  ApiResponse, 
+  IApiRequest, 
+  IApiResponse, 
   tokenKey,
   refreshTokenKey
 } from "../common";
 
-interface SignInResponse {
+interface ISignInResponse {
   token: string;
   refreshToken: string;
 }
 
-interface SignInRequest {
+interface ISignInRequest {
   email: string;
   password: string;
 }
 
-async function signIn(params: SignInRequest): Promise<ApiResponse<SignInResponse>> {
-  const request: ApiRequest<SignInRequest> = {
+async function signIn(params: ISignInRequest): Promise<IApiResponse<ISignInResponse>> {
+  const request: IApiRequest<ISignInRequest> = {
     url: identityPaths.signIn,
     method: "POST",
-    data: params,
+    data: params
   };
 
-  const response = await callApi<SignInRequest, SignInResponse>(request);
+  const response = await callApi<ISignInRequest, ISignInResponse>(request);
 
   if(response.succeeded && response.data) {
     await storeData(tokenKey, response.data.token);
@@ -36,4 +36,4 @@ async function signIn(params: SignInRequest): Promise<ApiResponse<SignInResponse
   throw response;
 }
 
-export { signIn, SignInRequest, SignInResponse };
+export { signIn, ISignInRequest, ISignInResponse };
