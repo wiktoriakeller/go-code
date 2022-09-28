@@ -6,8 +6,6 @@ import {
 } from "../common";
 
 interface IGetAllCoursesInfosResponse {
-  token: string;
-  refreshToken: string;
   courses: ICourseInfo[];
 }
 
@@ -18,18 +16,6 @@ interface ICourseInfo {
   description: string;
   passPercentTreshold: number;
   isUserSignedUp: boolean;
-}
-
-interface IQuestion {
-  id: number;
-  content: string;
-  answers: IAnswear[];
-}
-
-interface IAnswear {
-  id: number;
-  content: string;
-  isCorrect: boolean;
 }
 
 async function getAllCoursesInfos(): Promise<IApiResponse<IGetAllCoursesInfosResponse>> {
@@ -49,8 +35,6 @@ async function getAllCoursesInfos(): Promise<IApiResponse<IGetAllCoursesInfosRes
 
 export { 
   IGetAllCoursesInfosResponse, 
-  ICourseInfo, 
-  IQuestion, 
-  IAnswear, 
+  ICourseInfo,
   getAllCoursesInfos 
 };

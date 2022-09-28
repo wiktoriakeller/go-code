@@ -8,7 +8,7 @@ const identityPaths = {
 
 const coursesPaths = {
   getAll: "courses",
-  getAllForUser: "courses/user",
+  getUserCourses: "courses/user",
   signUp: "courses/signup"
 }
 

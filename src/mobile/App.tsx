@@ -6,8 +6,8 @@ import { RootStackParamList } from "./navigation/stackNavigation";
 import { SignUpPage } from "./pages/SignUpPage";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { RootDrawerParamList } from "./navigation/drawerNavigation";
-import { UserCourses } from "./pages/UserCourses";
-import { AllCourses } from "./pages/AllCourses";
+import { UserCoursesPage } from "./pages/UserCoursesPage";
+import { AllCoursesPage } from "./pages/AllCoursesPage";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Drawer = createDrawerNavigator<RootDrawerParamList>();
@@ -18,12 +18,12 @@ const HomePage = () => {
       initialRouteName="UserCourses">
       <Drawer.Screen 
         name="UserCourses"
-        component={UserCourses}
+        component={UserCoursesPage}
         options={{ title: "My courses"}}
       />
       <Drawer.Screen 
         name="AllCourses"
-        component={AllCourses}
+        component={AllCoursesPage}
         options={{ title: "All courses"}}
       />
     </Drawer.Navigator>

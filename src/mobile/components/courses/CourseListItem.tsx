@@ -3,9 +3,10 @@ import React from "react";
 import { TagItem } from "./TagItem";
 import { ICourseInfo } from "../../api/courses/getAllCoursesInfos";
 import { CustomButton, IButtonProps } from "../CustomButton";
+import { ICourse } from "../../api/courses/getUserCourses";
 
 export interface ICourseListItemProps {
-  course: ICourseInfo;
+  course: ICourseInfo | ICourse;
   button: IButtonProps
 }
 
