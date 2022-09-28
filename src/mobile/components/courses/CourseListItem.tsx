@@ -25,7 +25,9 @@ export const CourseListItem = (props: ICourseListItemProps) => {
         </View>
       </View>
       <View style={styles.secondary}>
-        <Text>{props.course.description}</Text>
+        <View style={styles.description}>
+          <Text style={ {fontSize: 16} }>{props.course.description}</Text>
+        </View>
         <View style={styles.button}>
           <CustomButton
             {...props.button}
@@ -42,7 +44,8 @@ const styles = StyleSheet.create({
   root: {
     borderRadius: 15,
     backgroundColor: "pink",
-    marginTop: 12,
+    marginTop: 6,
+    marginBottom: 6,
     marginLeft: "6%",
     marginRight: "6%",
     paddingTop: "2%",
@@ -64,29 +67,26 @@ const styles = StyleSheet.create({
   secondary: {
     flex: 1,
     flexDirection: "row",
-    alignItems: "baseline",
+    alignItems: "center",
     marginTop: 10
   },
   button: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    width: 80
+    width: "25%"
   },
   buttonText: {
     fontWeight: "normal",
     fontSize: 14
   },
   buttonContainer: {
-    width: 80,
+    width: "100%",
     padding: 6,
-    marginVertical: 0
+    marginVertical: 0,
   },
   title: {
     fontWeight: "bold",
     fontSize: 18
   },
   description: {
-    width: "70%"
+    width: "75%"
   }
 });
