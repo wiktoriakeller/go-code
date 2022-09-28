@@ -38,7 +38,6 @@ async function getAllCourses(): Promise<IApiResponse<IGetAllCoursesResponse>> {
     method: "GET"
   };
 
-  console.log(request);
   const response = await callApi<any, IGetAllCoursesResponse>(request);
 
   if(response.succeeded && response.data) {

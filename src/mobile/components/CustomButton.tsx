@@ -11,15 +11,14 @@ interface IButtonProps {
 }
 
 const CustomButton = (props: IButtonProps) => {
-  const pressableStandardStyles = [styles.container, props.containerStyle ?? {}];
-  const [pressableStyles, setPressableStyles] = useState(pressableStandardStyles);
+  const [disabledStyle, setDisabledStyle] = useState({});
 
   useEffect(() => {
     if(props.isDisabled) {
-      setPressableStyles([...pressableStandardStyles, styles.disabledButton]);
+      setDisabledStyle(styles.disabledButton);
     }
     else {
-      setPressableStyles(pressableStandardStyles);
+      setDisabledStyle({});
     }
   }, [props.isDisabled]);
 
@@ -30,7 +29,7 @@ const CustomButton = (props: IButtonProps) => {
           props.onPress(event);
         }
       }} 
-      style={pressableStyles}
+      style={[styles.container, props.containerStyle ?? {}, disabledStyle]}
       >
       <Text style={[styles.text, props.textStyle ?? {}]}>{props.text}</Text>
     </Pressable>
