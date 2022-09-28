@@ -9,7 +9,7 @@ const identityPaths = {
 const coursesPaths = {
   getAll: "courses",
   getAllForUser: "courses/user",
-  signUp: "courses/signup/"
+  signUp: "courses/signup"
 }
 
 enum StatusCodes {

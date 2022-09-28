@@ -1,11 +1,11 @@
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import React from "react";
 import { TagItem } from "./TagItem";
-import { ICourse } from "../../api/courses/getAllCourses";
+import { ICourseInfo } from "../../api/courses/getAllCoursesInfos";
 import { CustomButton, IButtonProps } from "../CustomButton";
 
 export interface ICourseListItemProps {
-  course: ICourse;
+  course: ICourseInfo;
   button: IButtonProps
 }
 

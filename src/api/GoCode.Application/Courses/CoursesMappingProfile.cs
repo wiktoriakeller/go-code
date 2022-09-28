@@ -36,6 +36,7 @@ namespace GoCode.Application.Courses
             CreateMap<CreateCourseDto, Course>();
             CreateMap<Course, CreateCourseResponse>();
             CreateMap<Course, UpdateCourseResponse>();
+            CreateMap<Course, CourseInfoDto>();
         }
     }
 }

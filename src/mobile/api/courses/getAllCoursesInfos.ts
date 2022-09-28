@@ -5,19 +5,19 @@ import {
   IApiResponse
 } from "../common";
 
-interface IGetAllCoursesResponse {
+interface IGetAllCoursesInfosResponse {
   token: string;
   refreshToken: string;
-  courses: ICourse[];
+  courses: ICourseInfo[];
 }
 
-interface ICourse {
+interface ICourseInfo {
   id: number;
   name: string;
   xp: number;
   description: string;
   passPercentTreshold: number;
-  questions: IQuestion[];
+  isUserSignedUp: boolean;
 }
 
 interface IQuestion {
@@ -32,13 +32,13 @@ interface IAnswear {
   isCorrect: boolean;
 }
 
-async function getAllCourses(): Promise<IApiResponse<IGetAllCoursesResponse>> {
+async function getAllCoursesInfos(): Promise<IApiResponse<IGetAllCoursesInfosResponse>> {
   const request: IApiRequest<any> = {
     url: coursesPaths.getAll,
     method: "GET"
   };
 
-  const response = await callApi<any, IGetAllCoursesResponse>(request);
+  const response = await callApi<any, IGetAllCoursesInfosResponse>(request);
 
   if(response.succeeded && response.data) {
     return response;
@@ -48,9 +48,9 @@ async function getAllCourses(): Promise<IApiResponse<IGetAllCoursesResponse>> {
 }
 
 export { 
-  IGetAllCoursesResponse, 
-  ICourse, 
+  IGetAllCoursesInfosResponse, 
+  ICourseInfo, 
   IQuestion, 
   IAnswear, 
-  getAllCourses 
+  getAllCoursesInfos 
 };

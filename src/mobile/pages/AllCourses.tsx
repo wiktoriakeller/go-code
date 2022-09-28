@@ -1,7 +1,7 @@
 import { View } from "react-native"
 import React, { useEffect, useState } from "react"
 import { CourseListItem } from "../components/courses/CourseListItem"
-import { ICourse, getAllCourses, IGetAllCoursesResponse } from "../api/courses/getAllCourses";
+import { ICourseInfo, getAllCoursesInfos, IGetAllCoursesInfosResponse } from "../api/courses/getAllCoursesInfos";
 import { IApiResponse } from "../api/common";
 import Spinner from "react-native-loading-spinner-overlay/lib";
 import { ISignUpForCourseResponse, signUpForCourse } from "../api/courses/signUpForCourse";
@@ -13,16 +13,17 @@ interface IRegisterCourse {
 
 export const AllCourses = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [courses, setCourses] = useState<ICourse[]>([]);
+  const [courses, setCourses] = useState<ICourseInfo[]>([]);
+  const [reload, setReload] = useState(true);
 
   useEffect(() => {
-    getAllCourses()
-    .then((response: IApiResponse<IGetAllCoursesResponse>) => setCourses(response.data?.courses as ICourse[]))
-    .catch((error: IApiResponse<IGetAllCoursesResponse>) => console.log(error))
+    getAllCoursesInfos()
+    .then((response: IApiResponse<IGetAllCoursesInfosResponse>) => setCourses(response.data?.courses as ICourseInfo[]))
+    .catch((error: IApiResponse<IGetAllCoursesInfosResponse>) => console.log(error))
     .finally(() => {
       setIsLoading(false);
     })
-  }, []);
+  }, [reload]);
 
   const registerForCourseButton = (props: IRegisterCourse) => {
     return {
@@ -37,6 +38,7 @@ export const AllCourses = () => {
         .catch((error: IApiResponse<ISignUpForCourseResponse>) => console.log(error))
         .finally(() => {
           setIsLoading(false);
+          setReload(!reload);
         })
       }
     }
@@ -53,7 +55,7 @@ export const AllCourses = () => {
           <CourseListItem
             key={item.id}
             course={item}
-            button={registerForCourseButton({ courseId: item.id, registered: false })}
+            button={registerForCourseButton({ courseId: item.id, registered: item.isUserSignedUp })}
           />
         )
       }

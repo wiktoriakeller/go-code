@@ -14,9 +14,9 @@ namespace GoCode.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllCourses()
+        public async Task<IActionResult> GetAllCoursesInfo()
         {
-            var query = new GetAllCoursesQuery();
+            var query = new GetAllCoursesInfoQuery();
             var response = await _medaitor.Send(query);
             return GetStatusCode(response);
         }

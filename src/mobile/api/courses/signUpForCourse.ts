@@ -15,10 +15,11 @@ interface ISignUpForCourseResponse {
 
 async function signUpForCourse(params: ISignUpForCourseRequest): Promise<IApiResponse<ISignUpForCourseResponse>> {
   const request: IApiRequest<any> = {
-    url: `${coursesPaths.signUp}\\${params.id}`,
-    method: "POST"
+    url: `${coursesPaths.signUp}/${params.id}`,
+    method: "PATCH"
   };
 
+  console.log(request);
   const response = await callApi<any, ISignUpForCourseResponse>(request);
 
   if(response.succeeded && response.data) {
