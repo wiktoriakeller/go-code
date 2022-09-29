@@ -5,14 +5,18 @@ import { IApiResponse } from '../api/common';
 import Spinner from 'react-native-loading-spinner-overlay/lib';
 import { CourseListItem } from '../components/courses/CourseListItem';
 import { useIsFocused } from '@react-navigation/native';
+import { Question } from '../components/courses/Question';
 
 interface IStartCourse {
-
+  courseId: number;
+  courseIndex: number;
 }
 
 export const UserCoursesPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [courses, setCourses] = useState<ICourse[]>([]);
+  const [startedTest, setStartedTest] = useState(false);
+  const [currentCourse, setCurrentCourse] = useState(0);
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -28,10 +32,15 @@ export const UserCoursesPage = () => {
       text: "Start",
       isDisabled: false,
       onPress: () => {
-
+        setStartedTest(true);
+        setCurrentCourse(props.courseIndex);
       }
     }
   };
+
+  if(startedTest) {
+    return <Question {...courses[currentCourse].questions[0]} />
+  }
 
   return (
     <View>
@@ -42,10 +51,10 @@ export const UserCoursesPage = () => {
       <View style={{ marginBottom: 6 }}/>
       <FlatList
         data={courses}
-        renderItem={({item}) => (
+        renderItem={({item, index}) => (
           <CourseListItem
             course={item}
-            button={startTest({})}
+            button={startTest({ courseId: item.id, courseIndex: index })}
           />
         )}
         keyExtractor={course => course.id.toString()}
