@@ -1,11 +1,11 @@
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 
-interface ITagProps {
+export interface ITagProps {
   text: string;
 }
 
-const TagItem = (props: ITagProps) => {
+export const TagItem = (props: ITagProps) => {
   return (
     <View style={styles.root}>
       <Text style={styles.text}>{props.text}</Text>
@@ -27,5 +27,3 @@ const styles = StyleSheet.create({
     fontSize: 12
   }
 });
-
-export { ITagProps, TagItem }

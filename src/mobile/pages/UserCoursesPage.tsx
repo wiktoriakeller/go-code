@@ -6,6 +6,8 @@ import Spinner from 'react-native-loading-spinner-overlay/lib';
 import { CourseListItem } from '../components/courses/CourseListItem';
 import { useIsFocused } from '@react-navigation/native';
 import { Question } from '../components/courses/Question';
+import { IFormAnswear } from '../api/courses/sendUserAnswers';
+import { IButtonProps } from '../components/CustomButton';
 
 interface IStartCourse {
   courseId: number;
@@ -15,9 +17,33 @@ interface IStartCourse {
 export const UserCoursesPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [courses, setCourses] = useState<ICourse[]>([]);
-  const [startedTest, setStartedTest] = useState(false);
-  const [currentCourse, setCurrentCourse] = useState(0);
+  const [currentCourseIndex, setCurrentCourseIndex] = useState(0);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [startedCourse, setStartedCourse] = useState(false);
+  const [formAnswers, setFormAnswers] = useState<IFormAnswear[]>([]);
   const isFocused = useIsFocused();
+
+  const nextButton: IButtonProps = {
+    text: "Next",
+    isDisabled: false,
+    onPress: () => {
+      const numberOfQuestions = courses[currentCourseIndex]?.questions.length;
+      if(currentCourseIndex !== -1 && currentQuestionIndex < (numberOfQuestions - 1)) {
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+      }
+    }
+  }
+
+  const sendAnswersButton: IButtonProps = {
+    text: "Send",
+    isDisabled: false,
+    onPress: () => {
+      console.log("Send!");
+      setCurrentCourseIndex(0);
+      setCurrentQuestionIndex(0);
+      setStartedCourse(false);
+    }
+  }
 
   useEffect(() => {
     setIsLoading(true);
@@ -27,19 +53,32 @@ export const UserCoursesPage = () => {
     .finally(() => setIsLoading(false))
   }, [isFocused]);
 
-  const startTest = (props: IStartCourse) => {
+  const startTest = (course: IStartCourse) => {
     return {
       text: "Start",
       isDisabled: false,
       onPress: () => {
-        setStartedTest(true);
-        setCurrentCourse(props.courseIndex);
+        setCurrentCourseIndex(course.courseIndex);
+        setCurrentQuestionIndex(0);
+        setFormAnswers(courses[course.courseIndex].questions.map((item) => {
+          return {
+            questionId: item.id,
+            answearId: 0
+          };
+        }));
+        setStartedCourse(true);
       }
     }
   };
 
-  if(startedTest) {
-    return <Question {...courses[currentCourse].questions[0]} />
+  if(startedCourse) {
+    return (<Question 
+      questionNumber={currentQuestionIndex}
+      question={courses[currentCourseIndex].questions[currentQuestionIndex]}
+      formAnswers={formAnswers}
+      setFormAnswers={setFormAnswers}
+      nextButton={currentQuestionIndex === (courses[currentCourseIndex].questions.length - 1) ? sendAnswersButton : nextButton}
+    />)
   }
 
   return (

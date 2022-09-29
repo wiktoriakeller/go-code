@@ -5,15 +5,15 @@ import {
   IApiResponse
 } from "../common";
 
-interface ISignUpForCourseRequest {
+export interface ISignUpForCourseRequest {
   id: number;
 }
 
-interface ISignUpForCourseResponse {
+export interface ISignUpForCourseResponse {
   id: number;
 }
 
-async function signUpForCourse(params: ISignUpForCourseRequest): Promise<IApiResponse<ISignUpForCourseResponse>> {
+export async function signUpForCourse(params: ISignUpForCourseRequest): Promise<IApiResponse<ISignUpForCourseResponse>> {
   const request: IApiRequest<any> = {
     url: `${coursesPaths.signUp}/${params.id}`,
     method: "PATCH"
@@ -28,9 +28,3 @@ async function signUpForCourse(params: ISignUpForCourseRequest): Promise<IApiRes
 
   throw response;
 }
-
-export { 
-  ISignUpForCourseRequest, 
-  ISignUpForCourseResponse, 
-  signUpForCourse 
-};

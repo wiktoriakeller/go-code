@@ -1,58 +1,58 @@
 import { View, Text, StyleSheet } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IQuestion } from '../../api/courses/getUserCourses'
 import RadioGroup, { RadioButtonProps } from 'react-native-radio-buttons-group';
 import { CustomButton, IButtonProps } from '../CustomButton';
+import { IFormAnswear } from '../../api/courses/sendUserAnswers';
 
-export const Question = (question: IQuestion) => {
-  const radioButtonsData = question.answers.map((answear) => {
-    return {
-      id: answear.id.toString(),
-      label: answear.content,
-      value: answear.id.toString(),
-      disabled: false,
-      selected: false
-    }
-  });
+export interface IQuestionsData {
+  questionNumber: number;
+  question: IQuestion;
+  formAnswers: IFormAnswear[];
+  setFormAnswers: React.Dispatch<React.SetStateAction<IFormAnswear[]>>;
+  nextButton: IButtonProps;
+}
 
-  const [radioButtons, setRadioButtons] = useState<RadioButtonProps[]>(radioButtonsData);
+export const Question = (props: IQuestionsData) => {
+  const mapQuestionToRadioButtons = () => {
+    return props.question.answers.map((answear, index) => {
+      return {
+        id: answear.id.toString(),
+        label: answear.content,
+        value: answear.id.toString(),
+        disabled: false,
+        selected: index === 0 ? true : false
+      }
+    });
+  }
+  
+  const [radioButtons, setRadioButtons] = useState<RadioButtonProps[]>(mapQuestionToRadioButtons());
   const onPressRadioButton = (radioButtons: RadioButtonProps[]) => {
-    setRadioButtons(radioButtons); 
+    setRadioButtons(radioButtons);
+    const selectedId = radioButtons.find((item) => item.selected)?.id;
+    if(selectedId) {
+      const id = selectedId as unknown as number;
+      const newAnswers = [...props.formAnswers];
+      newAnswers[props.questionNumber].answearId = id;
+      props.setFormAnswers(newAnswers);
+    }
   }
 
-  const previousButton: IButtonProps = {
-    text: "Previous",
-    isDisabled: false,
-    onPress: () => console.log("Previous")
-  };
-
-  const nextButton: IButtonProps = {
-    text: "Next",
-    isDisabled: false,
-    onPress: () => console.log("Next")
-  }
+  useEffect(() => {
+    setRadioButtons(mapQuestionToRadioButtons());
+  }, [props.question]);
 
   return (
     <View style={styles.root}>
-      <View style={styles.header}>
-        <Text style={styles.questionContent}>{question.content}</Text>
-      </View>
+      <Text style={styles.questionContent}>{props.question.content}</Text>
       <RadioGroup
           radioButtons={radioButtons}
           onPress={onPressRadioButton}
           containerStyle={styles.radioButtons}
         />
-      <View style={styles.controlButtons}>
+      <View style={styles.nextButton}>
         <CustomButton
-          {...previousButton}
-          containerStyle={styles.button}
-          textStyle={styles.button}
-        />
-        <View style={{width: "2%"}}/>
-        <CustomButton
-          {...nextButton}
-          containerStyle={styles.button}
-          textStyle={styles.button}
+          {...props.nextButton}
         />
       </View>
     </View>
@@ -63,35 +63,26 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "flex-start"
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center"
   },
   questionContent: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: "bold",
-    marginTop: 15,
-    marginBottom: 15,
-    marginLeft: 15
-  },
-  header: {
-    alignSelf: "flex-start"
+    marginTop: "35%",
+    marginBottom: 25,
   },
   radioButtons: {
-    flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "baseline"
+    alignItems: "baseline",
+    marginBottom: 25
   },
-  button: {
-    width: "45%"
-  },
-  buttonText: {
-
-  },
-  controlButtons: {
+  nextButton: {
     flex: 1,
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     justifyContent: "center",
-    alignSelf: "center"
+    alignSelf: "center",
+    width: "50%"
   }
 });

@@ -5,11 +5,11 @@ import {
   IApiResponse
 } from "../common";
 
-interface IGetUserCourses {
+export interface IGetUserCourses {
   courses: ICourse[];
 }
 
-interface ICourse {
+export interface ICourse {
   id: number;
   name: string;
   xp: number;
@@ -18,19 +18,19 @@ interface ICourse {
   questions: IQuestion[];
 }
 
-interface IQuestion {
+export interface IQuestion {
   id: number;
   content: string;
   answers: IAnswear[];
 }
 
-interface IAnswear {
+export interface IAnswear {
   id: number;
   content: string;
   isCorrect: boolean;
 }
 
-async function getUserCourses(): Promise<IApiResponse<IGetUserCourses>> {
+export async function getUserCourses(): Promise<IApiResponse<IGetUserCourses>> {
   const request: IApiRequest<any> = {
     url: coursesPaths.getUserCourses,
     method: "GET"
@@ -44,11 +44,3 @@ async function getUserCourses(): Promise<IApiResponse<IGetUserCourses>> {
 
   throw response;
 }
-
-export { 
-  IGetUserCourses,
-  ICourse,
-  IQuestion, 
-  IAnswear, 
-  getUserCourses 
-};
