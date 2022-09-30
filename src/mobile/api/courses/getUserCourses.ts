@@ -6,15 +6,16 @@ import {
 } from "../common";
 
 export interface IGetUserCourses {
-  courses: ICourse[];
+  courses: IUserCourse[];
 }
 
-export interface ICourse {
+export interface IUserCourse {
   id: number;
   name: string;
   xp: number;
   description: string;
   passPercentTreshold: number;
+  userPassed: boolean;
   questions: IQuestion[];
 }
 

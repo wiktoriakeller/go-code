@@ -3,11 +3,11 @@ import React from "react";
 import { TagItem } from "./TagItem";
 import { ICourseInfo } from "../../api/courses/getAllCoursesInfos";
 import { CustomButton, IButtonProps } from "../CustomButton";
-import { ICourse } from "../../api/courses/getUserCourses";
+import { IUserCourse } from "../../api/courses/getUserCourses";
 import colors from "../../styles/colors";
 
 export interface ICourseListItemProps {
-  course: ICourseInfo | ICourse;
+  course: ICourseInfo | IUserCourse;
   button: IButtonProps
 }
 
@@ -18,11 +18,14 @@ export const CourseListItem = (props: ICourseListItemProps) => {
         <Text style={styles.title}>{props.course.name}</Text>
         <View style={styles.tags}>
           <TagItem
-            text={`XP ${props.course.xp}`}
-          />
-          <TagItem
             text={`Treshold: ${props.course.passPercentTreshold}`}
           />
+          {
+            (props.course as IUserCourse)?.userPassed === true ?
+            <TagItem
+              text={"Passed"}
+            /> : <View/>
+          }
         </View>
       </View>
       <View style={styles.secondary}>

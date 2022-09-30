@@ -12,7 +12,7 @@ namespace GoCode.Application.Common
                 .ReverseMap();
             CreateMap<CreateAnswearDto, Answear>()
                 .ReverseMap();
-            CreateMap<Course, CourseDto>();
+            CreateMap<Course, UserCourseDto>();
             CreateMap<Question, QuestionDto>();
             CreateMap<Answear, AnswearDto>();
         }

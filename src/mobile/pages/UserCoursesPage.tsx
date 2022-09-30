@@ -1,6 +1,6 @@
 import { FlatList, Modal, View, StyleSheet, Pressable, Text } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { getUserCourses, ICourse, IGetUserCourses } from '../api/courses/getUserCourses';
+import { getUserCourses, IUserCourse, IGetUserCourses } from '../api/courses/getUserCourses';
 import { IApiResponse } from '../api/common';
 import Spinner from 'react-native-loading-spinner-overlay/lib';
 import { CourseListItem } from '../components/courses/CourseListItem';
@@ -17,7 +17,7 @@ interface IStartCourse {
 
 export const UserCoursesPage = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [courses, setCourses] = useState<ICourse[]>([]);
+  const [courses, setCourses] = useState<IUserCourse[]>([]);
   const [currentCourseIndex, setCurrentCourseIndex] = useState(0);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [startedCourse, setStartedCourse] = useState(false);
@@ -69,12 +69,16 @@ export const UserCoursesPage = () => {
     }
   }
 
-  useEffect(() => {
+  const fetchCourses = () => {
     setIsLoading(true);
     getUserCourses()
-    .then((response: IApiResponse<IGetUserCourses>) => setCourses(response.data?.courses as ICourse[]))
+    .then((response: IApiResponse<IGetUserCourses>) => setCourses(response.data?.courses as IUserCourse[]))
     .catch((error: IApiResponse<IGetUserCourses>) => console.log(error))
-    .finally(() => setIsLoading(false))
+    .finally(() => setIsLoading(false));
+  }
+
+  useEffect(() => {
+    fetchCourses();
   }, [isFocused]);
 
   const startTest = (course: IStartCourse) => {
@@ -100,6 +104,7 @@ export const UserCoursesPage = () => {
     isDisabled: false,
     onPress: () => {
       setModalVisible(false); 
+      fetchCourses();
     },
     containerStyle: styles.modalButton,
     textStyle: styles.modalButtonText
