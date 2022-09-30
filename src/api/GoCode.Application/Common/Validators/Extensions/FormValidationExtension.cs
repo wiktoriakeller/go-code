@@ -15,7 +15,7 @@ namespace GoCode.Application.Common.Validators.Extensions
             return ruleBuilder.MustAsync(async (rootObject, id, context) =>
             {
                 var userCourse = await userCoursesRepository.GetByIdAsync(id);
-                if (userCourse.UserId == currentUserService.User.Id)
+                if (userCourse?.UserId == currentUserService?.User?.Id)
                 {
                     return true;
                 }

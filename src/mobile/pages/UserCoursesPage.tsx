@@ -7,7 +7,8 @@ import { CourseListItem } from '../components/courses/CourseListItem';
 import { useIsFocused } from '@react-navigation/native';
 import { Question } from '../components/courses/Question';
 import { IFormAnswear, sendUserAnswers } from '../api/courses/sendUserAnswers';
-import { IButtonProps } from '../components/CustomButton';
+import { CustomButton, IButtonProps } from '../components/CustomButton';
+import colors from '../styles/colors';
 
 interface IStartCourse {
   courseId: number;
@@ -86,12 +87,22 @@ export const UserCoursesPage = () => {
         setFormAnswers(courses[course.courseIndex].questions.map((item) => {
           return {
             questionId: item.id,
-            answearId: 0
+            answearId: item.answers[0].id
           };
         }));
         setStartedCourse(true);
       }
     }
+  };
+
+  const modalButton: IButtonProps = {
+    text: modalCloseText,
+    isDisabled: false,
+    onPress: () => {
+      setModalVisible(false); 
+    },
+    containerStyle: styles.modalButton,
+    textStyle: styles.modalButtonText
   };
 
   if(startedCourse) {
@@ -106,7 +117,7 @@ export const UserCoursesPage = () => {
   }
 
   return (
-    <View>
+    <View style={{ backgroundColor: colors.background }}>
       <Spinner
         visible={isLoading}
         textContent={""}
@@ -122,12 +133,7 @@ export const UserCoursesPage = () => {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>{modalContent}</Text>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}
-            >
-              <Text style={styles.textStyle}>{modalCloseText}</Text>
-            </Pressable>
+            <CustomButton {...modalButton}/>
           </View>
         </View>
       </Modal>
@@ -158,34 +164,29 @@ const styles = StyleSheet.create({
     margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
-    padding: 35,
+    paddingLeft: "16%",
+    paddingRight: "16%",
+    paddingTop: "8%",
+    paddingBottom: "8%",
     alignItems: "center",
-    shadowColor: "#000",
+    shadowColor: colors.shadow,
     shadowOffset: {
-      width: 0,
-      height: 2
+      width: 2,
+      height: 4
     },
     shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5
+    shadowRadius: 5,
+    elevation: 6
   },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2
+  modalButton: {
+    marginVertical: 0,
+    marginTop: 5
   },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center"
+  modalButtonText: {
+    fontSize: 16
   },
   modalText: {
+    fontSize: 20,
     marginBottom: 15,
     textAlign: "center"
   }

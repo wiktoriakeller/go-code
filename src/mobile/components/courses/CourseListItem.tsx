@@ -4,6 +4,7 @@ import { TagItem } from "./TagItem";
 import { ICourseInfo } from "../../api/courses/getAllCoursesInfos";
 import { CustomButton, IButtonProps } from "../CustomButton";
 import { ICourse } from "../../api/courses/getUserCourses";
+import colors from "../../styles/colors";
 
 export interface ICourseListItemProps {
   course: ICourseInfo | ICourse;
@@ -43,7 +44,8 @@ export const CourseListItem = (props: ICourseListItemProps) => {
 const styles = StyleSheet.create({
   root: {
     borderRadius: 15,
-    backgroundColor: "pink",
+    borderColor: colors.lightGrey,
+    backgroundColor: colors.light,
     marginTop: 6,
     marginBottom: 6,
     marginLeft: "6%",
@@ -51,7 +53,15 @@ const styles = StyleSheet.create({
     paddingTop: "2%",
     paddingLeft: "4%",
     paddingBottom: "2%",
-    paddingRight: "4%"
+    paddingRight: "4%",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 2,
+      height: 2
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+    elevation: 3
   },
   main: {
     flex: 1,
