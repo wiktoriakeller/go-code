@@ -21,7 +21,8 @@ export const Question = (props: IQuestionsData) => {
         label: answear.content,
         value: answear.id.toString(),
         disabled: false,
-        selected: index === 0 ? true : false
+        selected: index === 0 ? true : false,
+        labelStyle: styles.labelStyle
       }
     });
   }
@@ -44,7 +45,9 @@ export const Question = (props: IQuestionsData) => {
 
   return (
     <View style={styles.root}>
-      <Text style={styles.questionContent}>{props.question.content}</Text>
+      <View style={styles.header}>
+        <Text style={styles.questionContent}>{props.question.content}</Text>
+      </View>
       <RadioGroup
           radioButtons={radioButtons}
           onPress={onPressRadioButton}
@@ -70,12 +73,21 @@ const styles = StyleSheet.create({
   questionContent: {
     fontSize: 32,
     fontWeight: "bold",
-    marginTop: "35%",
-    marginBottom: 25,
+    marginTop: "10%",
+    marginBottom: "5%",
+  },
+  header: {
+    marginLeft: "4%",
+    marginRight: "4%"
   },
   radioButtons: {
     alignItems: "baseline",
-    marginBottom: 25
+    marginBottom: "5%",
+    marginLeft: "4%",
+    marginRight: "4%"
+  },
+  labelStyle: {
+    fontSize: 18
   },
   nextButton: {
     flex: 1,

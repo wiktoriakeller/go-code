@@ -96,7 +96,7 @@ namespace GoCode.Application.Form.Handlers
                 IsCorrect = false
             };
 
-            if (correctAnswear.Id == response.AnswerId)
+            if (correctAnswear.Id == response.AnswearId)
             {
                 correctAnswers++;
                 responseResult.IsCorrect = true;

@@ -16,11 +16,11 @@ export interface ISignUpForCourseResponse {
 export async function signUpForCourse(params: ISignUpForCourseRequest): Promise<IApiResponse<ISignUpForCourseResponse>> {
   const request: IApiRequest<any> = {
     url: `${coursesPaths.signUp}/${params.id}`,
-    method: "PATCH"
+    method: "PATCH",
+    data: params
   };
 
-  console.log(request);
-  const response = await callApi<any, ISignUpForCourseResponse>(request);
+  const response = await callApi<ISignUpForCourseRequest, ISignUpForCourseResponse>(request);
 
   if(response.succeeded && response.data) {
     return response;
