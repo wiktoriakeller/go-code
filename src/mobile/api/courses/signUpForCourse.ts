@@ -5,22 +5,22 @@ import {
   IApiResponse
 } from "../common";
 
-interface ISignUpForCourseRequest {
+export interface ISignUpForCourseRequest {
   id: number;
 }
 
-interface ISignUpForCourseResponse {
+export interface ISignUpForCourseResponse {
   id: number;
 }
 
-async function signUpForCourse(params: ISignUpForCourseRequest): Promise<IApiResponse<ISignUpForCourseResponse>> {
+export async function signUpForCourse(params: ISignUpForCourseRequest): Promise<IApiResponse<ISignUpForCourseResponse>> {
   const request: IApiRequest<any> = {
     url: `${coursesPaths.signUp}/${params.id}`,
-    method: "PATCH"
+    method: "PATCH",
+    data: params
   };
 
-  console.log(request);
-  const response = await callApi<any, ISignUpForCourseResponse>(request);
+  const response = await callApi<ISignUpForCourseRequest, ISignUpForCourseResponse>(request);
 
   if(response.succeeded && response.data) {
     return response;
@@ -28,9 +28,3 @@ async function signUpForCourse(params: ISignUpForCourseRequest): Promise<IApiRes
 
   throw response;
 }
-
-export { 
-  ISignUpForCourseRequest, 
-  ISignUpForCourseResponse, 
-  signUpForCourse 
-};

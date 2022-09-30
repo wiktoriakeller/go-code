@@ -16,7 +16,7 @@ namespace GoCode.UnitTests.Application.Courses.Handlers
         [Theory]
         [CustomUser]
         public async Task Handle_GivenGetUserCoursesQuery_WhenUserIsNotNull_ReturnsUserCourses(User user,
-            IEnumerable<CourseDto> expected, GetUserCoursesQuery query)
+            IEnumerable<UserCourseDto> expected, GetUserCoursesQuery query)
         {
             //Arrange
             var currentUserMock = new Mock<ICurrentUserService>();
@@ -26,7 +26,7 @@ namespace GoCode.UnitTests.Application.Courses.Handlers
             var coursesRepositoryMock = new Mock<ICoursesRepository>();
 
             var mapperMock = new Mock<IMapper>();
-            mapperMock.Setup(x => x.Map<IEnumerable<CourseDto>>(It.IsAny<IEnumerable<Course>>()))
+            mapperMock.Setup(x => x.Map<IEnumerable<UserCourseDto>>(It.IsAny<IEnumerable<Course>>()))
                 .Returns(expected);
 
             var sut = new GetUserCoursesQueryHandler(currentUserMock.Object, coursesRepositoryMock.Object,

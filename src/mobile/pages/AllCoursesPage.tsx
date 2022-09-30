@@ -7,6 +7,7 @@ import Spinner from "react-native-loading-spinner-overlay/lib";
 import { ISignUpForCourseResponse, signUpForCourse } from "../api/courses/signUpForCourse";
 import { useIsFocused } from '@react-navigation/native';
 import { FlatList } from "react-native-gesture-handler";
+import colors from "../styles/colors";
 
 interface IRegisterCourse {
   courseId: number;
@@ -47,7 +48,7 @@ export const AllCoursesPage = () => {
   };
 
   return (
-    <View>
+    <View style={{ backgroundColor: colors.background }}>
       <Spinner
         visible={isLoading}
         textContent={""}

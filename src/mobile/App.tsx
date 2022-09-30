@@ -4,10 +4,11 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootStackParamList } from "./navigation/stackNavigation";
 import { SignUpPage } from "./pages/SignUpPage";
-import { createDrawerNavigator } from "@react-navigation/drawer";
+import { createDrawerNavigator, DrawerContentComponentProps, DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer";
 import { RootDrawerParamList } from "./navigation/drawerNavigation";
 import { UserCoursesPage } from "./pages/UserCoursesPage";
 import { AllCoursesPage } from "./pages/AllCoursesPage";
+import colors from './styles/colors';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Drawer = createDrawerNavigator<RootDrawerParamList>();
@@ -19,12 +20,20 @@ const HomePage = () => {
       <Drawer.Screen 
         name="UserCourses"
         component={UserCoursesPage}
-        options={{ title: "My courses"}}
+        options={{ 
+          title: "My courses",
+          drawerActiveBackgroundColor: colors.primaryLight,
+          drawerActiveTintColor: colors.white,
+        }}
       />
       <Drawer.Screen 
         name="AllCourses"
         component={AllCoursesPage}
-        options={{ title: "All courses"}}
+        options={{ 
+          title: "All courses",
+          drawerActiveBackgroundColor: colors.primaryLight,
+          drawerActiveTintColor: colors.white
+        }}
       />
     </Drawer.Navigator>
   )

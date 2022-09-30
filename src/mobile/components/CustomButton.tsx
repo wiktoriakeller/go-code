@@ -2,7 +2,7 @@ import { Pressable, Text, StyleSheet, GestureResponderEvent } from "react-native
 import React, { useEffect, useState } from "react"
 import colors from "../styles/colors"
 
-interface IButtonProps {
+export interface IButtonProps {
   text: string;
   isDisabled: boolean;
   onPress: (event: GestureResponderEvent) => void;
@@ -10,7 +10,7 @@ interface IButtonProps {
   textStyle?: any;
 }
 
-const CustomButton = (props: IButtonProps) => {
+export const CustomButton = (props: IButtonProps) => {
   const [disabledStyle, setDisabledStyle] = useState({});
 
   useEffect(() => {
@@ -56,5 +56,3 @@ const styles = StyleSheet.create({
     backgroundColor: colors.grey
   }
 });
-
-export { IButtonProps, CustomButton };

@@ -34,8 +34,13 @@ namespace GoCode.Application.Courses.Handlers
                 return ResponseResult.Unauthorized<GetUserCoursesResponse>(ErrorMessages.Identity.UnauthorizedUser);
             }
 
-            var courses = _coursesRepository.GetCoursesWithAll(x => x.UserCourses.Any(uc => uc.UserId == currentUser.Id));
-            var mappedCourses = _mapper.Map<IEnumerable<CourseDto>>(courses);
+            var courses = _coursesRepository.GetCoursesWithAll(x => x.UserCourses.Any(uc => uc.UserId == currentUser.Id)).ToList();
+            var mappedCourses = _mapper.Map<IEnumerable<UserCourseDto>>(courses).ToList();
+            for (int i = 0; i < courses.Count(); i++)
+            {
+                mappedCourses[i].UserPassed = courses[i].UserCourses.First(uc => uc.UserId == currentUser.Id).UserGainedXP;
+            }
+
             var response = new GetUserCoursesResponse() { Courses = mappedCourses };
             return ResponseResult.Ok(response);
         }
