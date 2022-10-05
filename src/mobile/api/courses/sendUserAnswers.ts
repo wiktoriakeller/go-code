@@ -30,9 +30,7 @@ export async function sendUserAnswers(params: ICourseFormRequest): Promise<IApiR
     data: params
   };
 
-  console.log(request);
   const response = await callApi<any, ICourseFormResponse>(request);
-  console.log(response);
 
   if(response.succeeded && response.data) {
     return response;

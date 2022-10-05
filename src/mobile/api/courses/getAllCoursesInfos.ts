@@ -1,8 +1,5 @@
-import { callApi } from "../callApi";
 import { 
-  coursesPaths, 
-  IApiRequest, 
-  IApiResponse
+  coursesPaths
 } from "../common";
 
 export interface IGetAllCoursesInfosResponse {
@@ -18,17 +15,9 @@ export interface ICourseInfo {
   isUserSignedUp: boolean;
 }
 
-export async function getAllCoursesInfos(): Promise<IApiResponse<IGetAllCoursesInfosResponse>> {
-  const request: IApiRequest<any> = {
+export const getAllCoursesRequest = () => {
+  return {
     url: coursesPaths.getAll,
     method: "GET"
   };
-
-  const response = await callApi<any, IGetAllCoursesInfosResponse>(request);
-
-  if(response.succeeded && response.data) {
-    return response;
-  }
-
-  throw response;
 }

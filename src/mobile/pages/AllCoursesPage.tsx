@@ -1,12 +1,12 @@
 import { View } from "react-native"
 import React, { useEffect, useState } from "react"
 import { CourseListItem } from "../components/courses/CourseListItem"
-import { getAllCoursesInfos, IGetAllCoursesInfosResponse, ICourseInfo } from "../api/courses/getAllCoursesInfos";
-import { IApiResponse } from "../api/common";
+import { IGetAllCoursesInfosResponse, getAllCoursesRequest } from "../api/courses/getAllCoursesInfos";
 import Spinner from "react-native-loading-spinner-overlay/lib";
-import { ISignUpForCourseResponse, signUpForCourse } from "../api/courses/signUpForCourse";
+import { ISignUpForCourseRequest, ISignUpForCourseResponse, signUpForCourseRequest } from "../api/courses/signUpForCourse";
 import { useIsFocused } from '@react-navigation/native';
 import { FlatList } from "react-native-gesture-handler";
+import { useQuery } from "../api/useQuery";
 import colors from "../styles/colors";
 
 interface IRegisterCourse {
@@ -15,34 +15,38 @@ interface IRegisterCourse {
 }
 
 export const AllCoursesPage = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [courses, setCourses] = useState<ICourseInfo[]>([]);
   const [reload, setReload] = useState(true);
   const isFocused = useIsFocused();
+  
+  const { 
+    data: courses, 
+    fetchData: getAllCoursesInfos, 
+    isLoading: coursesLoading, 
+    isSuccess: coursesSuccess 
+  } = useQuery<any, IGetAllCoursesInfosResponse>();
+
+  const { 
+    fetchData: signUpForCourse, 
+    isLoading: signUpLoading,
+    isSuccess: signUpSuccess
+  } = useQuery<ISignUpForCourseRequest, ISignUpForCourseResponse>();
 
   useEffect(() => {
-    setIsLoading(true);
-    getAllCoursesInfos()
-    .then((response: IApiResponse<IGetAllCoursesInfosResponse>) => setCourses(response.data?.courses as ICourseInfo[]))
-    .catch((error: IApiResponse<IGetAllCoursesInfosResponse>) => console.log(error))
-    .finally(() => setIsLoading(false))
+    getAllCoursesInfos(getAllCoursesRequest());
   }, [reload, isFocused]);
+
+  useEffect(() => {
+    if(signUpSuccess) {
+      setReload(!reload);
+    }
+  }, [signUpSuccess]);
 
   const registerForCourseButton = (props: IRegisterCourse) => {
     return {
       text: "Sign up",
       isDisabled: props.registered,
       onPress: () => {
-        setIsLoading(true);
-        signUpForCourse({
-          id: props.courseId
-        })
-        .then(() => console.log("registered"))
-        .catch((error: IApiResponse<ISignUpForCourseResponse>) => console.log(error))
-        .finally(() => {
-          setIsLoading(false);
-          setReload(!reload);
-        })
+        signUpForCourse(signUpForCourseRequest({ id: props.courseId }));
       }
     }
   };
@@ -50,12 +54,12 @@ export const AllCoursesPage = () => {
   return (
     <View style={{ backgroundColor: colors.background }}>
       <Spinner
-        visible={isLoading}
+        visible={coursesLoading || signUpLoading}
         textContent={""}
       />
       <View style={{ marginBottom: 6 }}/>
       <FlatList
-        data={courses}
+        data={coursesSuccess ? courses?.courses : []}
         renderItem={({item}) => (
           <CourseListItem
             course={item}
