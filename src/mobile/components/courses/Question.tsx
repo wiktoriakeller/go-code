@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { IQuestion } from '../../api/courses/getUserCourses'
+import { IQuestion } from '../../api/courses/getUserCoursesRequest'
 import RadioGroup, { RadioButtonProps } from 'react-native-radio-buttons-group';
 import { CustomButton, IButtonProps } from '../CustomButton';
-import { IFormAnswear } from '../../api/courses/sendForm';
+import { IFormAnswear } from '../../api/courses/getSendFormRequest';
 
 export interface IQuestionsData {
   questionNumber: number;

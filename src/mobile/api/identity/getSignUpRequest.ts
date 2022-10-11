@@ -10,7 +10,7 @@ export interface ISignUpRequest {
   username: string;
 }
 
-export const signUpRequest = (params: ISignUpRequest) => {
+export const getSignUpRequest = (params: ISignUpRequest) => {
   return {
     url: identityPaths.signUp,
     method: "POST",

@@ -7,6 +7,7 @@ import {
   IApiResponse,
   tokenKey
 } from "./common";
+import { refreshToken } from "./identity/refreshToken";
 
 axios.defaults.baseURL = baseUrl;
 
@@ -28,10 +29,17 @@ export const responseInterceptor = axios.interceptors.response.use(
   (response) => {
     return response;
   },
-  (error) => {
+  async (error) => {    
     const originalRequest = error.config;
+    console.log(error);
     if(error.response.status === StatusCodes.Unauthorized && !originalRequest._retry) {
       originalRequest._retry = true;
+      const response = await refreshToken();
+      console.log(response);
+      if(response.succeeded) {
+        axios.defaults.headers.common["Authorization"] = `bearer ${response.data?.token}`;
+        return axios(originalRequest);
+      }
     }
     return Promise.reject(error);
   }

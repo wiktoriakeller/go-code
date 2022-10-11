@@ -119,7 +119,7 @@ namespace GoCode.Infrastructure.Identity
 
         public async Task<Response<RefreshTokenResponse>> RefreshTokenAsync(RefreshTokenCommand refreshTokenCommand)
         {
-            var result = IsJwtTokenValid<RefreshTokenResponse>(refreshTokenCommand.Token);
+            var result = IsJwtTokenValid<RefreshTokenResponse>(refreshTokenCommand.Token, false);
 
             if (!result.response.Succeeded)
             {
@@ -155,14 +155,14 @@ namespace GoCode.Infrastructure.Identity
             return ResponseResult.Ok(response);
         }
 
-        private (Response<T> response, string? userId, string? jti) IsJwtTokenValid<T>(string? token)
+        private (Response<T> response, string? userId, string? jti) IsJwtTokenValid<T>(string? token, bool validateLifetime = true)
         {
             if (token is null)
             {
                 return (ResponseResult.Unauthorized<T>(ErrorMessages.Identity.InvalidToken), null, null);
             }
 
-            var validatedJwt = _jwtService.GetPrincipalFromJwtToken(token);
+            var validatedJwt = _jwtService.GetPrincipalFromJwtToken(token, validateLifetime);
 
             if (validatedJwt == null)
             {

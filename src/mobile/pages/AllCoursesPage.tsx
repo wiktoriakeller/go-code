@@ -1,9 +1,9 @@
 import { View } from "react-native"
 import React, { useEffect, useState } from "react"
 import { CourseListItem } from "../components/courses/CourseListItem"
-import { IGetAllCoursesInfosResponse, getAllCoursesRequest } from "../api/courses/getAllCoursesInfos";
+import { IGetAllCoursesInfosResponse, getAllCoursesInfosRequest } from "../api/courses/getAllCoursesInfosRequest";
 import Spinner from "react-native-loading-spinner-overlay/lib";
-import { ISignUpForCourseRequest, ISignUpForCourseResponse, signUpForCourseRequest } from "../api/courses/signUpForCourse";
+import { ISignUpForCourseRequest, ISignUpForCourseResponse, getSignUpForCourseRequest } from "../api/courses/getSignUpForCourseRequest";
 import { useIsFocused } from '@react-navigation/native';
 import { FlatList } from "react-native-gesture-handler";
 import { useQuery } from "../api/useQuery";
@@ -32,7 +32,7 @@ export const AllCoursesPage = () => {
   } = useQuery<ISignUpForCourseRequest, ISignUpForCourseResponse>();
 
   useEffect(() => {
-    getAllCoursesInfos(getAllCoursesRequest());
+    getAllCoursesInfos(getAllCoursesInfosRequest());
   }, [reload, isFocused]);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export const AllCoursesPage = () => {
       text: "Sign up",
       isDisabled: props.registered,
       onPress: () => {
-        signUpForCourse(signUpForCourseRequest({ id: props.courseId }));
+        signUpForCourse(getSignUpForCourseRequest({ id: props.courseId }));
       }
     }
   };

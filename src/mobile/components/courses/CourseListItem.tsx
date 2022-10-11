@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import React from "react";
 import { TagItem } from "./TagItem";
-import { ICourseInfo } from "../../api/courses/getAllCoursesInfos";
+import { ICourseInfo } from "../../api/courses/getAllCoursesInfosRequest";
 import { CustomButton, IButtonProps } from "../CustomButton";
-import { IUserCourse } from "../../api/courses/getUserCourses";
+import { IUserCourse } from "../../api/courses/getUserCoursesRequest";
 import colors from "../../styles/colors";
 
 export interface ICourseListItemProps {

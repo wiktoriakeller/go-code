@@ -43,12 +43,27 @@ namespace GoCode.Infrastructure.Identity
             return (jwtToken, jti);
         }
 
-        public ClaimsPrincipal? GetPrincipalFromJwtToken(string jwtToken)
+        public ClaimsPrincipal? GetPrincipalFromJwtToken(string jwtToken, bool validateLifetime)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             try
             {
-                var principal = tokenHandler.ValidateToken(jwtToken, _tokenValidationParameters, out var validatedToken);
+                var validationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = _tokenValidationParameters.ValidateIssuerSigningKey,
+                    ValidIssuer = _tokenValidationParameters.ValidIssuer,
+                    ValidAudience = _tokenValidationParameters.ValidAudience,
+                    IssuerSigningKey = _tokenValidationParameters.IssuerSigningKey,
+                    ValidateLifetime = _tokenValidationParameters.ValidateLifetime,
+                    ClockSkew = _tokenValidationParameters.ClockSkew,
+                };
+
+                if (!validateLifetime)
+                {
+                    validationParameters.ValidateLifetime = false;
+                }
+
+                var principal = tokenHandler.ValidateToken(jwtToken, validationParameters, out var validatedToken);
 
                 if (!IsJwtWithValidSecurityAlgorithm(validatedToken))
                 {

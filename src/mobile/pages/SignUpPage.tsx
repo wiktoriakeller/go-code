@@ -14,7 +14,7 @@ import { CustomButton, IButtonProps } from "../components/CustomButton";
 import colors from "../styles/colors";
 import { SignUpNavigation } from "../navigation/stackNavigation";
 import { useHidePassword } from "../hooks/useHidePassword";
-import { signUpRequest, ISignUpRequest, ISignUpResponse } from "../api/identity/signUp";
+import { getSignUpRequest, ISignUpRequest, ISignUpResponse } from "../api/identity/getSignUpRequest";
 import { IApiResponse } from "../api/common";
 import Spinner from "react-native-loading-spinner-overlay/lib";
 import { Messages } from "../components/Messages";
@@ -149,7 +149,7 @@ export const SignUpPage = ({ navigation }: SignUpNavigation) => {
       setResponseErrorMessages([]);
       setDisabledSignUpButton(true);
 
-      signUp(signUpRequest({
+      signUp(getSignUpRequest({
         email: email,
         username: username,
         password: password

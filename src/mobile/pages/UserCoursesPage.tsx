@@ -1,11 +1,11 @@
 import { FlatList, Modal, View, StyleSheet, Text } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { IUserCourse, IGetUserCourses, getUserCoursesRequest } from '../api/courses/getUserCourses';
+import { IUserCourse, IGetUserCourses, getUserCoursesRequest } from '../api/courses/getUserCoursesRequest';
 import Spinner from 'react-native-loading-spinner-overlay/lib';
 import { CourseListItem } from '../components/courses/CourseListItem';
 import { useIsFocused } from '@react-navigation/native';
 import { Question } from '../components/courses/Question';
-import { ICourseFormRequest, ICourseFormResponse, IFormAnswear, sendFormRequest } from '../api/courses/sendForm';
+import { ICourseFormRequest, ICourseFormResponse, IFormAnswear, getSendFormRequest } from '../api/courses/getSendFormRequest';
 import { CustomButton, IButtonProps } from '../components/CustomButton';
 import colors from '../styles/colors';
 import { useQuery } from '../api/useQuery';
@@ -45,7 +45,7 @@ export const UserCoursesPage = () => {
     text: "Send",
     isDisabled: false,
     onPress: () => {
-      sendForm(sendFormRequest({
+      sendForm(getSendFormRequest({
         courseId: currentCourse?.id,
         formAnswers: formAnswers
       }))

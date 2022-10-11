@@ -22,7 +22,7 @@ export interface ICourseFormResponse {
   responsesEvaluation: IQuestionEvaluation[];
 }
 
-export const sendFormRequest = (params: ICourseFormRequest) => {
+export const getSendFormRequest = (params: ICourseFormRequest) => {
   return {
     url: formPaths.sendCourseForm,
     method: "POST",

@@ -13,7 +13,7 @@ export interface ISignUpForCourseResponse {
   id: number;
 }
 
-export const signUpForCourseRequest = (params: ISignUpForCourseRequest) => {
+export const getSignUpForCourseRequest = (params: ISignUpForCourseRequest) => {
   return {
     url: `${coursesPaths.signUp}/${params.id}`,
     method: "PATCH",

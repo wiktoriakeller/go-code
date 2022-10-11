@@ -1,6 +1,4 @@
-import { 
-  coursesPaths
-} from "../common";
+import { coursesPaths } from "../common";
 
 export interface IGetAllCoursesInfosResponse {
   courses: ICourseInfo[];
@@ -15,7 +13,7 @@ export interface ICourseInfo {
   isUserSignedUp: boolean;
 }
 
-export const getAllCoursesRequest = () => {
+export const getAllCoursesInfosRequest = () => {
   return {
     url: coursesPaths.getAll,
     method: "GET"

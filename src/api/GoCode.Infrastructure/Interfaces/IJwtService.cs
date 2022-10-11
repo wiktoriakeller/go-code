@@ -7,6 +7,6 @@ namespace GoCode.Infrastructure.Interfaces
     {
         Task<(string jwtToken, string jti)> CreateJwtToken(User user);
 
-        ClaimsPrincipal? GetPrincipalFromJwtToken(string token);
+        ClaimsPrincipal? GetPrincipalFromJwtToken(string token, bool validateLifetime = true);
     }
 }
