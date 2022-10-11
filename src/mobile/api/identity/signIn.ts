@@ -8,17 +8,17 @@ import {
   refreshTokenKey
 } from "../common";
 
-interface ISignInResponse {
+export interface ISignInResponse {
   token: string;
   refreshToken: string;
 }
 
-interface ISignInRequest {
+export interface ISignInRequest {
   email: string;
   password: string;
 }
 
-async function signIn(params: ISignInRequest): Promise<IApiResponse<ISignInResponse>> {
+export async function signIn(params: ISignInRequest): Promise<IApiResponse<ISignInResponse>> {
   const request: IApiRequest<ISignInRequest> = {
     url: identityPaths.signIn,
     method: "POST",
@@ -35,5 +35,3 @@ async function signIn(params: ISignInRequest): Promise<IApiResponse<ISignInRespo
 
   throw response;
 }
-
-export { signIn, ISignInRequest, ISignInResponse };

@@ -1,38 +1,41 @@
-import { FlatList, Modal, View, StyleSheet, Pressable, Text } from 'react-native'
+import { FlatList, Modal, View, StyleSheet, Text } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { getUserCourses, IUserCourse, IGetUserCourses } from '../api/courses/getUserCourses';
-import { IApiResponse } from '../api/common';
+import { IUserCourse, IGetUserCourses, getUserCoursesRequest } from '../api/courses/getUserCourses';
 import Spinner from 'react-native-loading-spinner-overlay/lib';
 import { CourseListItem } from '../components/courses/CourseListItem';
 import { useIsFocused } from '@react-navigation/native';
 import { Question } from '../components/courses/Question';
-import { IFormAnswear, sendUserAnswers } from '../api/courses/sendUserAnswers';
+import { ICourseFormRequest, ICourseFormResponse, IFormAnswear, sendFormRequest } from '../api/courses/sendForm';
 import { CustomButton, IButtonProps } from '../components/CustomButton';
 import colors from '../styles/colors';
-
-interface IStartCourse {
-  courseId: number;
-  courseIndex: number;
-}
+import { useQuery } from '../api/useQuery';
 
 export const UserCoursesPage = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [courses, setCourses] = useState<IUserCourse[]>([]);
-  const [currentCourseIndex, setCurrentCourseIndex] = useState(0);
+  const [currentCourse, setCurrentCourse] = useState<IUserCourse>();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [startedCourse, setStartedCourse] = useState(false);
   const [formAnswers, setFormAnswers] = useState<IFormAnswear[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState("");
   const [modalCloseText, setModalCloseText] = useState("");
   const isFocused = useIsFocused();
 
+  const { 
+    fetchData: getUserCourses, 
+    data: coursesResponse,
+    isLoading: coursesLoading,
+  } = useQuery<any, IGetUserCourses>();
+
+  const { 
+    fetchData: sendForm, 
+    isLoading: sendFormLoading
+  } = useQuery<ICourseFormRequest, ICourseFormResponse>();
+
   const nextButton: IButtonProps = {
     text: "Next",
     isDisabled: false,
     onPress: () => {
-      const numberOfQuestions = courses[currentCourseIndex]?.questions.length;
-      if(currentCourseIndex !== -1 && currentQuestionIndex < (numberOfQuestions - 1)) {
+      const numberOfQuestions = currentCourse?.questions.length;
+      if(numberOfQuestions && currentQuestionIndex < (numberOfQuestions - 1)) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
       }
     }
@@ -42,12 +45,10 @@ export const UserCoursesPage = () => {
     text: "Send",
     isDisabled: false,
     onPress: () => {
-      console.log("Send!");
-      setIsLoading(true);
-      sendUserAnswers({
-        courseId: courses[currentCourseIndex].id,
+      sendForm(sendFormRequest({
+        courseId: currentCourse?.id,
         formAnswers: formAnswers
-      })
+      }))
       .then((response) => {
         if(response.data?.passed) {
           setModalContent("Congratulations you've passed!");
@@ -60,41 +61,33 @@ export const UserCoursesPage = () => {
 
         setModalVisible(true);
       })
-      .catch((ex) => console.log(ex))
-      .finally(() => setIsLoading(false))
 
-      setCurrentCourseIndex(0);
+      setCurrentCourse(undefined);
       setCurrentQuestionIndex(0);
-      setStartedCourse(false);
     }
   }
 
   const fetchCourses = () => {
-    setIsLoading(true);
-    getUserCourses()
-    .then((response: IApiResponse<IGetUserCourses>) => setCourses(response.data?.courses as IUserCourse[]))
-    .catch((error: IApiResponse<IGetUserCourses>) => console.log(error))
-    .finally(() => setIsLoading(false));
+    getUserCourses(getUserCoursesRequest());
   }
 
   useEffect(() => {
     fetchCourses();
   }, [isFocused]);
 
-  const startTest = (course: IStartCourse) => {
+  const startTest = (course: IUserCourse) => {
     return {
       text: "Start",
       isDisabled: false,
       onPress: () => {
-        setCurrentCourseIndex(course.courseIndex);
         setCurrentQuestionIndex(0);
-        setFormAnswers(courses[course.courseIndex].questions.map((item) => {
+        setCurrentCourse(course);
+        setFormAnswers(course.questions.map((item) => {
           return {
             questionId: item.id,
             answearId: item.answers[0].id
           };
         }));
-        setStartedCourse(true);
       }
     }
   };
@@ -110,30 +103,37 @@ export const UserCoursesPage = () => {
     textStyle: styles.modalButtonText
   };
 
-  if(startedCourse) {
+  if(coursesResponse?.courses.length === 0) {
+    return (
+      <View style={styles.emptyPage}>
+        <Text style={styles.emptyPageText}>So empty...</Text>
+        <Text style={styles.emptyPageText}>Sign up for some courses!</Text>
+      </View>
+    )
+  }
+
+  if(currentCourse) {
     return (
       <Question 
       questionNumber={currentQuestionIndex}
-      question={courses[currentCourseIndex].questions[currentQuestionIndex]}
+      question={currentCourse.questions[currentQuestionIndex]}
       formAnswers={formAnswers}
-      setFormAnswers={setFormAnswers}
-      nextButton={currentQuestionIndex === (courses[currentCourseIndex].questions.length - 1) ? sendAnswersButton : nextButton}
+      onSetFormAnswers={(answers) => setFormAnswers(answers)}
+      nextButton={currentQuestionIndex === (currentCourse.questions.length - 1) ? sendAnswersButton : nextButton}
     />)
   }
 
   return (
     <View style={{ backgroundColor: colors.background }}>
       <Spinner
-        visible={isLoading}
+        visible={coursesLoading || sendFormLoading}
         textContent={""}
       />
       <Modal
         animationType="fade"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
+        onRequestClose={() => setModalVisible(prev => !prev)}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
@@ -144,11 +144,11 @@ export const UserCoursesPage = () => {
       </Modal>
       <View style={{ marginBottom: 6 }}/>
       <FlatList
-        data={courses}
-        renderItem={({item, index}) => (
+        data={coursesResponse?.courses}
+        renderItem={({ item }) => (
           <CourseListItem
             course={item}
-            button={startTest({ courseId: item.id, courseIndex: index })}
+            button={startTest(item)}
           />
         )}
         keyExtractor={course => course.id.toString()}
@@ -194,5 +194,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 15,
     textAlign: "center"
+  },
+  emptyPage: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: "20%"
+  },
+  emptyPageText: {
+    fontSize: 22
   }
 });

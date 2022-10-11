@@ -1,9 +1,4 @@
-import { callApi } from "../callApi";
-import { 
-  coursesPaths, 
-  IApiRequest, 
-  IApiResponse
-} from "../common";
+import { coursesPaths } from "../common";
 
 export interface IGetUserCourses {
   courses: IUserCourse[];
@@ -31,17 +26,9 @@ export interface IAnswear {
   isCorrect: boolean;
 }
 
-export async function getUserCourses(): Promise<IApiResponse<IGetUserCourses>> {
-  const request: IApiRequest<any> = {
+export const getUserCoursesRequest = () => {
+  return {
     url: coursesPaths.getUserCourses,
     method: "GET"
   };
-
-  const response = await callApi<any, IGetUserCourses>(request);
-
-  if(response.succeeded && response.data) {
-    return response;
-  }
-
-  throw response;
 }

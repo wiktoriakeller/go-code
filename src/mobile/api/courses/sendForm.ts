@@ -1,8 +1,7 @@
-import { callApi } from "../callApi";
-import { formPaths, IApiRequest, IApiResponse } from "../common";
+import { formPaths } from "../common";
 
 export interface ICourseFormRequest {
-  courseId: number;
+  courseId?: number;
   formAnswers: IFormAnswear[];
 }
 
@@ -23,18 +22,10 @@ export interface ICourseFormResponse {
   responsesEvaluation: IQuestionEvaluation[];
 }
 
-export async function sendUserAnswers(params: ICourseFormRequest): Promise<IApiResponse<ICourseFormResponse>> {
-  const request: IApiRequest<ICourseFormRequest> = {
+export const sendFormRequest = (params: ICourseFormRequest) => {
+  return {
     url: formPaths.sendCourseForm,
     method: "POST",
     data: params
   };
-
-  const response = await callApi<any, ICourseFormResponse>(request);
-
-  if(response.succeeded && response.data) {
-    return response;
-  }
-
-  throw response;
 }

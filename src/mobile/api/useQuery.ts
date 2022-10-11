@@ -20,7 +20,7 @@ export const useQuery = <TRequest, TResponse>() => {
 
     if(response.succeeded) {
       setIsSuccess(true);
-      return;
+      return response;
     }
   
     setIsError(true);
