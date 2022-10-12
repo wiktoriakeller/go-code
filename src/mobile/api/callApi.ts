@@ -1,16 +1,18 @@
-import axios, { Axios, AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { getData } from "./storage";
 import {  
   baseUrl,
   StatusCodes, 
   IApiRequest,
   IApiResponse,
-  tokenKey
+  tokenKey,
+  identityPaths
 } from "./common";
+import { refreshToken } from "./identity/refreshToken";
 
 axios.defaults.baseURL = baseUrl;
 
-const requestInterceptor = axios.interceptors.request.use(
+export const requestInterceptor = axios.interceptors.request.use(
   async (config) => {
     const jwt = await getData(tokenKey);
     if(jwt && config.headers) {
@@ -24,20 +26,25 @@ const requestInterceptor = axios.interceptors.request.use(
   }
 )
 
-const responseInterceptor = axios.interceptors.response.use(
+export const responseInterceptor = axios.interceptors.response.use(
   (response) => {
     return response;
   },
-  (error) => {
-    const originalRequest = error.config;
-    if(error.response.status === StatusCodes.Unauthorized && !originalRequest._retry) {
+  async (error) => {    
+    const originalRequest = error?.config;
+    if(error?.response?.status === StatusCodes.Unauthorized && !originalRequest._retry && originalRequest.url != identityPaths.refreshToken) {
       originalRequest._retry = true;
+      const response = await refreshToken();
+      if(response.succeeded) {
+        axios.defaults.headers.common["Authorization"] = `bearer ${response.data?.token}`;
+        return axios(originalRequest);
+      }
     }
     return Promise.reject(error);
   }
 )
 
-async function callApi<TRequest, TResponse> (params: IApiRequest<TRequest>): Promise<IApiResponse<TResponse>> {
+export async function callApi<TRequest, TResponse> (params: IApiRequest<TRequest>): Promise<IApiResponse<TResponse>> {
   let response: IApiResponse<TResponse>;
 
   try {
@@ -63,8 +70,5 @@ async function callApi<TRequest, TResponse> (params: IApiRequest<TRequest>): Pro
     }
   }
   
-  console.log(response);
   return response;
 }
-
-export { callApi, responseInterceptor, requestInterceptor };

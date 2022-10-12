@@ -1,15 +1,15 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { IQuestion } from '../../api/courses/getUserCourses'
+import { IQuestion } from '../../api/courses/getUserCoursesRequest'
 import RadioGroup, { RadioButtonProps } from 'react-native-radio-buttons-group';
 import { CustomButton, IButtonProps } from '../CustomButton';
-import { IFormAnswear } from '../../api/courses/sendUserAnswers';
+import { IFormAnswear } from '../../api/courses/getSendFormRequest';
 
 export interface IQuestionsData {
   questionNumber: number;
   question: IQuestion;
   formAnswers: IFormAnswear[];
-  setFormAnswers: React.Dispatch<React.SetStateAction<IFormAnswear[]>>;
+  onSetFormAnswers: (formAnswers: IFormAnswear[]) => void;
   nextButton: IButtonProps;
 }
 
@@ -35,7 +35,7 @@ export const Question = (props: IQuestionsData) => {
       const id = selectedId as unknown as number;
       const newAnswers = [...props.formAnswers];
       newAnswers[props.questionNumber].answearId = id;
-      props.setFormAnswers(newAnswers);
+      props.onSetFormAnswers(newAnswers);
     }
   }
 
@@ -71,20 +71,22 @@ const styles = StyleSheet.create({
     alignContent: "center"
   },
   questionContent: {
-    fontSize: 32,
+    fontSize: 24,
+    textAlign: "justify",
     fontWeight: "bold",
-    marginTop: "10%",
-    marginBottom: "5%",
+    marginTop: "8%",
+    marginBottom: "5%"
   },
   header: {
-    marginLeft: "4%",
-    marginRight: "4%"
+    marginLeft: "6%",
+    marginRight: "6%"
   },
   radioButtons: {
     alignItems: "baseline",
+    alignSelf: "flex-start",
     marginBottom: "5%",
-    marginLeft: "4%",
-    marginRight: "4%"
+    marginLeft: "6%",
+    marginRight: "6%"
   },
   labelStyle: {
     fontSize: 18
@@ -95,6 +97,6 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     justifyContent: "center",
     alignSelf: "center",
-    width: "50%"
+    width: "92%"
   }
 });
