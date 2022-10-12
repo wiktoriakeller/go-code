@@ -12,16 +12,20 @@ import { CustomInputForm, IInputProps } from "../components/CustomInputForm";
 import { mainFormStyle } from "./styles/formStyles";
 import { CustomButton, IButtonProps } from "../components/CustomButton";
 import colors from "../styles/colors";
-import { SignUpNavigation } from "../navigation/common";
+import { SignUpNavigation } from "../navigation/stackNavigation";
 import { useHidePassword } from "../hooks/useHidePassword";
-import { signUp, SignUpRequest } from "../api/identity/signUp";
-import { ApiResponse } from "../api/common";
+import { getSignUpRequest, ISignUpRequest, ISignUpResponse } from "../api/identity/getSignUpRequest";
+import { IApiResponse } from "../api/common";
 import Spinner from "react-native-loading-spinner-overlay/lib";
 import { Messages } from "../components/Messages";
+import { useQuery } from "../api/useQuery";
 
 export const SignUpPage = ({ navigation }: SignUpNavigation) => {
-  const [loading, setLoading] = useState(false);
-  const [apiErrorMessages, setApiErrorMessages] = useState([] as string[]);
+  const {
+    fetchData: signUp, 
+    isLoading: signUpLoading,
+  } = useQuery<ISignUpRequest, ISignUpResponse>();
+  const [responseErrorMessages, setResponseErrorMessages] = useState<string[]>([]);
 
   const [email, setEmail] = useState("");
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
@@ -36,14 +40,17 @@ export const SignUpPage = ({ navigation }: SignUpNavigation) => {
     placeholder: "Enter your email address",
     label: "Email",
     startIconName: "email-outline",
-    validators: emailValidators,
-    error: {
-      message: emailErrorMessage,
-      setMessage: setEmailErrorMessage
+    validation: {
+      value: email,
+      validators: emailValidators,
+      error: {
+        message: emailErrorMessage,
+        setMessage: setEmailErrorMessage
+      }
     },
     onChangeText: (value: string) => { 
       setEmail(value)
-      setApiErrorMessages([]);
+      setResponseErrorMessages([]);
     }
   };
 
@@ -59,14 +66,17 @@ export const SignUpPage = ({ navigation }: SignUpNavigation) => {
     placeholder: "Enter your username",
     label: "Username",
     startIconName: "pen",
-    validators: usernameValidators,
-    error: {
-      message: usernameErrorMessage,
-      setMessage: setUsernameErrorMessage
-    },
+    validation: {
+      value: username,
+      validators: usernameValidators,
+      error: {
+        message: usernameErrorMessage,
+        setMessage: setUsernameErrorMessage
+      },
+    },    
     onChangeText: (value: string) => {
       setUsername(value)
-      setApiErrorMessages([]);
+      setResponseErrorMessages([]);
     }
   };
 
@@ -85,15 +95,18 @@ export const SignUpPage = ({ navigation }: SignUpNavigation) => {
     label: "Password",
     startIconName: "lock-outline",
     endIconName: hidePassword.endIconName,
-    validators: passwordValidators,
+    validation: {
+      value: password,
+      validators: passwordValidators,
+      error: {
+        message: passwordErrorMessage,
+        setMessage: setPasswordErrorMessage
+      },
+    },     
     autoComplete: "password",
-    error: {
-      message: passwordErrorMessage,
-      setMessage: setPasswordErrorMessage
-    },
     onChangeText: (value: string) => { 
       setPassword(value)
-      setApiErrorMessages([]);
+      setResponseErrorMessages([]);
     },
     onPressEndIcon: () => hidePassword.hide()
   };
@@ -112,14 +125,18 @@ export const SignUpPage = ({ navigation }: SignUpNavigation) => {
     label: "Confirm password",
     startIconName: "lock-outline",
     endIconName: hideConfirmPassword.endIconName,
-    validators: confirmPasswordValidators,
-    error: {
-      message: confirmPasswordErrorMessage,
-      setMessage: setConfirmPasswordErrorMessage
+    validation: {
+      value: confirmPassword,
+      validators: confirmPasswordValidators,
+      changingValues: [password, confirmPassword],
+      error: {
+        message: confirmPasswordErrorMessage,
+        setMessage: setConfirmPasswordErrorMessage
+      },
     },
     onChangeText: (value: string) => { 
       setConfirmPassword(value)
-      setApiErrorMessages([]);
+      setResponseErrorMessages([]);
     },
     onPressEndIcon: () => hideConfirmPassword.hide()
   };
@@ -129,19 +146,17 @@ export const SignUpPage = ({ navigation }: SignUpNavigation) => {
     text: "Sign up",
     isDisabled: disabledSignUpButton,
     onPress: () => {
-      setLoading(true);
-      setApiErrorMessages([]);
+      setResponseErrorMessages([]);
       setDisabledSignUpButton(true);
 
-      signUp({
+      signUp(getSignUpRequest({
         email: email,
         username: username,
         password: password
-      })
+      }))
       .then(() => navigation.goBack())
-      .catch((error: ApiResponse<SignUpRequest>) => setApiErrorMessages(error.errors))
+      .catch((error: IApiResponse<ISignUpRequest>) => setResponseErrorMessages(error.errors))
       .finally(() => {
-        setLoading(false);
         setDisabledSignUpButton(false);
       })
     }
@@ -176,11 +191,11 @@ export const SignUpPage = ({ navigation }: SignUpNavigation) => {
   return (
     <View style={mainFormStyle.root}>
       <Spinner
-        visible={loading}
+        visible={signUpLoading}
         textContent={""}
       />
-      { apiErrorMessages.length > 0 
-        ? <Messages messages={apiErrorMessages} isError={true}/>
+      { responseErrorMessages.length > 0 
+        ? <Messages messages={responseErrorMessages} isError={true}/>
         : <View/>
       }
       <View style={mainFormStyle.textContainer}>

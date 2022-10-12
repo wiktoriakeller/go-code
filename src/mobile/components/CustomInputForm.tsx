@@ -1,13 +1,13 @@
 import { View, TextInput, Text, StyleSheet, TextInputProps } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import colors from "../styles/colors";
-import { ValidationFunc, IValidationError } from "../validation/validators";
+import { IValidation } from "../validation/validators";
+import { useValidation } from "../hooks/useValidation";
 
 interface IInputProps extends TextInputProps {
   label: string;
-  validators: ValidationFunc<string>[];
-  error: IValidationError;
+  validation: IValidation<string>;
   startIconName?: string;
   endIconName?: string;
   onPressEndIcon?: () => void;
@@ -18,22 +18,10 @@ const CustomInputForm = (props: IInputProps) => {
   const [firstTimeFocused, setFirstTimeFocused] = useState(false);
   const startIconName = props.startIconName ?? "";
   const endIconName = props.endIconName ?? "";
-
-  useEffect(() => {
-    for(const validator of props.validators) {
-      const valueToCheck = props.value ?? "";
-      const result = validator(valueToCheck);
-      if(!result[0]) {
-        props.error.setMessage(result[1]);
-        return;
-      }
-    }
-    
-    props.error.setMessage("");
-  }, [props.value]);
+  useValidation(props.validation);
 
   const getBorderColor = (): string => {
-    if(props.error.message.length > 0 && firstTimeFocused) {
+    if(props.validation.error.message.length > 0 && firstTimeFocused) {
       return colors.red;
     }
     
@@ -99,8 +87,8 @@ const CustomInputForm = (props: IInputProps) => {
             : <View/>
           }
         </View>
-          { props.error.message.length > 0 && firstTimeFocused
-            ? <Text style={styles.errorMessage}>{props.error.message}</Text>
+          { props.validation.error.message.length > 0 && firstTimeFocused
+            ? <Text style={styles.errorMessage}>{props.validation.error.message}</Text>
             : <View/> 
           }
       </View>

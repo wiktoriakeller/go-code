@@ -1,9 +1,9 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 type RootStackParamList = {
-    SignIn: undefined;
-    SignUp: undefined;
-    Home: undefined;
+  SignIn: undefined;
+  SignUp: undefined;
+  Home: undefined;
 };
 
 type SignInNavigation = NativeStackScreenProps<RootStackParamList, "SignIn">;

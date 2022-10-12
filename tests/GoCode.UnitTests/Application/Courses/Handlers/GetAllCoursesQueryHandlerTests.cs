@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GoCode.Application.Common.Contracts.DataAccess;
+using GoCode.Application.Common.Contracts.Identity;
 using GoCode.Application.Common.Dtos;
 using GoCode.Application.Courses.Handlers;
 using GoCode.Application.Courses.Queries;
@@ -12,16 +13,17 @@ namespace GoCode.UnitTests.Application.Courses.Handlers
     {
         [Theory]
         [AutoData]
-        public async Task Handle_GivenGetAllCoursesQuery_MustReturnAllCourses(GetAllCoursesQuery query,
-            IEnumerable<CourseDto> expected)
+        public async Task Handle_GivenGetAllCoursesQuery_MustReturnAllCourses(GetAllCoursesInfoQuery query,
+            IEnumerable<CourseInfoDto> expected)
         {
             //Arrange
             var repositoryMock = new Mock<ICoursesRepository>();
             var mapperMock = new Mock<IMapper>();
-            mapperMock.Setup(x => x.Map<IEnumerable<CourseDto>>(It.IsAny<IEnumerable<Course>>()))
+            var currentUserServiceMock = new Mock<ICurrentUserService>();
+            mapperMock.Setup(x => x.Map<IEnumerable<CourseInfoDto>>(It.IsAny<IEnumerable<Course>>()))
                 .Returns(expected);
 
-            var sut = new GetAllCoursesQueryHandler(repositoryMock.Object, mapperMock.Object);
+            var sut = new GetAllCoursesInfoQueryHandler(repositoryMock.Object, currentUserServiceMock.Object, mapperMock.Object);
 
             //Act
             var response = await sut.Handle(query, CancellationToken.None);

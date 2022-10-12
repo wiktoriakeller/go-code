@@ -3,18 +3,18 @@ import React, { useEffect, useState } from "react"
 import { IInputProps, CustomInputForm } from "../components/CustomInputForm";
 import { IButtonProps, CustomButton } from "../components/CustomButton";
 import { validateMinLength, ValidationFunc } from "../validation/validators";
-import { SignInNavigation } from "../navigation/common";
+import { SignInNavigation } from "../navigation/stackNavigation";
 import { mainFormStyle } from "./styles/formStyles";
 import colors from "../styles/colors";
-import { signIn, SignInResponse } from "../api/identity/signIn";
+import { signIn, ISignInResponse } from "../api/identity/signIn";
 import { useHidePassword } from "../hooks/useHidePassword";
-import { ApiResponse } from "../api/common";
+import { IApiResponse } from "../api/common";
 import { Messages } from "../components/Messages";
 import Spinner from "react-native-loading-spinner-overlay";
 
 export const SignInPage = ({ navigation }: SignInNavigation) => {
   const [loading, setLoading] = useState(false);
-  const [apiErrorMessages, setApiErrorMessages] = useState([] as string[]);
+  const [apiErrorMessages, setApiErrorMessages] = useState<string[]>([]);
 
   const [email, setEmail] = useState("");
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
@@ -28,12 +28,15 @@ export const SignInPage = ({ navigation }: SignInNavigation) => {
     placeholder: "Enter your email address",
     label: "Email",
     startIconName: "email-outline",
-    validators: emailValidators,
+    validation: {
+      value: email,
+      validators: emailValidators,
+      error: {
+        message: emailErrorMessage,
+        setMessage: setEmailErrorMessage
+      },
+    },    
     autoComplete: "email",
-    error: {
-      message: emailErrorMessage,
-      setMessage: setEmailErrorMessage
-    },
     onChangeText: (value: string) => {
       setEmail(value);
       setApiErrorMessages([]);
@@ -54,12 +57,15 @@ export const SignInPage = ({ navigation }: SignInNavigation) => {
     label: "Password",
     startIconName: "lock-outline",
     endIconName: hidePassowrd.endIconName,
-    validators: passwordValidators,
+    validation: {
+      value: password,
+      validators: passwordValidators,
+      error: {
+        message: passwordErrorMessage,
+        setMessage: setPasswordErrorMessage
+      },
+    },     
     autoComplete: "password",
-    error: {
-      message: passwordErrorMessage,
-      setMessage: setPasswordErrorMessage
-    },
     onChangeText: (value: string) => {
       setPassword(value);
       setApiErrorMessages([]);
@@ -81,7 +87,7 @@ export const SignInPage = ({ navigation }: SignInNavigation) => {
         password: password
       })
       .then(() => navigation.navigate("Home"))
-      .catch((error: ApiResponse<SignInResponse>) => setApiErrorMessages(error.errors))
+      .catch((error: IApiResponse<ISignInResponse>) => setApiErrorMessages(error.errors))
       .finally(() => {
         setLoading(false);
         setDisabledLoginButton(false);

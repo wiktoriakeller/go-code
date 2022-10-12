@@ -12,10 +12,10 @@ namespace GoCode.Application.Common.Validators.Extensions
             IUserCoursesRepository userCoursesRepository,
             ICurrentUserService currentUserService)
         {
-            return ruleBuilder.MustAsync(async (rootObject, id, context) =>
+            return ruleBuilder.MustAsync(async (rootObject, courseId, context) =>
             {
-                var userCourse = await userCoursesRepository.GetByIdAsync(id);
-                if (userCourse.UserId == currentUserService.User.Id)
+                var userCourse = await userCoursesRepository.GetUserCourseByCourseIdAndUserId(courseId, currentUserService?.User?.Id ?? "");
+                if (userCourse is not null)
                 {
                     return true;
                 }

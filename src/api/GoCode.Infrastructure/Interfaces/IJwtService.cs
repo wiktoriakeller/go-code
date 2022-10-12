@@ -1,12 +1,13 @@
-﻿using GoCode.Infrastructure.Identity.Entities;
+﻿using GoCode.Infrastructure.Identity.Dto;
+using GoCode.Infrastructure.Identity.Entities;
 using System.Security.Claims;
 
 namespace GoCode.Infrastructure.Interfaces
 {
     public interface IJwtService
     {
-        Task<(string jwtToken, string jti)> CreateJwtToken(User user);
+        Task<JwtTokenInfoDto> CreateJwtToken(User user);
 
-        ClaimsPrincipal? GetPrincipalFromJwtToken(string token);
+        ClaimsPrincipal? GetPrincipalFromJwtToken(string token, bool validateLifetime);
     }
 }

@@ -4,6 +4,7 @@ using GoCode.Application.Common.Constants;
 using GoCode.Application.Common.Contracts.DataAccess;
 using GoCode.Application.Identity.Commands;
 using GoCode.Infrastructure.Identity;
+using GoCode.Infrastructure.Identity.Dto;
 using GoCode.Infrastructure.Identity.Entities;
 using GoCode.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -200,7 +201,11 @@ namespace GoCode.UnitTests.Infrastructure
                 .Returns(Task.FromResult<User?>(null));
 
             jwtService.Setup(x => x.CreateJwtToken(user))
-                .ReturnsAsync((token, jti));
+                .ReturnsAsync(new JwtTokenInfoDto 
+                { 
+                    Jti = jti, 
+                    Token = token 
+                });
 
             var sut = new IdentityService(userManager.Object,
                 jwtService.Object,

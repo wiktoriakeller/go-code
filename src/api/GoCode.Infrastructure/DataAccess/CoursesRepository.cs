@@ -14,22 +14,22 @@ namespace GoCode.Infrastructure.DataAccess
 
         public async Task<Course?> FirstOrDefaultWithAllAsync(Expression<Func<Course, bool>> predicate) =>
             await _dbContext.Set<Course>()
+            .Include(c => c.UserCourses)
             .Include(c => c.Questions)
             .ThenInclude(q => q.Answers)
-            .Include(c => c.UserCourses)
             .FirstOrDefaultAsync(predicate);
 
         public IEnumerable<Course> GetCoursesWithAll() =>
             _dbContext.Set<Course>()
+            .Include(c => c.UserCourses)
             .Include(c => c.Questions)
-            .ThenInclude(q => q.Answers)
-            .Include(c => c.UserCourses);
+            .ThenInclude(q => q.Answers);
 
         public IEnumerable<Course> GetCoursesWithAll(Expression<Func<Course, bool>> predicate) =>
             _dbContext.Set<Course>()
             .Where(predicate)
+            .Include(c => c.UserCourses)
             .Include(c => c.Questions)
-            .ThenInclude(q => q.Answers)
-            .Include(c => c.UserCourses);
+            .ThenInclude(q => q.Answers);
     }
 }

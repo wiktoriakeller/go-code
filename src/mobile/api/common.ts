@@ -1,18 +1,22 @@
-const baseUrl = "http://192.168.1.74:5219/api/v1/";
+export const baseUrl = "http://192.168.1.74:5219/api/v1/";
   
-const identityPaths = {
+export const identityPaths = {
   signUp: "identity/register",
   signIn: "identity/login",
   refreshToken: "identity/refresh"
 }
 
-const coursesPaths = {
+export const coursesPaths = {
   getAll: "courses",
-  getAllForUser: "courses/user",
-  signUp: "courses/signup/"
+  getUserCourses: "courses/user",
+  signUp: "courses/signup"
 }
 
-enum StatusCodes {
+export const formPaths = {
+  sendCourseForm: "form/evaluate"
+}
+
+export enum StatusCodes {
   BadRequest = 400,
   Unauthorized = 401,
   Forbidden = 403,
@@ -20,37 +24,25 @@ enum StatusCodes {
   InternalServerError = 500
 }
 
-interface ApiRequest<T> {
+export interface IApiRequest<T> {
   url: string;
   method: string;
   data?: T;
   headers?: any;
 }
 
-interface ApiResponse<T> {
+export interface IApiResponse<T> {
   data?: T;
   errors: string[];
-  responseError: ResponseError;
+  responseError: IResponseError;
   httpStatusCode: number;
   succeeded: boolean;
 }
 
-interface ResponseError {
+export interface IResponseError {
   id: number;
   name: string;
 }
 
-const tokenKey = "jwt";
-const refreshTokenKey = "refresh";
-
-export { 
-  baseUrl,
-  identityPaths, 
-  coursesPaths, 
-  StatusCodes, 
-  ApiRequest,
-  ApiResponse,
-  ResponseError,
-  tokenKey,
-  refreshTokenKey
-}
+export const tokenKey = "jwt";
+export const refreshTokenKey = "refresh";
