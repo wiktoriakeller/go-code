@@ -44,7 +44,6 @@ namespace GoCode.WebAPI.Middleware
 
     public static class IdentityMiddlewareExtension
     {
-        public static IApplicationBuilder UseIdentityMiddleware(this IApplicationBuilder builder) =>
-            builder.UseMiddleware<IdentityMiddleware>();
+        public static IApplicationBuilder UseIdentityMiddleware(this IApplicationBuilder builder) => builder.UseMiddleware<IdentityMiddleware>();
     }
 }

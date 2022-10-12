@@ -5,7 +5,8 @@ import {
   StatusCodes, 
   IApiRequest,
   IApiResponse,
-  tokenKey
+  tokenKey,
+  identityPaths
 } from "./common";
 import { refreshToken } from "./identity/refreshToken";
 
@@ -30,12 +31,10 @@ export const responseInterceptor = axios.interceptors.response.use(
     return response;
   },
   async (error) => {    
-    const originalRequest = error.config;
-    console.log(error);
-    if(error.response.status === StatusCodes.Unauthorized && !originalRequest._retry) {
+    const originalRequest = error?.config;
+    if(error?.response?.status === StatusCodes.Unauthorized && !originalRequest._retry && originalRequest.url != identityPaths.refreshToken) {
       originalRequest._retry = true;
       const response = await refreshToken();
-      console.log(response);
       if(response.succeeded) {
         axios.defaults.headers.common["Authorization"] = `bearer ${response.data?.token}`;
         return axios(originalRequest);

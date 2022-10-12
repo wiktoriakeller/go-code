@@ -1,4 +1,5 @@
-﻿using GoCode.Infrastructure.Identity.Entities;
+﻿using GoCode.Infrastructure.Identity.Dto;
+using GoCode.Infrastructure.Identity.Entities;
 using GoCode.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -9,7 +10,7 @@ using System.Text;
 
 namespace GoCode.Infrastructure.Identity
 {
-    internal class JwtService : IJwtService
+    public class JwtService : IJwtService
     {
         private readonly JwtOptions _jwtOptions;
         private readonly TokenValidationParameters _tokenValidationParameters;
@@ -24,7 +25,7 @@ namespace GoCode.Infrastructure.Identity
             _userManager = userManager;
         }
 
-        public async Task<(string jwtToken, string jti)> CreateJwtToken(User user)
+        public async Task<JwtTokenInfoDto> CreateJwtToken(User user)
         {
             var (claims, jti) = await GetJwtTokenClaims(user);
 
@@ -40,7 +41,12 @@ namespace GoCode.Infrastructure.Identity
                 signingCredentials: signingCredentials);
 
             var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
-            return (jwtToken, jti);
+
+            return new JwtTokenInfoDto
+            {
+                Token = jwtToken,
+                Jti = jti
+            };
         }
 
         public ClaimsPrincipal? GetPrincipalFromJwtToken(string jwtToken, bool validateLifetime)
@@ -54,17 +60,11 @@ namespace GoCode.Infrastructure.Identity
                     ValidIssuer = _tokenValidationParameters.ValidIssuer,
                     ValidAudience = _tokenValidationParameters.ValidAudience,
                     IssuerSigningKey = _tokenValidationParameters.IssuerSigningKey,
-                    ValidateLifetime = _tokenValidationParameters.ValidateLifetime,
+                    ValidateLifetime = validateLifetime ? true : false,
                     ClockSkew = _tokenValidationParameters.ClockSkew,
                 };
 
-                if (!validateLifetime)
-                {
-                    validationParameters.ValidateLifetime = false;
-                }
-
                 var principal = tokenHandler.ValidateToken(jwtToken, validationParameters, out var validatedToken);
-
                 if (!IsJwtWithValidSecurityAlgorithm(validatedToken))
                 {
                     return null;

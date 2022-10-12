@@ -51,7 +51,7 @@ namespace GoCode.Infrastructure.Identity
 
         public async Task<Response<IUser>> GetUserFromTokenAsync(string? token)
         {
-            var result = IsJwtTokenValid<IUser>(token);
+            var result = IsJwtTokenValid<IUser>(token, true);
 
             if (!result.response.Succeeded)
             {
@@ -104,14 +104,13 @@ namespace GoCode.Infrastructure.Identity
                 return ResponseResult.ValidationError<AuthenticateUserResponse>(ErrorMessages.Identity.IncorrectCredentials);
             }
 
-            var (jwtToken, jti) = await _jwtService.CreateJwtToken(user);
-            var storedRefresh = await _refreshTokenRepository.FirstOrDefaultAsync(t => t.UserId == user.Id);
-            var refreshToken = await CreateRefreshToken(jti, user, storedRefresh);
+            var newJwt = await _jwtService.CreateJwtToken(user);
+            var newRefreshToken = await CreateRefreshToken(newJwt.Jti, user);
 
             var response = new AuthenticateUserResponse
             {
-                Token = jwtToken,
-                RefreshToken = refreshToken
+                Token = newJwt.Token,
+                RefreshToken = newRefreshToken
             };
 
             return ResponseResult.Ok(response);
@@ -126,36 +125,36 @@ namespace GoCode.Infrastructure.Identity
                 return result.response;
             }
 
-            var storedTokens = _refreshTokenRepository
+            var refreshTokens = _refreshTokenRepository
                 .GetWhere(x => x.Token == refreshTokenCommand.RefreshToken)
                 .ToList();
 
-            if (storedTokens.Count != 1)
+            if (refreshTokens.Count != 1)
             {
                 return ResponseResult.Unauthorized<RefreshTokenResponse>(ErrorMessages.Identity.InvalidToken);
             }
 
-            var storedToken = storedTokens.First();
+            var currentRefreshToken = refreshTokens.First();
 
-            if (storedToken.ExpiryDate >= DateTime.UtcNow || storedToken.JwtId != result.jti)
+            if (currentRefreshToken.ExpiryDate >= DateTime.UtcNow || currentRefreshToken.JwtId != result.jti)
             {
                 return ResponseResult.Unauthorized<RefreshTokenResponse>(ErrorMessages.Identity.InvalidToken);
             }
 
             var user = await _userManager.FindByIdAsync(result.userId);
-            var (jwtToken, newJti) = await _jwtService.CreateJwtToken(user);
-            var refreshToken = await CreateRefreshToken(newJti, user, storedToken);
+            var newJwt = await _jwtService.CreateJwtToken(user);
+            var newRefreshToken = await CreateRefreshToken(newJwt.Jti, user);
 
             var response = new RefreshTokenResponse
             {
-                Token = jwtToken,
-                RefreshToken = refreshToken
+                Token = newJwt.Token,
+                RefreshToken = newRefreshToken
             };
 
             return ResponseResult.Ok(response);
         }
 
-        private (Response<T> response, string? userId, string? jti) IsJwtTokenValid<T>(string? token, bool validateLifetime = true)
+        private (Response<T> response, string? userId, string? jti) IsJwtTokenValid<T>(string? token, bool validateLifetime)
         {
             if (token is null)
             {
@@ -180,11 +179,13 @@ namespace GoCode.Infrastructure.Identity
             return (ResponseResult.Ok<T>(), userId, jti);
         }
 
-        private async Task<string> CreateRefreshToken(string jti, User user, RefreshToken? storedRefresh = null)
+        private async Task<string> CreateRefreshToken(string jti, User user)
         {
-            if (storedRefresh != null)
+            var currentRefresh = await _refreshTokenRepository.FirstOrDefaultAsync(t => t.UserId == user.Id);
+
+            if (currentRefresh != null)
             {
-                await _refreshTokenRepository.DeleteAsync(storedRefresh);
+                await _refreshTokenRepository.DeleteAsync(currentRefresh);
             }
 
             var refreshToken = new RefreshToken

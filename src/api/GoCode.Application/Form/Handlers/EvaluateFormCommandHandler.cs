@@ -61,7 +61,7 @@ namespace GoCode.Application.Form.Handlers
             }
 
             var gainedXP = 0;
-            var percantage = ((float)correctAnswers / (float)results.Count) * 100.0f;
+            var percantage = correctAnswers / (float)results.Count * 100.0f;
             var levelUp = false;
 
             if (!userCourse.UserGainedXP && percantage >= course.PassPercentTreshold)
