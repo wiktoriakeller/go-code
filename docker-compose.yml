@@ -1,38 +1,36 @@
-version: '3.9'
-
 networks:
-    localdev:
-        name: localdev
+  localdev:
+    name: localdev
 
 services:
-    db-sql:
-        container_name: mssql-db
-        image: mcr.microsoft.com/mssql/server:2022-latest
-        environment:
-            ACCEPT_EULA: "Y"
-            SA_PASSWORD: ${SA_PASSWORD?err}
-        user: root
-        ports:
-            - "1433:1433"
-        networks:
-            - localdev
-        volumes:
-            - db-data:/var/opt/mssql/data
-        
-    api:
-        container_name: go-code-api
-        build:
-            context: ./src/api/
-        environment:
-            - "ConnectionStrings:DefaultConnection=${CONNECTION_STRING?err}"
-            - "Authentication:JwtOptions:Key=${JWT_KEY?err}"
-            - "Admin:Email=${ADMIN_EMAIL?err}"
-            - "Admin:Username=${ADMIN_USERNAME?err}"
-            - "Admin:Password=${ADMIN_PASSWORD?err}"
-        restart: always
-        depends_on:
-            - db-sql
-        networks:
-            - localdev
+  db-sql:
+    container_name: mssql-db
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: ${SA_PASSWORD?err}
+    user: root
+    ports:
+      - "1433:1433"
+    networks:
+      - localdev
+    volumes:
+      - db-data:/var/opt/mssql/data
+
+  api:
+    container_name: go-code-api
+    build:
+      context: ./src/api/
+    environment:
+      - "Authentication:JwtOptions:Key=${JWT_KEY?err}"
+      - "Admin:Email=${ADMIN_EMAIL?err}"
+      - "Admin:Username=${ADMIN_USERNAME?err}"
+      - "Admin:Password=${ADMIN_PASSWORD?err}"
+    restart: always
+    depends_on:
+      - db-sql
+    networks:
+      - localdev
+
 volumes:
-    db-data:
+  db-data:

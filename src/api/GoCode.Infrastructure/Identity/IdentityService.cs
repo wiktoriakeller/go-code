@@ -3,6 +3,7 @@ using GoCode.Application.Common.BaseResponse;
 using GoCode.Application.Common.Constants;
 using GoCode.Application.Common.Contracts.DataAccess;
 using GoCode.Application.Common.Contracts.Identity;
+using GoCode.Application.Common.Services;
 using GoCode.Application.Identity.Commands;
 using GoCode.Application.Identity.Responses;
 using GoCode.Domain.Interfaces;
@@ -22,18 +23,21 @@ namespace GoCode.Infrastructure.Identity
         private readonly IJwtService _jwtService;
         private readonly IRepository<RefreshToken> _refreshTokenRepository;
         private readonly IMapper _mapper;
+        private readonly IDateTimeProvider _dateTimeProvider;
         private readonly JwtOptions _jwtOptions;
 
         public IdentityService(UserManager<User> userManager,
             IJwtService jwtService,
             IRepository<RefreshToken> refreshTokenRepository,
             IMapper mapper,
+            IDateTimeProvider dateTimeProvider,
             IOptions<JwtOptions> jwtOptions)
         {
             _userManager = userManager;
             _jwtService = jwtService;
             _refreshTokenRepository = refreshTokenRepository;
             _mapper = mapper;
+            _dateTimeProvider = dateTimeProvider;
             _jwtOptions = jwtOptions.Value;
         }
 
@@ -192,8 +196,8 @@ namespace GoCode.Infrastructure.Identity
             {
                 Token = GetUniqueToken(),
                 JwtId = jti,
-                CreationDate = DateTime.UtcNow,
-                ExpiryDate = DateTime.UtcNow.AddDays(_jwtOptions.RefreshTokenExpirationInDays),
+                CreationDate = _dateTimeProvider.UtcNow,
+                ExpiryDate = _dateTimeProvider.UtcNow.AddDays(_jwtOptions.RefreshTokenExpirationInDays),
                 UserId = user.Id,
                 User = user
             };

@@ -1,27 +1,29 @@
-export const baseUrl = "http://192.168.1.74:5219/api/v1/";
-  
+import { BASE_API_URL } from "@env";
+
+export const baseUrl = BASE_API_URL;
+
 export const identityPaths = {
-  signUp: "identity/register",
-  signIn: "identity/login",
-  refreshToken: "identity/refresh"
-}
+  signUp: "users/",
+  signIn: "users/tokens",
+  refreshToken: "users/refresh-tokens",
+};
 
 export const coursesPaths = {
   getAll: "courses",
-  getUserCourses: "courses/user",
-  signUp: "courses/signup"
-}
+  getUserCourses: "courses/users",
+  signUp: "courses/users",
+};
 
 export const formPaths = {
-  sendCourseForm: "form/evaluate"
-}
+  sendCourseForm: "forms/",
+};
 
 export enum StatusCodes {
   BadRequest = 400,
   Unauthorized = 401,
   Forbidden = 403,
   NotFound = 404,
-  InternalServerError = 500
+  InternalServerError = 500,
 }
 
 export interface IApiRequest<T> {

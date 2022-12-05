@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import colors from "../styles/colors";
 
 interface IMessagesProps {
@@ -8,11 +8,11 @@ interface IMessagesProps {
 }
 
 function Messages(props: IMessagesProps) {
-  const colorStyle = { 
-    backgroundColor: colors.errorBlock
-  }
+  const colorStyle = {
+    backgroundColor: colors.errorBlock,
+  };
 
-  if(!props.isError) {
+  if (!props.isError) {
     colorStyle.backgroundColor = colors.successBlock;
   }
 
@@ -22,12 +22,12 @@ function Messages(props: IMessagesProps) {
         <Text style={[styles.text, colorStyle]}>{message}</Text>
       ))}
     </View>
-  )
+  );
 }
 
-const styles = StyleSheet.create({ 
+const styles = StyleSheet.create({
   root: {
-    margin: "2%"
+    margin: "2%",
   },
   text: {
     color: colors.white,
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     padding: 4,
     borderRadius: 5,
-  }
+  },
 });
 
 export { IMessagesProps, Messages };

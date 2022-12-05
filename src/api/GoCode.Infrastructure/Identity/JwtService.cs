@@ -1,4 +1,5 @@
-﻿using GoCode.Infrastructure.Identity.Dto;
+﻿using GoCode.Application.Common.Services;
+using GoCode.Infrastructure.Identity.Dto;
 using GoCode.Infrastructure.Identity.Entities;
 using GoCode.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -15,14 +16,18 @@ namespace GoCode.Infrastructure.Identity
         private readonly JwtOptions _jwtOptions;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly UserManager<User> _userManager;
+        private readonly IDateTimeProvider _dateTimeProvider;
 
-        public JwtService(IOptions<JwtOptions> jwtOptions,
+        public JwtService(
+            IOptions<JwtOptions> jwtOptions,
             TokenValidationParameters tokenValidationParameters,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            IDateTimeProvider dateTimeProvider)
         {
             _jwtOptions = jwtOptions.Value;
             _tokenValidationParameters = tokenValidationParameters;
             _userManager = userManager;
+            _dateTimeProvider = dateTimeProvider;
         }
 
         public async Task<JwtTokenInfoDto> CreateJwtToken(User user)
@@ -36,8 +41,8 @@ namespace GoCode.Infrastructure.Identity
                 issuer: _jwtOptions.Issuer,
                 audience: _jwtOptions.Audience,
                 claims: claims,
-                notBefore: DateTime.UtcNow,
-                expires: DateTime.UtcNow.AddMinutes(_jwtOptions.ExpirationInMinutes),
+                notBefore: _dateTimeProvider.UtcNow,
+                expires: _dateTimeProvider.UtcNow.AddMinutes(_jwtOptions.ExpirationInMinutes),
                 signingCredentials: signingCredentials);
 
             var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
