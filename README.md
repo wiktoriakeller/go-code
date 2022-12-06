@@ -1,5 +1,7 @@
 [![CI](https://github.com/wiktoriakeller/go-code/actions/workflows/ci.yml/badge.svg)](https://github.com/wiktoriakeller/go-code/actions/workflows/ci.yml)
 
+[![CI](https://github.com/wiktoriakeller/go-code/actions/workflows/cd.yml/badge.svg)](https://github.com/wiktoriakeller/go-code/actions/workflows/cd.yml)
+
 # Go-Code
 
 REST Web API that follows the Onion architecture and CQRS pattern with React Native mobile app. Users can take part in online courses and solve quizes.
@@ -63,4 +65,9 @@ To run the mobile application locally, create `.env` file in the `\src\mobile` d
 
 ```
 BASE_API_URL=http://192.168.1.74:5219/api/v1/
+```
+
+Then in the `\src\mobile` directory run:
+```
+expo start
 ```
