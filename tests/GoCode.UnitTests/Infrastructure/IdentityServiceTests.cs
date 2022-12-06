@@ -2,6 +2,7 @@
 using GoCode.Application.Common.BaseResponse;
 using GoCode.Application.Common.Constants;
 using GoCode.Application.Common.Contracts.DataAccess;
+using GoCode.Application.Common.Services;
 using GoCode.Application.Identity.Commands;
 using GoCode.Infrastructure.Identity;
 using GoCode.Infrastructure.Identity.Dto;
@@ -17,11 +18,14 @@ namespace GoCode.UnitTests.Infrastructure
     {
         private readonly IOptions<JwtOptions> _jwtOptions;
         private readonly Mock<IRepository<RefreshToken>> _refreshTokenRepository;
+        private readonly Mock<IDateTimeProvider> _dateTimeProvider;
 
         public IdentityServiceTests()
         {
             _jwtOptions = Options.Create(new JwtOptions());
             _refreshTokenRepository = new Mock<IRepository<RefreshToken>>();
+            _dateTimeProvider = new Mock<IDateTimeProvider>();
+            _dateTimeProvider.Setup(x => x.UtcNow).Returns(new DateTime(2022, 1, 1, 12, 0, 0, 0, 0));
         }
 
         [Theory]
@@ -37,6 +41,7 @@ namespace GoCode.UnitTests.Infrastructure
                 jwtService.Object,
                 _refreshTokenRepository.Object,
                 mapper.Object,
+                _dateTimeProvider.Object,
                 _jwtOptions);
 
             //Act
@@ -62,6 +67,7 @@ namespace GoCode.UnitTests.Infrastructure
                 jwtService.Object,
                 _refreshTokenRepository.Object,
                 mapper.Object,
+                _dateTimeProvider.Object,
                 _jwtOptions);
 
             //Act
@@ -88,6 +94,7 @@ namespace GoCode.UnitTests.Infrastructure
                 jwtService.Object,
                 _refreshTokenRepository.Object,
                 mapper.Object,
+                _dateTimeProvider.Object,
                 _jwtOptions);
 
             //Act
@@ -113,6 +120,7 @@ namespace GoCode.UnitTests.Infrastructure
                 jwtService.Object,
                 _refreshTokenRepository.Object,
                 mapper.Object,
+                _dateTimeProvider.Object,
                 _jwtOptions);
 
             //Act
@@ -140,6 +148,7 @@ namespace GoCode.UnitTests.Infrastructure
                 jwtService.Object,
                 refreshTokenRepository.Object,
                 mapper.Object,
+                _dateTimeProvider.Object,
                 jwtOptions);
 
             //Act
@@ -169,6 +178,7 @@ namespace GoCode.UnitTests.Infrastructure
                 jwtService.Object,
                 _refreshTokenRepository.Object,
                 mapper.Object,
+                _dateTimeProvider.Object,
                 _jwtOptions);
 
             //Act
@@ -201,16 +211,17 @@ namespace GoCode.UnitTests.Infrastructure
                 .Returns(Task.FromResult<User?>(null));
 
             jwtService.Setup(x => x.CreateJwtToken(user))
-                .ReturnsAsync(new JwtTokenInfoDto 
-                { 
-                    Jti = jti, 
-                    Token = token 
+                .ReturnsAsync(new JwtTokenInfoDto
+                {
+                    Jti = jti,
+                    Token = token
                 });
 
             var sut = new IdentityService(userManager.Object,
                 jwtService.Object,
                 _refreshTokenRepository.Object,
                 mapper.Object,
+                _dateTimeProvider.Object,
                 _jwtOptions);
 
             //Act

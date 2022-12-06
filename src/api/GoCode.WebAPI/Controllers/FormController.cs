@@ -5,14 +5,17 @@ using Microsoft.AspNetCore.Authorization;
 namespace GoCode.WebAPI.Controllers
 {
     [Authorize]
-    [Route("api/v1/form")]
+    [Route("api/v1/forms")]
     public class FormController : BaseApiController
     {
         public FormController(IMediator mediator, IMapper mapper) : base(mediator, mapper)
         {
         }
 
-        [HttpPost("evaluate")]
+        /// <summary>
+        /// Check user answers for quiz
+        /// </summary>
+        [HttpPost]
         public async Task<IActionResult> EvaluateForm([FromBody] EvaluateFormRequest request)
         {
             var command = _mapper.Map<EvaluateFormCommand>(request);

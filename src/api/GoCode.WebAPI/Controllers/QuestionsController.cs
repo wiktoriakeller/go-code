@@ -12,6 +12,11 @@ namespace GoCode.WebAPI.Controllers
         {
         }
 
+        /// <summary>
+        /// Create question, only for admin
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> CreateQuestion([FromBody] CreateQuestionRequest request)
         {
@@ -20,6 +25,11 @@ namespace GoCode.WebAPI.Controllers
             return GetStatusCode(response);
         }
 
+        /// <summary>
+        /// Delete question, only for admin
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteQuestion([FromRoute] int id)
         {
@@ -28,6 +38,12 @@ namespace GoCode.WebAPI.Controllers
             return GetStatusCode(response);
         }
 
+        /// <summary>
+        /// Update question, only for admin
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateQuestion([FromRoute] int id, [FromBody] UpdateQuestionRequest request)
         {

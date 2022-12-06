@@ -9,22 +9,19 @@ export const useHidePassword = () => {
 
   const hide = () => {
     setHidePassword(!hidePassword);
-    if(hidePassword) {
+    if (hidePassword) {
       setEndIconName(hideIcon);
       setSecureTextEntry(true);
-    }
-    else {
+    } else {
       setEndIconName(showIcon);
       setSecureTextEntry(false);
     }
-  }
+  };
 
-  return (
-    {
-      hide,
-      hidePassword,
-      endIconName,
-      secureTextEntry
-    }
-  )
-}
+  return {
+    hide,
+    hidePassword,
+    endIconName,
+    secureTextEntry,
+  };
+};
