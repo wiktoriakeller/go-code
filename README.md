@@ -68,6 +68,17 @@ BASE_API_URL=http://192.168.1.74:5219/api/v1/
 ```
 
 Then in the `\src\mobile` directory run:
+
 ```
 expo start
 ```
+
+## Screenshots
+
+<img src="https://github.com/wiktoriakeller/go-code/blob/main/screenshots/1.jpg" width="700"/>
+<img src="https://github.com/wiktoriakeller/go-code/blob/main/screenshots/2.jpg" width="700"/>
+<img src="https://github.com/wiktoriakeller/go-code/blob/main/screenshots/3.jpg" width="700"/>
+<img src="https://github.com/wiktoriakeller/go-code/blob/main/screenshots/4.jpg" width="700"/>
+<img src="https://github.com/wiktoriakeller/go-code/blob/main/screenshots/5.jpg" width="700"/>
+<img src="https://github.com/wiktoriakeller/go-code/blob/main/screenshots/6.jpg" width="700"/>
+<img src="https://github.com/wiktoriakeller/go-code/blob/main/screenshots/7.jpg" width="700"/>
