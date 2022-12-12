@@ -1,10 +1,15 @@
 [![CI](https://github.com/wiktoriakeller/go-code/actions/workflows/ci.yml/badge.svg)](https://github.com/wiktoriakeller/go-code/actions/workflows/ci.yml)
-
 [![CI](https://github.com/wiktoriakeller/go-code/actions/workflows/cd.yml/badge.svg)](https://github.com/wiktoriakeller/go-code/actions/workflows/cd.yml)
 
 # Go-Code
 
-REST Web API that follows the Onion architecture and CQRS pattern with React Native mobile app. Users can take part in online courses and solve quizes.
+REST Web API that follows the Onion architecture and CQRS pattern with React Native mobile app. Users can take part in online courses and solve quizes. The API is currently deployed on Azure: https://gocodeapi-test.azurewebsites.net/swagger/index.html.
+
+Admin account credentials: 
+```
+email: appadmin@admin
+password: P@ssw0rd1
+```
 
 ## Technologies
 
